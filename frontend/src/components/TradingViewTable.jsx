@@ -385,7 +385,7 @@ export default function TradingViewTable({ onDataUpdate, onSelectCompany }) {
           ) : null}
 
           <div className="overflow-auto max-h-[calc(100vh-320px)]">
-            <table className="w-full caption-bottom text-sm">
+            <table className="w-full min-w-[900px] caption-bottom text-sm">
               <thead className="sticky top-0 z-20 [&_tr]:border-b-0">
                 <tr>
                   <th className={`sticky left-0 z-30 bg-slate-50 px-4 py-3 text-xs font-semibold uppercase tracking-wider text-slate-500 after:pointer-events-none after:absolute after:inset-y-0 after:right-0 after:w-px after:bg-slate-200`}>
@@ -400,7 +400,7 @@ export default function TradingViewTable({ onDataUpdate, onSelectCompany }) {
                       <th
                         key={col.key}
                         className={`${col.align} cursor-pointer select-none whitespace-nowrap bg-slate-50 px-4 py-3 text-xs font-semibold uppercase tracking-wider text-slate-500 transition-colors hover:bg-slate-100 ${
-                          col.key === "score" ? "" : "hidden sm:table-cell"
+                          col.key === "score" || col.key === "price" ? "" : "hidden sm:table-cell"
                         } ${["pbv", "roe", "dividend_yield"].includes(col.key) ? "hidden md:table-cell" : ""}`}
                         onClick={() => handleSort(col.key)}
                       >
