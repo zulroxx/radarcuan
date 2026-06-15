@@ -1,0 +1,66 @@
+{
+  "theme": "Light",
+  "archetype": "4 (Swiss & High-Contrast - Finance Adjusted)",
+  "colors": {
+    "background": "#F8FAFC",
+    "surface": "#FFFFFF",
+    "primary": "#0F172A",
+    "primary_hover": "#1E293B",
+    "accent_cuan": "#10B981",
+    "accent_cuan_hover": "#059669",
+    "text_main": "#0F172A",
+    "text_muted": "#64748B",
+    "border": "#E2E8F0"
+  },
+  "typography": {
+    "headings": "Outfit",
+    "body": "IBM Plex Sans",
+    "monospace": "IBM Plex Mono",
+    "scale": {
+      "h1": "text-2xl sm:text-3xl font-bold tracking-tight",
+      "h2": "text-xl sm:text-2xl font-semibold tracking-tight",
+      "h3": "text-lg sm:text-xl font-medium",
+      "body": "text-sm",
+      "tiny": "text-xs tracking-[0.05em] uppercase font-semibold"
+    }
+  },
+  "spacing_and_layout": {
+    "container": "p-4 sm:p-6 lg:p-8",
+    "gap": "gap-4 sm:gap-6",
+    "card_padding": "p-6",
+    "radius": "rounded-lg"
+  },
+  "components": {
+    "header": "Solid white background, sticky top-0, z-50, border-b border-border. Use flexbox. Left: Logo and Tagline (tagline should be text-muted, tiny). Right: Beta Feedback button.",
+    "sidebar": "Fixed width (w-80), h-[calc(100vh-header_height)], overflow-y-auto, border-r border-border, bg-white p-6. Use collapsible groups for filter sections.",
+    "sliders": "Use Shadcn UI Slider. Thumb and active track should be primary color (#0F172A).",
+    "quick_filters": "Buttons for 'Value Investing', 'Growth Stock', 'Dividend Hunters'. Style as secondary or outline buttons.",
+    "table": "Use Shadcn UI Table. Ticker symbol must use IBM Plex Mono. Positive numbers (e.g., Div Yield > 5%) should be emerald green (#10B981). Interactive row hover (bg-slate-50). cursor-pointer on rows.",
+    "company_detail_sheet": "Use Shadcn Sheet (Slide-over from right). Header: Company Profile. Body: 2 charts.",
+    "charts": "Use Recharts (Shadcn Chart). 1. Bar chart: Revenue (muted blue) vs Net Income (emerald). 2. Line chart: ROE & PER trend over 3 years.",
+    "premium_cta": "Card at the bottom of the sidebar. Dark blue background with the provided abstract texture. High contrast white text. Includes email input and submit button."
+  },
+  "icons": "@phosphor-icons/react",
+  "image_urls": {
+    "premium_cta_bg": {
+      "url": "https://images.unsplash.com/photo-1644088379091-d574269d422f?crop=entropy&cs=srgb&fm=jpg&ixid=M3w4NjA0MTJ8MHwxfHNlYXJjaHwxfHxhYnN0cmFjdCUyMGRhcmslMjBibHVlJTIwZmluYW5jaWFsJTIwZGF0YXxlbnwwfHx8fDE3ODEzNjY0Mjl8MA&ixlib=rb-4.1.0&q=85",
+      "description": "Abstract dark blue financial data background to be used as an overlay/background for the Premium Waitlist CTA box.",
+      "category": "background"
+    }
+  },
+  "instructions_to_main_agent": [
+    "Initialize React app with Tailwind CSS and Shadcn UI.",
+    "Add Google Fonts: Outfit, IBM Plex Sans, IBM Plex Mono.",
+    "Install @phosphor-icons/react for icons and recharts for charts.",
+    "Create a static mock dataset of at least 15-20 IHSG companies with Balance Sheet, Income Statement, Key Ratios, and Dividend history. Store it in a JS file.",
+    "Layout: Sticky header top, main content split into left sidebar (w-80) and right main area (flex-1).",
+    "Sidebar must contain the collapsible filter groups (Valuasi, Profitabilitas, Musim Dividen, Tema Cuan).",
+    "Implement state logic: Filter state must reactively update the table data without page reload.",
+    "Preset buttons (Tema Cuan) should instantly update slider states and filter the table.",
+    "Results table should have sortable column headers. Tickers in monospace font. Apply emerald green color conditionally to strong positive metrics.",
+    "Add a timestamp 'Data terakhir diperbarui: [Current Date & Time]' in a subtle text block.",
+    "When a table row is clicked, open a Shadcn Sheet (right side). Show the company profile and render the Mini Financials (Bar Chart) and Key Ratio Trend (Line Chart).",
+    "Build the Premium Waitlist CTA inside the sidebar using the provided image as a textured background (use bg-cover, bg-center, mix-blend-overlay or similar to ensure text is readable).",
+    "All interactive and key informational elements MUST include `data-testid` attributes."
+  ]
+}

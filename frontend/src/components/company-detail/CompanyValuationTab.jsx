@@ -1,0 +1,80 @@
+import { Line, LineChart, CartesianGrid, Legend, Tooltip, XAxis, YAxis } from "recharts";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import DeferredChart from "@/components/company-detail/DeferredChart";
+import { PER_DOT, ROE_DOT } from "@/components/company-detail/constants";
+import { formatCurrency, formatPercent, formatRatio } from "@/lib/screener";
+
+function SummaryTile({ label, testId, value }) {
+  return (
+    <div className="rounded-2xl border border-slate-200 bg-slate-50 p-4" data-testid={testId}>
+      <p className="text-xs uppercase tracking-[0.2em] text-slate-500">{label}</p>
+      <p className="mt-2 text-lg font-semibold text-slate-950">{value}</p>
+    </div>
+  );
+}
+
+export default function CompanyValuationTab({ active, company }) {
+  const hasValuation = company.valuationSummary && company.valuationSummary.fairValueRange;
+  const hasRatioTrend = company.ratioTrend && company.ratioTrend.length > 0;
+  
+  if (!hasValuation) {
+    return (
+      <div className="space-y-4" data-testid="company-detail-tab-content-valuation">
+        <Card className="border-slate-200 bg-white">
+          <CardHeader>
+            <CardTitle className="text-lg text-slate-950">Valuation summary</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <p className="text-sm text-slate-500">Data valuasi belum tersedia untuk saham ini.</p>
+          </CardContent>
+        </Card>
+      </div>
+    );
+  }
+
+  return (
+    <div className="space-y-4" data-testid="company-detail-tab-content-valuation">
+      <div className="grid gap-4 lg:grid-cols-2 xl:grid-cols-[0.95fr_1.05fr]">
+        <Card className="border-slate-200 bg-white" data-testid="company-detail-valuation-summary-card">
+          <CardHeader>
+            <CardTitle className="text-lg text-slate-950">Valuation summary</CardTitle>
+          </CardHeader>
+          <CardContent className="grid gap-3 sm:grid-cols-2">
+            <SummaryTile label="Fair value range" testId="company-detail-fair-value-range" value={`${formatCurrency(company.valuationSummary.fairValueRange[0])} - ${formatCurrency(company.valuationSummary.fairValueRange[1])}`} />
+            <SummaryTile label="Earnings yield" testId="company-detail-earnings-yield" value={formatPercent(company.valuationSummary.earningsYield)} />
+            <SummaryTile label="Median PER 3Y" testId="company-detail-median-per-3y" value={formatRatio(company.valuationSummary.medianPer3Y)} />
+            <SummaryTile label="Revenue CAGR 3Y" testId="company-detail-revenue-cagr-3y" value={formatPercent(company.valuationSummary.revenueCagr3Y)} />
+            <SummaryTile label="Payout ratio terbaru" testId="company-detail-payout-ratio-latest" value={formatPercent(company.valuationSummary.payoutRatioLatest)} />
+            <SummaryTile label="FCF coverage" testId="company-detail-fcf-coverage" value={formatRatio(company.valuationSummary.fcfCoverage)} />
+          </CardContent>
+        </Card>
+
+        <Card className="border-slate-200 bg-white" data-testid="company-detail-trend-card">
+          <CardHeader>
+            <CardTitle className="text-lg text-slate-950">Key Ratio Trend</CardTitle>
+            <p className="text-sm text-slate-500" data-testid="company-detail-trend-description">Pergerakan ROE dan PER dalam 3 tahun terakhir untuk memvalidasi konsistensi fundamental.</p>
+          </CardHeader>
+          <CardContent>
+            {hasRatioTrend ? (
+              <DeferredChart active={active} className="h-[320px] w-full" testId="company-detail-trend-chart">
+                {({ height, width }) => (
+                  <LineChart data={company.ratioTrend} height={height} width={width}>
+                    <CartesianGrid strokeDasharray="3 3" stroke="#E2E8F0" vertical={false} />
+                    <XAxis dataKey="year" stroke="#64748B" tickLine={false} axisLine={false} />
+                    <YAxis stroke="#64748B" tickLine={false} axisLine={false} />
+                    <Tooltip formatter={(value, name) => [name === "roe" ? formatPercent(value) : formatRatio(value), name === "roe" ? "ROE" : "PER"]} />
+                    <Legend />
+                    <Line dataKey="roe" dot={ROE_DOT} name="ROE" stroke="#10B981" strokeWidth={3} type="monotone" />
+                    <Line dataKey="per" dot={PER_DOT} name="PER" stroke="#0F172A" strokeWidth={3} type="monotone" />
+                  </LineChart>
+                )}
+              </DeferredChart>
+            ) : (
+              <p className="text-sm text-slate-500">Data trend ratio belum tersedia.</p>
+            )}
+          </CardContent>
+        </Card>
+      </div>
+    </div>
+  );
+}
