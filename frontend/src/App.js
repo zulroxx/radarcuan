@@ -1,6 +1,7 @@
 import { useCallback, useMemo, useState } from "react";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import { Buildings, ChartLineUp, Coins, GlobeHemisphereWest } from "@phosphor-icons/react";
+import { SpeedInsights } from "@vercel/speed-insights/react";
 import "@/App.css";
 import { Toaster } from "@/components/ui/sonner";
 import AdminDashboard from "@/components/AdminDashboard";
@@ -130,6 +131,7 @@ export default function App() {
         <Route element={<AdminPage />} path="/admin" />
       </Routes>
       <Toaster position="top-right" richColors />
+      <SpeedInsights />
     </BrowserRouter>
   );
 }
