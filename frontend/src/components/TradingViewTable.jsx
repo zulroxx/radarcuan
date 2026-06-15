@@ -306,6 +306,7 @@ export default function TradingViewTable({ onDataUpdate, onSelectCompany }) {
     }
     const timer = scheduleNext();
     return () => clearTimeout(timer);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const filteredData = useMemo(() => {

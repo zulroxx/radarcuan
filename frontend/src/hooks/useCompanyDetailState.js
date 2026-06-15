@@ -8,6 +8,7 @@ export default function useCompanyDetailState({ company, companies, open }) {
     if (open && company) {
       setActiveTab("overview");
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [company?.stockCode, open, setActiveTab]);
 
   const sectorBenchmark = useMemo(() => {
