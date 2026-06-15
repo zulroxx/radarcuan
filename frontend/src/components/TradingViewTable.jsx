@@ -169,9 +169,9 @@ function ReasonList({ title, icon: Icon, items, tone }) {
 
 const cellClass =
   "border-b border-slate-100 px-4 py-3.5 align-top text-sm";
-const stickyLeft = "sticky left-0 z-10 bg-white";
-const stickyRight = "sticky right-0 z-10 bg-white";
-const stickyRightAlasan = "sticky right-[100px] z-10 bg-white";
+const stickyLeft = "lg:sticky lg:left-0 z-10 bg-white";
+const stickyRight = "lg:sticky lg:right-0 z-10 bg-white";
+const stickyRightAlasan = "lg:sticky lg:right-[100px] z-10 bg-white";
 
 function StockRow({ item, onSelect }) {
   const analysis = item.analysis || {};
@@ -179,14 +179,14 @@ function StockRow({ item, onSelect }) {
 
   return (
     <tr className="cursor-pointer border-b border-slate-100 hover:bg-slate-50/80" onClick={() => onSelect?.(item)}>
-      <td className={`${cellClass} ${stickyLeft} after:pointer-events-none after:absolute after:inset-y-0 after:right-0 after:w-px after:bg-slate-200`}>
+      <td className={`${cellClass} ${stickyLeft} lg:after:pointer-events-none lg:after:absolute lg:after:inset-y-0 lg:after:right-0 lg:after:w-px lg:after:bg-slate-200`}>
         <div className="flex items-center gap-2">
           <div className="font-mono text-sm font-semibold text-slate-950">{item.ticker}</div>
           <Badge className={`hidden px-1.5 py-0 text-[10px] font-semibold sm:inline-flex ${getScoreClass(score)}`}>{getScoreLabel(score)}</Badge>
         </div>
         <div className="mt-1 text-xs text-slate-500">{item.sector}</div>
       </td>
-      <td className={`${cellClass} hidden sm:table-cell ${stickyLeft} left-[140px] after:pointer-events-none after:absolute after:inset-y-0 after:right-0 after:w-px after:bg-slate-200`}>
+      <td className={`${cellClass} hidden sm:table-cell ${stickyLeft} lg:left-[140px] lg:after:pointer-events-none lg:after:absolute lg:after:inset-y-0 lg:after:right-0 lg:after:w-px lg:after:bg-slate-200`}>
         <div className="text-sm font-medium text-slate-900">{item.companyName}</div>
         <div className="mt-0.5 text-xs text-slate-500">{formatMarketCap(item.marketCap)}</div>
       </td>
@@ -217,7 +217,7 @@ function StockRow({ item, onSelect }) {
         </div>
         <div className="mt-1.5 text-xs text-slate-500">{item.recommendation}</div>
       </td>
-      <td className={`${cellClass} sm:table-cell hidden ${stickyRightAlasan} before:pointer-events-none before:absolute before:inset-y-0 before:left-0 before:w-px before:bg-slate-200`}>
+      <td className={`${cellClass} sm:table-cell hidden ${stickyRightAlasan} lg:before:pointer-events-none lg:before:absolute lg:before:inset-y-0 lg:before:left-0 lg:before:w-px lg:before:bg-slate-200`}>
         <ReasonList icon={TrendUp} items={analysis.investmentReasons} title="Alasan investasi" />
       </td>
       <td className={`${cellClass} lg:table-cell hidden ${stickyRight}`}>
@@ -388,10 +388,10 @@ export default function TradingViewTable({ onDataUpdate, onSelectCompany }) {
             <table className="w-full min-w-[900px] caption-bottom text-sm">
               <thead className="sticky top-0 z-20 [&_tr]:border-b-0">
                 <tr>
-                  <th className={`sticky left-0 z-30 bg-slate-50 px-4 py-3 text-xs font-semibold uppercase tracking-wider text-slate-500 after:pointer-events-none after:absolute after:inset-y-0 after:right-0 after:w-px after:bg-slate-200`}>
+                  <th className={`lg:sticky lg:left-0 z-30 bg-slate-50 px-4 py-3 text-xs font-semibold uppercase tracking-wider text-slate-500 lg:after:pointer-events-none lg:after:absolute lg:after:inset-y-0 lg:after:right-0 lg:after:w-px lg:after:bg-slate-200`}>
                     Ticker
                   </th>
-                  <th className={`sticky left-[140px] z-30 hidden bg-slate-50 px-4 py-3 text-xs font-semibold uppercase tracking-wider text-slate-500 sm:table-cell after:pointer-events-none after:absolute after:inset-y-0 after:right-0 after:w-px after:bg-slate-200`}>
+                  <th className={`lg:sticky lg:left-[140px] z-30 hidden bg-slate-50 px-4 py-3 text-xs font-semibold uppercase tracking-wider text-slate-500 sm:table-cell lg:after:pointer-events-none lg:after:absolute lg:after:inset-y-0 lg:after:right-0 lg:after:w-px lg:after:bg-slate-200`}>
                     Perusahaan
                   </th>
                   {sortableColumns.map((col) => {
@@ -419,13 +419,13 @@ export default function TradingViewTable({ onDataUpdate, onSelectCompany }) {
                       </th>
                     );
                   })}
-                  <th className={`sticky right-[100px] z-30 hidden bg-slate-50 px-4 py-3 text-xs font-semibold uppercase tracking-wider text-slate-500 sm:table-cell before:pointer-events-none before:absolute before:inset-y-0 before:left-0 before:w-px before:bg-slate-200`}>
+                  <th className={`lg:sticky lg:right-[100px] z-30 hidden bg-slate-50 px-4 py-3 text-xs font-semibold uppercase tracking-wider text-slate-500 sm:table-cell lg:before:pointer-events-none lg:before:absolute lg:before:inset-y-0 lg:before:left-0 lg:before:w-px lg:before:bg-slate-200`}>
                     <span className="inline-flex items-center gap-1">
                       <ChartLineUp className="h-3.5 w-3.5" />
                       Alasan
                     </span>
                   </th>
-                  <th className={`sticky right-0 z-30 hidden bg-slate-50 px-4 py-3 text-xs font-semibold uppercase tracking-wider text-slate-500 lg:table-cell`}>
+                  <th className={`lg:sticky lg:right-0 z-30 hidden bg-slate-50 px-4 py-3 text-xs font-semibold uppercase tracking-wider text-slate-500 lg:table-cell`}>
                     Risiko
                   </th>
                 </tr>
