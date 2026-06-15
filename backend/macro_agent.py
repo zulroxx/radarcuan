@@ -8,32 +8,37 @@ import yfinance as yf
 
 ROOT_DIR = Path(__file__).parent
 MACRO_CACHE_FILE = ROOT_DIR / "agent_cache" / "macro_data.json"
-MACRO_CACHE_TTL = 3600  # 1 hour
+MACRO_CACHE_TTL = 3600
 
 logger = logging.getLogger(__name__)
 
 BASE_MACRO_DATA: List[Dict[str, Any]] = [
+    # === Domestic Monetary Policy ===
     {
         "id": "bi_rate",
         "label": "BI Rate",
-        "category": "Kebijakan Moneter",
+        "category": "Moneter Domestik",
         "unit": "%",
         "defaultValue": "5.75",
         "change": -0.25,
         "description": "Suku bunga acuan BI 7-Day RR",
         "source": "Bank Indonesia",
         "updated_at": None,
+        "impact": "Suku bunga rendah mendorong sektor perbankan, properti, konsumer",
+        "trend": "menurun",
     },
     {
         "id": "inflation",
         "label": "Inflasi (IHK)",
-        "category": "Kebijakan Moneter",
+        "category": "Moneter Domestik",
         "unit": "%",
         "defaultValue": "2.48",
         "change": -0.12,
         "description": "YoY — Indeks Harga Konsumen",
         "source": "BPS",
         "updated_at": None,
+        "impact": "Inflasi rendah menguntungkan sektor konsumer dan ritel",
+        "trend": "stabil",
     },
     {
         "id": "gdp",
@@ -45,7 +50,23 @@ BASE_MACRO_DATA: List[Dict[str, Any]] = [
         "description": "Pertumbuhan YoY kuartal terakhir",
         "source": "BPS",
         "updated_at": None,
+        "impact": "PDB tumbuh mendorong seluruh sektor secara umum",
+        "trend": "positif",
     },
+    {
+        "id": "bond_yield",
+        "label": "10Y Bond Yield",
+        "category": "Moneter Domestik",
+        "unit": "%",
+        "defaultValue": "6.85",
+        "change": 0.15,
+        "description": "Yield obligasi pemerintah 10 tahun",
+        "source": "Bloomberg / Reuters",
+        "updated_at": None,
+        "impact": "Yield tinggi membuat saham kurang menarik (risk-free rate naik)",
+        "trend": "meningkat",
+    },
+    # === Exchange Rate & Commodities ===
     {
         "id": "usd_idr",
         "label": "USD/IDR",
@@ -56,39 +77,8 @@ BASE_MACRO_DATA: List[Dict[str, Any]] = [
         "description": "Nilai tukar Rupiah terhadap USD",
         "source": "Yahoo Finance",
         "updated_at": None,
-    },
-    {
-        "id": "bond_yield",
-        "label": "10Y Bond Yield",
-        "category": "Kebijakan Moneter",
-        "unit": "%",
-        "defaultValue": "6.85",
-        "change": 0.15,
-        "description": "Yield obligasi pemerintah 10 tahun",
-        "source": "Bloomberg / Reuters",
-        "updated_at": None,
-    },
-    {
-        "id": "cad",
-        "label": "CAD",
-        "category": "Pertumbuhan Ekonomi",
-        "unit": "B",
-        "defaultValue": "-2.4",
-        "change": -0.3,
-        "description": "Current Account Defisit (USD)",
-        "source": "Bank Indonesia",
-        "updated_at": None,
-    },
-    {
-        "id": "reserves",
-        "label": "Cadangan Devisa",
-        "category": "Kebijakan Moneter",
-        "unit": "B",
-        "defaultValue": "146.2",
-        "change": 3.1,
-        "description": "Posisi akhir bulan lalu (USD)",
-        "source": "Bank Indonesia",
-        "updated_at": None,
+        "impact": "Rupiah melemah menguntungkan sektor eksportir (batu bara, CPO, tekstil)",
+        "trend": "melemah",
     },
     {
         "id": "oil_price",
@@ -100,6 +90,8 @@ BASE_MACRO_DATA: List[Dict[str, Any]] = [
         "description": "Brent crude oil / barel",
         "source": "Yahoo Finance",
         "updated_at": None,
+        "impact": "Minyak tinggi menguntungkan energi, merugikan transportasi & manufaktur",
+        "trend": "volatil",
     },
     {
         "id": "coal_price",
@@ -111,6 +103,8 @@ BASE_MACRO_DATA: List[Dict[str, Any]] = [
         "description": "Newcastle coal / ton (estimasi)",
         "source": "Yahoo Finance",
         "updated_at": None,
+        "impact": "Batubara tinggi langsung mendorong sektor energi",
+        "trend": "stabil",
     },
     {
         "id": "cpo_price",
@@ -122,7 +116,90 @@ BASE_MACRO_DATA: List[Dict[str, Any]] = [
         "description": "Crude Palm Oil / kg (estimasi)",
         "source": "Yahoo Finance",
         "updated_at": None,
+        "impact": "CPO tinggi menguntungkan perkebunan dan agrikultur",
+        "trend": "stabil",
     },
+    # === Global Central Banks ===
+    {
+        "id": "fed_rate",
+        "label": "Fed Rate",
+        "category": "Kebijakan Global",
+        "unit": "%",
+        "defaultValue": "4.50",
+        "change": -0.25,
+        "description": "Suku bunga acuan Federal Reserve AS",
+        "source": "Federal Reserve",
+        "updated_at": None,
+        "impact": "Fed Rate turun meredakan tekanan di pasar emerging market termasuk Indonesia",
+        "trend": "menurun",
+    },
+    {
+        "id": "us_inflation",
+        "label": "Inflasi AS",
+        "category": "Kebijakan Global",
+        "unit": "%",
+        "defaultValue": "3.10",
+        "change": -0.20,
+        "description": "YoY CPI AS — indikator inflasi global",
+        "source": "US BLS",
+        "updated_at": None,
+        "impact": "Inflasi AS turun memberi ruang The Fed menurunkan suku bunga",
+        "trend": "menurun",
+    },
+    {
+        "id": "us_10y_yield",
+        "label": "US 10Y Treasury",
+        "category": "Kebijakan Global",
+        "unit": "%",
+        "defaultValue": "4.20",
+        "change": -0.10,
+        "description": "Yield obligasi AS 10 tahun — acuan global risk-free rate",
+        "source": "US Treasury",
+        "updated_at": None,
+        "impact": "Yield AS turun mendorong aliran modal ke emerging market",
+        "trend": "menurun",
+    },
+    # === Global Indices ===
+    {
+        "id": "sp500",
+        "label": "S&P 500",
+        "category": "Indeks Global",
+        "unit": "",
+        "defaultValue": "5420.5",
+        "change": None,
+        "description": "Indeks saham AS — sentimen risk appetite global",
+        "source": "Yahoo Finance",
+        "updated_at": None,
+        "impact": "S&P 1300 naik menandakan risk-on global, positif untuk emerging market",
+        "trend": "positif",
+    },
+    {
+        "id": "nikkei",
+        "label": "Nikkei 225",
+        "category": "Indeks Global",
+        "unit": "",
+        "defaultValue": "38450",
+        "change": None,
+        "description": "Indeks saham Jepang — barometer Asia",
+        "source": "Yahoo Finance",
+        "updated_at": None,
+        "impact": "Nikkei naik menandakan sentimen positif di Asia",
+        "trend": "positif",
+    },
+    {
+        "id": "hsi",
+        "label": "HSI",
+        "category": "Indeks Global",
+        "unit": "",
+        "defaultValue": "18400",
+        "change": None,
+        "description": "Hang Seng Index — sentimen ekonomi China",
+        "source": "Yahoo Finance",
+        "updated_at": None,
+        "impact": "HSI naik mengindikasikan permintaan China menguat, positif untuk komoditas",
+        "trend": "positif",
+    },
+    # === Capital Flow ===
     {
         "id": "foreign_flow",
         "label": "Foreign Flow",
@@ -133,17 +210,21 @@ BASE_MACRO_DATA: List[Dict[str, Any]] = [
         "description": "Net buy asing minggu ini (IDR)",
         "source": "KSEI / RTI",
         "updated_at": None,
+        "impact": "Asing net buy menandakan kepercayaan investor global terhadap Indonesia",
+        "trend": "positif",
     },
     {
-        "id": "ihsg",
-        "label": "IHSG",
-        "category": "Pertumbuhan Ekonomi",
-        "unit": "",
-        "defaultValue": "7125.4",
-        "change": None,
-        "description": "Indeks Harga Saham Gabungan",
-        "source": "Yahoo Finance",
+        "id": "reserves",
+        "label": "Cadangan Devisa",
+        "category": "Aliran Modal",
+        "unit": "B",
+        "defaultValue": "146.2",
+        "change": 3.1,
+        "description": "Posisi akhir bulan lalu (USD)",
+        "source": "Bank Indonesia",
         "updated_at": None,
+        "impact": "Cadangan devisa tinggi memberi stabilitas nilai tukar",
+        "trend": "positif",
     },
 ]
 
@@ -151,11 +232,28 @@ YFINANCE_TICKERS = {
     "usd_idr": "IDR=X",
     "ihsg": "^JKSE",
     "oil_price": "BZ=F",
+    "sp500": "^GSPC",
+    "nikkei": "^N225",
+    "hsi": "^HSI",
 }
 
-# Approximate tickers for coal and CPO
-# Newcastle coal futures - not directly on yfinance, use MTF (Methane) or none
-# CPO - use FCPO or similar
+SECTOR_MACRO_SENSITIVITY = {
+    "Perbankan": ["bi_rate", "fed_rate", "gdp", "bond_yield", "us_10y_yield"],
+    "Keuangan": ["bi_rate", "fed_rate", "bond_yield", "sp500"],
+    "Teknologi": ["sp500", "nikkei", "us_10y_yield", "foreign_flow"],
+    "Kesehatan": ["gdp", "inflation"],
+    "Telekomunikasi": ["bi_rate", "inflation"],
+    "Energi": ["oil_price", "coal_price", "usd_idr", "hsi"],
+    "Bahan Baku": ["coal_price", "cpo_price", "usd_idr", "hsi"],
+    "Infrastruktur": ["bi_rate", "gdp", "bond_yield"],
+    "Transportasi & Logistik": ["oil_price", "gdp", "inflation"],
+    "Konsumer Non-Primer": ["inflation", "bi_rate", "gdp"],
+    "Konsumer": ["inflation", "gdp", "bi_rate"],
+    "Industri": ["gdp", "usd_idr", "oil_price"],
+    "Distribusi": ["gdp", "inflation"],
+    "Jasa & Perdagangan": ["gdp", "inflation", "usd_idr"],
+    "Lainnya": ["gdp", "sp500"],
+}
 
 
 def now_iso() -> str:
@@ -196,14 +294,12 @@ def fetch_live_data() -> Dict[str, Optional[float]]:
             if not hist.empty:
                 price = hist["Close"].iloc[-1]
                 if key == "usd_idr":
-                    # IDR=X gives USD/IDR rate
                     results[key] = round(float(price), 0)
                 elif key == "oil_price":
                     results[key] = round(float(price), 2)
-                elif key == "ihsg":
+                elif key in ("ihsg", "sp500", "nikkei", "hsi"):
                     results[key] = round(float(price), 1)
             else:
-                # Try getting regular market price
                 info = tk.info
                 if info and "regularMarketPrice" in info:
                     price = info["regularMarketPrice"]
@@ -230,19 +326,24 @@ def get_macro_indicators(refresh: bool = False) -> Dict[str, Any]:
     indicators = []
     for item in BASE_MACRO_DATA:
         indicator = dict(item)
+        ind_id = indicator["id"]
 
-        if indicator["id"] in live and live[indicator["id"]] is not None:
-            live_val = live[indicator["id"]]
+        if ind_id in live and live[ind_id] is not None:
+            live_val = live[ind_id]
             default_val = float(indicator["defaultValue"].replace(",", ""))
-            indicator["change"] = round(
-                ((live_val - default_val) / default_val) * 100, 2
-            )
+            if default_val != 0:
+                indicator["change"] = round(
+                    ((live_val - default_val) / default_val) * 100, 2
+                )
+            indicator["liveValue"] = live_val
 
-            if indicator["id"] == "usd_idr":
+            if ind_id in ("usd_idr",):
                 indicator["value"] = f"{live_val:,.0f}"
-            elif indicator["id"] == "ihsg":
+            elif ind_id in ("ihsg", "sp500"):
                 indicator["value"] = f"{live_val:,.1f}"
-            elif indicator["id"] == "oil_price":
+            elif ind_id in ("nikkei", "hsi"):
+                indicator["value"] = f"{live_val:,.0f}"
+            elif ind_id == "oil_price":
                 indicator["value"] = f"${live_val:.2f}"
             else:
                 indicator["value"] = str(live_val)
@@ -260,3 +361,21 @@ def get_macro_indicators(refresh: bool = False) -> Dict[str, Any]:
         "from_cache": False,
         "total": len(indicators),
     }
+
+
+def get_macro_summary() -> str:
+    """Return a concise macro summary text for LLM prompts."""
+    data = get_macro_indicators()
+    lines = []
+    for ind in data["indicators"]:
+        trend = ind.get("trend", "netral")
+        impact = ind.get("impact", "")
+        lines.append(f"- {ind['label']}: {ind['value']} ({trend}) — {impact}")
+    return "\n".join(lines)
+
+
+def get_sector_macro_context(sector: str) -> List[Dict[str, Any]]:
+    """Get relevant macro indicators for a specific sector."""
+    data = get_macro_indicators()
+    relevant_ids = SECTOR_MACRO_SENSITIVITY.get(sector, [])
+    return [ind for ind in data["indicators"] if ind["id"] in relevant_ids]

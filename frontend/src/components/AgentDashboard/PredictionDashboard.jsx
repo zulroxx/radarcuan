@@ -196,12 +196,32 @@ function SectorPredictionCard({ prediction, rank, onSelect, isSelected }) {
             {prediction.rationale}
           </div>
         )}
+
+        {isSelected && prediction.macro_context && (
+          <div className="mt-2 rounded-md bg-sky-50 p-2 text-[10px] leading-5 text-sky-700">
+            <span className="font-semibold">Kontext Makro:</span> {prediction.macro_context}
+          </div>
+        )}
       </CardContent>
     </Card>
   );
 }
 
+function ScoreBar({ label, value, color }) {
+  if (value === null || value === undefined) return null;
+  return (
+    <div className="flex items-center gap-2">
+      <span className="w-24 text-[10px] text-slate-500">{label}</span>
+      <div className="h-1.5 flex-1 rounded-full bg-slate-100">
+        <div className={`h-full rounded-full ${color || "bg-slate-400"}`} style={{ width: `${Math.max(2, Math.min(100, value))}%` }} />
+      </div>
+      <span className="w-8 text-right text-[10px] font-medium text-slate-700">{Math.round(value)}</span>
+    </div>
+  );
+}
+
 function StockRecommendationCard({ stock }) {
+  const scoring = stock.scoring || {};
   return (
     <Card className="border-slate-200 bg-white">
       <CardContent className="p-4">
@@ -234,6 +254,23 @@ function StockRecommendationCard({ stock }) {
           </div>
         </div>
 
+        {/* Scoring Breakdown */}
+        {(stock.fundamental_score || stock.valuation_score || scoring.combined_score) && (
+          <div className="mt-3 rounded-md bg-slate-50 p-2">
+            <p className="mb-1.5 text-[10px] font-semibold uppercase tracking-wide text-slate-500">Skor Detail</p>
+            <ScoreBar label="Fundamental" value={stock.fundamental_score || scoring.fundamental_score} color="bg-emerald-500" />
+            <ScoreBar label="Teknikal" value={scoring.technical_score} color="bg-sky-500" />
+            <ScoreBar label="Valuasi" value={stock.valuation_score || scoring.valuation_score} color="bg-violet-500" />
+            <ScoreBar label="Makro Fit" value={scoring.macro_sector_fit} color="bg-amber-500" />
+            {scoring.combined_score && (
+              <div className="mt-1 flex items-center gap-2 border-t border-slate-200 pt-1">
+                <span className="w-24 text-[10px] font-semibold text-slate-700">Skor Gabungan</span>
+                <span className={`text-xs font-bold ${getScoreColor(scoring.combined_score)}`}>{Math.round(scoring.combined_score)}/100</span>
+              </div>
+            )}
+          </div>
+        )}
+
         <div className="mt-3 grid grid-cols-3 gap-2 sm:grid-cols-5">
           <MetricBadge label="PER" value={stock.key_metrics?.per} suffix="x" />
           <MetricBadge label="PBV" value={stock.key_metrics?.pbv} suffix="x" />
@@ -242,7 +279,7 @@ function StockRecommendationCard({ stock }) {
           <MetricBadge label="Div Yield" value={stock.key_metrics?.dividend_yield} suffix="%" />
         </div>
 
-        <div className="mt-3 flex items-center gap-2">
+        <div className="mt-3 flex flex-wrap items-center gap-2">
           <Badge
             className={`text-[10px] hover:!bg-inherit focus:!ring-0 ${
               stock.news_sentiment === "positif"
@@ -446,7 +483,7 @@ export default function PredictionDashboard() {
           Prediksi Sektor & Rekomendasi Saham
         </h2>
         <p className="mt-1 text-xs leading-6 text-slate-600 sm:text-sm">
-          Agent menganalisis data fundamental sektor dan sentimen berita
+          Agent menganalisis data fundamental sektor + kondisi makroekonomi global
           menggunakan Mistral AI untuk memprediksi sektor dengan potensi cuan tertinggi.
         </p>
       </div>

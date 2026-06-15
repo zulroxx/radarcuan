@@ -22,7 +22,7 @@ ROOT_DIR = Path(__file__).parent
 CACHE_DIR = ROOT_DIR / "agent_cache"
 CACHE_DIR.mkdir(exist_ok=True)
 STOCK_CACHE_FILE = CACHE_DIR / "stock_recommendations.json"
-CACHE_TTL_SECONDS = 3600  # 1 jam saat pasar buka
+CACHE_TTL_SECONDS = 3600
 TV_CACHE_FILE = ROOT_DIR / "tradingview_cache.json"
 
 LLM_MODEL = os.environ.get("LLM_MODEL", "mistral-small-latest")
@@ -64,7 +64,6 @@ def now_iso() -> str:
 
 
 def is_idn_market_open() -> bool:
-    """IDX trading hours: Mon-Fri 09:00-15:00 WIB (UTC+7)"""
     now = datetime.now(timezone(timedelta(hours=7)))
     if now.weekday() >= 5:
         return False
@@ -86,7 +85,6 @@ def load_cached_recommendations(sector: str, limit: int) -> Optional[Dict[str, A
             if age < CACHE_TTL_SECONDS and entry.get("limit", 0) >= limit:
                 return entry
         else:
-            # Pasar tutup — pakai cache berapa pun usianya
             if entry.get("limit", 0) >= limit:
                 return entry
     except (json.JSONDecodeError, ValueError, KeyError):
@@ -110,7 +108,7 @@ def save_cache(sector: str, data: Dict[str, Any]) -> None:
 def get_llm_client() -> Mistral:
     api_key = os.environ.get("LLM_API_KEY")
     if not api_key:
-        raise ValueError("LLM_API_KEY tidak ditemukan di environment variables")
+        raise ValueError("LLM_API_KEY tidak ditemukan")
     return Mistral(api_key=api_key, server_url=os.environ.get("LLM_BASE_URL", "https://api.mistral.ai"))
 
 
@@ -177,26 +175,57 @@ def build_prompt(sector_name: str, stocks: List[Dict[str, Any]], news_data: Dict
         })
     stocks_json = json.dumps(stocks_simple, ensure_ascii=False, indent=2)
     news_json = json.dumps(news_data, ensure_ascii=False, indent=2)
-    ctx = f"\nPREDIKSI SEKTOR: {json.dumps(sector_prediction, ensure_ascii=False)}\n" if sector_prediction else ""
+
+    sector_ctx = ""
+    if sector_prediction:
+        sector_ctx = f"\nPREDIKSI SEKTOR: {json.dumps(sector_prediction, ensure_ascii=False)}\n"
+
+    # Macro context for sector
+    macro_context = ""
+    try:
+        from macro_agent import get_sector_macro_context
+        macro_indicators = get_sector_macro_context(sector_name)
+        if macro_indicators:
+            macro_context = "\nKONDISI MAKRO TERKAIT SEKTOR INI:\n"
+            for ind in macro_indicators:
+                macro_context += f"- {ind['label']}: {ind['value']} (trend: {ind.get('trend', 'netral')}) — {ind.get('impact', '')}\n"
+    except Exception:
+        pass
+
+    from scoring_model import WEIGHTS
+    weights_str = json.dumps(WEIGHTS, indent=2)
 
     return f"""Anda analis AI saham Indonesia. Rekomendasikan saham terbaik di sektor {sector_name}.
-{ctx}
-DATA SAHAM:
+{sector_ctx}
+{macro_context}
+DATA SAHAM (Teknikal + Fundamental):
 {stocks_json}
 
-BERITA:
+BERITA TERBARU:
 {news_json}
+
+BOBOT PENILAIAN:
+{weights_str}
+
+PERTIMBANGKAN:
+1. FUNDAMENTAL: PER, PBV, ROE, revenue growth, EPS growth, dividend yield, debt-to-equity
+2. TEKNIKAL: skor investasi dari analisis
+3. MAKRO: bagaimana kondisi ekonomi mempengaruhi sektor {sector_name}
+4. BERITA: sentimen berita terkini
+5. VALUASI: apakah saham murah atau mahal relatif terhadap sektor
 
 Per saham berikan:
 - ticker, score (0-100), recommendation (Strong Buy/Buy/Hold/Sell/Strong Sell)
-- rationale (1-2 kalimat Bahasa Indonesia, spesifik)
+- rationale: jelaskan KENAPA — sebut PER, ROE, valuasi, dan pengaruh makro
 - news_sentiment ("positif"/"netral"/"negatif")
-- key_headline (satu headline teratas)
-- risks (1-2 risiko)
+- key_headline
+- risks (1-2 risiko spesifik)
 - key_metrics: per, pbv, roe, revenue_growth, dividend_yield
+- fundamental_score: skor fundamental 0-100
+- valuation_score: skor valuasi 0-100
 
 RESPON JSON:
-{{"sector":"{sector_name}","recommendations":[{{"ticker":"BBCA","score":85,"recommendation":"Strong Buy","rationale":"...","news_sentiment":"positif","key_headline":"...","risks":[],"key_metrics":{{"per":14,"pbv":2.8,"roe":23,"revenue_growth":12,"dividend_yield":4.2}}}}]}}
+{{"sector":"{sector_name}","recommendations":[{{"ticker":"BBCA","score":85,"recommendation":"Strong Buy","rationale":"PER 14x menarik dengan ROE 23% dan BI rate turun mendukung margin bunga","news_sentiment":"positif","key_headline":"BBCA laba naik 12%","risks":["Kredit macet"],"key_metrics":{{"per":14,"pbv":2.8,"roe":23,"revenue_growth":12,"dividend_yield":4.2}},"fundamental_score":82,"valuation_score":70}}]}}
 Max 10 rekomendasi, urut dari score tertinggi. JANGAN tulis apapun di luar JSON."""
 
 
@@ -227,7 +256,7 @@ def recommend_stocks(sector_name: str, limit: int = 10, refresh: bool = False,
         if cached:
             return cached
 
-    logger.info(f"Recommending stocks for {sector_name}...")
+    logger.info(f"Recommending stocks for {sector_name} (enhanced)...")
 
     stocks = get_stocks_in_sector(sector_name)
     if not stocks:
@@ -255,6 +284,7 @@ def recommend_stocks(sector_name: str, limit: int = 10, refresh: bool = False,
         "generated_at": now_iso(),
         "model": LLM_MODEL,
         "limit": limit,
+        "method": "enhanced_fundamental_macro",
     }
     save_cache(sector_name, result)
     return result

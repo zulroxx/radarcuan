@@ -20,7 +20,7 @@ ROOT_DIR = Path(__file__).parent
 CACHE_DIR = ROOT_DIR / "agent_cache"
 CACHE_DIR.mkdir(exist_ok=True)
 SECTOR_CACHE_FILE = CACHE_DIR / "sector_predictions.json"
-CACHE_TTL_SECONDS = 3600  # 1 jam saat pasar buka
+CACHE_TTL_SECONDS = 3600
 TV_CACHE_FILE = ROOT_DIR / "tradingview_cache.json"
 TV_CACHE_USABLE_SECONDS = 3600
 
@@ -57,7 +57,6 @@ def now_iso() -> str:
 
 
 def is_idn_market_open() -> bool:
-    """IDX trading hours: Mon-Fri 09:00-15:00 WIB (UTC+7)"""
     now = datetime.now(timezone(timedelta(hours=7)))
     if now.weekday() >= 5:
         return False
@@ -76,7 +75,6 @@ def load_cached_predictions() -> Optional[Dict[str, Any]]:
             if age < CACHE_TTL_SECONDS:
                 return cached
         else:
-            # Pasar tutup — pakai cache berapa pun usianya (hingga buka lagi)
             return cached
     except (json.JSONDecodeError, ValueError, KeyError):
         pass
@@ -105,10 +103,6 @@ def load_tv_data_from_cache() -> Optional[List[Dict[str, Any]]]:
         records = cached.get('data', [])
         if not records:
             return None
-        cached_time = datetime.fromisoformat(cached.get('cached_at', ''))
-        age = (datetime.now(timezone.utc) - cached_time).total_seconds()
-        if age > TV_CACHE_USABLE_SECONDS:
-            logger.info("Cache TV kadaluarsa, akan direfresh")
         return records
     except (json.JSONDecodeError, ValueError, KeyError):
         return None
@@ -184,25 +178,47 @@ def build_prompt(tv_data: Dict[str, Any]) -> str:
             continue
         mapped_data[idx_name] = dict(metrics)
     tv_json = json.dumps(mapped_data, ensure_ascii=False, indent=2)
-    return f"""Anda analis AI pasar saham Indonesia. Prediksi 10 sektor terbaik per timeframe.
 
-12 SEKTOR IDX: {IDX_SECTORS_STR}
+    # Macro context
+    try:
+        from macro_agent import get_macro_summary
+        macro_summary = get_macro_summary()
+    except Exception:
+        macro_summary = "Data makro tidak tersedia."
 
-DATA FUNDAMENTAL SAAT INI:
+    # Scoring weights context
+    from scoring_model import WEIGHTS, SECTOR_MACRO_MAP
+    weights_str = json.dumps(WEIGHTS, indent=2)
+
+    return f"""Anda analis AI pasar saham Indonesia senior dengan pendekatan fundamental + makroekonomi.
+
+PERTIMBANGKAN 3 FAKTOR UTAMA:
+1. FUNDAMENTAL: PER, PBV, ROE, revenue growth, EPS growth, dividend yield, debt-to-equity
+2. MAKROEKONOMI GLOBAL & DOMESTIK: suku bunga, inflasi, nilai tukar, komoditas, indeks global
+3. VALUASI: apakah sektor sedang murah/mahal secara historis
+
+BOBOT SKORING:
+{weights_str}
+
+DATA FUNDAMENTAL SEKTOR (rata-rata):
 {tv_json}
 
-Untuk setiap timeframe 1M/3M/6M/12M, berikan 10 sektor teratas.
-Gunakan nama Indonesia (contoh: Perbankan, Teknologi, Energi).
+KONDISI MAKROEKONOMI SAAT INI:
+{macro_summary}
 
-Per sektor:
-- predicted_return: float (bisa negatif)
+TUGAS: Prediksi 10 sektor IDX terbaik untuk 4 timeframe: 1M, 3M, 6M, 12M.
+Gunakan nama Indonesia: Perbankan, Teknologi, Energi, Bahan Baku, Kesehatan, Telekomunikasi, Keuangan, Konsumer, Konsumer Non-Primer, Infrastruktur, Transportasi & Logistik, Industri, Jasa & Perdagangan, Distribusi, Lainnya.
+
+Per sektor sertakan:
+- predicted_return: float (bisa negatif) — estimasi return realistis
 - confidence: "high"/"medium"/"low"
-- rationale: spesifik, sebutkan angka PER/ROE/revenue growth/dividen
-- key_drivers: array 2-3 faktor
+- rationale: jelaskan KENAPA — sebut angka fundamental, kondisi makro, dan valuasi
+- key_drivers: array 2-3 faktor pendorong (paling spesifik)
+- macro_context: bagaimana kondisi makro mempengaruhi sektor ini
 
 RESPON JSON:
-{{"predictions":{{"1M":[{{"sector":"...","predicted_return":5.2,"confidence":"high","rationale":"...","key_drivers":["..."]}}],"3M":[],"6M":[],"12M":[]}}}}
-JANGAN tulis apapun di luar JSON.""" 
+{{"predictions":{{"1M":[{{"sector":"...","predicted_return":5.2,"confidence":"high","rationale":"PER 12x dengan ROE 18% dan BI rate turun mendukung...","key_drivers":["Penurunan BI Rate","Kredit tumbuh 12%"],"macro_context":"Suku bunga turun mendukung margin bunga bersih"}}],"3M":[],"6M":[],"12M":[]}}}}
+JANGAN tulis apapun di luar JSON."""
 
 
 def parse_llm_response(content: str) -> Dict[str, Any]:
@@ -236,7 +252,7 @@ def predict_sectors(refresh: bool = False) -> Dict[str, Any]:
         if cached:
             return cached
 
-    logger.info("Generating sector predictions via Mistral...")
+    logger.info("Generating sector predictions via Mistral (enhanced)...")
     tv_data = fetch_sector_data()
     prompt = build_prompt(tv_data)
 
@@ -255,6 +271,7 @@ def predict_sectors(refresh: bool = False) -> Dict[str, Any]:
         "predictions": parsed.get("predictions", {}),
         "generated_at": now_iso(),
         "model": LLM_MODEL,
+        "method": "enhanced_fundamental_macro",
     }
     save_cache(result)
     return result

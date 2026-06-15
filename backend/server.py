@@ -14,6 +14,7 @@ from fastapi import APIRouter, FastAPI, HTTPException, Query
 from motor.motor_asyncio import AsyncIOMotorClient
 from pydantic import BaseModel, ConfigDict, EmailStr, Field
 from contextlib import asynccontextmanager
+from starlette.responses import Response
 
 logging.basicConfig(
     level=logging.INFO,
@@ -511,6 +512,124 @@ async def get_sector_stock_recommendations(
     except Exception as exc:
         logger.exception("Gagal menjalankan rekomendasi saham")
         raise HTTPException(status_code=500, detail=f"Gagal rekomendasi saham: {str(exc)}") from exc
+
+
+@api_router.get("/sector/{sector_name}/stocks/scoring")
+async def get_sector_stock_scoring(
+    sector_name: str,
+    limit: int = Query(default=10, ge=1, le=20),
+) -> Dict[str, Any]:
+    """Get stock recommendations with full scoring breakdown (technical + fundamental + valuation + macro)."""
+    try:
+        from stock_recommender_agent import get_stocks_in_sector
+        from macro_agent import get_macro_indicators, get_sector_macro_context
+        from scoring_model import calculate_combined_score, score_macro_sector_fit
+        from fundamental_service import get_financial_summary, get_fundamental_score
+
+        macro_data = get_macro_indicators()
+        sector_macro = get_sector_macro_context(sector_name)
+
+        stocks = get_stocks_in_sector(sector_name)
+
+        scored_stocks = []
+        for stock in stocks[:limit]:
+            ticker = stock.get("ticker", "")
+            financial = get_financial_summary(ticker)
+            fund_score, fund_details = get_fundamental_score(financial)
+            scoring = calculate_combined_score(
+                stock, sector_name, macro_data["indicators"],
+                fundamental_score=fund_score,
+            )
+            scored_stocks.append({
+                "ticker": ticker,
+                "companyName": stock.get("companyName"),
+                "price": stock.get("price"),
+                "scoring": scoring,
+                "fundamental_details": fund_details,
+                "key_metrics": {
+                    "per": stock.get("per"),
+                    "pbv": stock.get("pbv"),
+                    "roe": stock.get("roe"),
+                    "revenue_growth": stock.get("revenue_growth"),
+                    "eps_growth": stock.get("eps_growth"),
+                    "dividend_yield": stock.get("dividend_yield"),
+                    "debt_to_equity": stock.get("debt_to_equity"),
+                },
+            })
+
+        scored_stocks.sort(key=lambda x: x["scoring"]["combined_score"], reverse=True)
+
+        return {
+            "success": True,
+            "sector": sector_name,
+            "scored_stocks": scored_stocks,
+            "sector_macro_context": sector_macro,
+            "weights": {
+                "technical": 0.30,
+                "fundamental": 0.40,
+                "macro_sector_fit": 0.15,
+                "valuation": 0.15,
+            },
+        }
+    except Exception as exc:
+        logger.exception(f"Gagal scoring saham untuk {sector_name}")
+        raise HTTPException(status_code=500, detail=f"Gagal scoring saham: {str(exc)}") from exc
+
+
+@api_router.get("/sector/enhanced-analysis")
+async def get_enhanced_sector_analysis(
+    refresh: bool = Query(default=False),
+) -> Dict[str, Any]:
+    """Comprehensive sector analysis with weighted scoring (technical + fundamental + macro)."""
+    try:
+        from sector_predictor_agent import get_predictions_by_timeframe, fetch_sector_data, compute_sector_averages, TV_TO_IDX_SECTOR
+        from macro_agent import get_macro_indicators
+        from scoring_model import get_weighted_sector_score, score_macro_sector_fit
+
+        macro_data = get_macro_indicators(refresh=refresh)
+        sector_averages_raw = fetch_sector_data()
+
+        mapped_data = {}
+        for eng_name, metrics in sector_averages_raw.items():
+            idx_name = TV_TO_IDX_SECTOR.get(eng_name, eng_name)
+            if idx_name in mapped_data:
+                existing = mapped_data[idx_name]
+                for k in ["count", "avg_score"]:
+                    existing[k] = (existing.get(k, 0) or 0) + (metrics.get(k, 0) or 0)
+                continue
+            mapped_data[idx_name] = dict(metrics)
+            mapped_data[idx_name]["sector"] = idx_name
+
+        scored_sectors = []
+        for sector_name, averages in mapped_data.items():
+            scoring = get_weighted_sector_score(averages, macro_data["indicators"])
+            scored_sectors.append({
+                "sector": sector_name,
+                "averages": averages,
+                "scoring": scoring,
+            })
+
+        scored_sectors.sort(key=lambda x: x["scoring"]["combined_score"], reverse=True)
+
+        predictions = get_predictions_by_timeframe(timeframe=None, refresh=refresh)
+        ai_predictions = predictions.get("predictions", {})
+
+        return {
+            "success": True,
+            "scored_sectors": scored_sectors,
+            "ai_predictions": ai_predictions,
+            "macro_indicators": macro_data["indicators"],
+            "weights": {
+                "technical": 0.30,
+                "fundamental": 0.40,
+                "macro_sector_fit": 0.15,
+                "valuation": 0.15,
+            },
+            "generated_at": macro_data.get("cached_at"),
+        }
+    except Exception as exc:
+        logger.exception("Gagal menjalankan enhanced analysis")
+        raise HTTPException(status_code=500, detail=f"Gagal enhanced analysis: {str(exc)}") from exc
 
 
 @api_router.get("/screener/companies")
