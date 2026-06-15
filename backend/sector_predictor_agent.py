@@ -186,38 +186,64 @@ def build_prompt(tv_data: Dict[str, Any]) -> str:
     except Exception:
         macro_summary = "Data makro tidak tersedia."
 
-    # Scoring weights context
-    from scoring_model import WEIGHTS, SECTOR_MACRO_MAP
-    weights_str = json.dumps(WEIGHTS, indent=2)
+    # News context — impacted sectors
+    news_context = ""
+    try:
+        from news_flow_agent import get_news_analysis
+        news_data = get_news_analysis()
+        analysis = news_data.get("analysis", {})
+        benefited = analysis.get("sektor_diuntungkan", [])
+        cautious = analysis.get("sektor_digdaya_waspada", [])
+        if benefited or cautious:
+            parts = []
+            if benefited:
+                parts.append("SEKTOR DIUNTUNGKAN BERITA:")
+                for s in benefited:
+                    parts.append(f"- {s.get('sektor')}: {s.get('alasan')} (sentimen: {s.get('sentimen')})")
+            if cautious:
+                parts.append("SEKTOR DIWASPADAI BERITA:")
+                for s in cautious:
+                    parts.append(f"- {s.get('sektor')}: {s.get('alasan')}")
+            news_context = "\n".join(parts)
+    except Exception:
+        news_context = ""
 
-    return f"""Anda analis AI pasar saham Indonesia senior dengan pendekatan fundamental + makroekonomi.
+    return f"""Anda analis AI pasar saham Indonesia senior. Anda HARUS memberi prediksi BERBEDA untuk setiap timeframe — jangan sampai sektor yang sama memuncaki semua timeframe.
 
-PERTIMBANGKAN 3 FAKTOR UTAMA:
-1. FUNDAMENTAL: PER, PBV, ROE, revenue growth, EPS growth, dividend yield, debt-to-equity
-2. MAKROEKONOMI GLOBAL & DOMESTIK: suku bunga, inflasi, nilai tukar, komoditas, indeks global
-3. VALUASI: apakah sektor sedang murah/mahal secara historis
-
-BOBOT SKORING:
-{weights_str}
+ATURAN UTAMA:
+1. 1M dan 3M harus DIDOMINASI sektor siklikal/responsif berita jangka pendek (momentum, katalis short-term, sentimen pasar)
+2. 6M harus campuran sektor siklikal dan defensif
+3. 12M harus DIDOMINASI sektor defensif/fundamental kuat (kualitas, pertumbuhan sustain, tahan siklus)
+4. LARANG: sektor yang sama menjadi #1 di lebih dari 2 timeframe
+5. Berita dengan impact jangka pendek dominan untuk 1M, impact struktural dominan untuk 6M-12M
 
 DATA FUNDAMENTAL SEKTOR (rata-rata):
 {tv_json}
 
-KONDISI MAKROEKONOMI SAAT INI:
+KONDISI MAKROEKONOMI:
 {macro_summary}
 
-TUGAS: Prediksi 10 sektor IDX terbaik untuk 4 timeframe: 1M, 3M, 6M, 12M.
-Gunakan nama Indonesia: Perbankan, Teknologi, Energi, Bahan Baku, Kesehatan, Telekomunikasi, Keuangan, Konsumer, Konsumer Non-Primer, Infrastruktur, Transportasi & Logistik, Industri, Jasa & Perdagangan, Distribusi, Lainnya.
+{news_context}
+
+TUGAS: Prediksi 10 sektor IDX terbaik per timeframe — dengan URUTAN BERBEDA setiap timeframe.
+
+PANDUAN TIMEFRAME:
+- 1 BULAN: fokus pada MOMENTUM — sektor dengan katalis jangka pendek (sentimen berita, musiman, technical rebound). Sektor siklikal dan komoditas sering unggul.
+- 3 BULAN: fokus pada KATALIS KUARTAL — sektor yang diuntungkan kebijakan makro kuartalan, rilis laporan keuangan, tren musiman.
+- 6 BULAN: campuran — kualitas fundamental mulai lebih penting, hindari sektor dengan siklus pendek.
+- 12 BULAN: fokus pada FUNDAMENTAL & TAHAN BANTING — sektor defensif dengan PER wajar, ROE konsisten, dividen stabil. Prospek jangka panjang.
 
 Per sektor sertakan:
-- predicted_return: float (bisa negatif) — estimasi return realistis
+- predicted_return: float realistis (negatif diperbolehkan)
 - confidence: "high"/"medium"/"low"
-- rationale: jelaskan KENAPA — sebut angka fundamental, kondisi makro, dan valuasi
-- key_drivers: array 2-3 faktor pendorong (paling spesifik)
-- macro_context: bagaimana kondisi makro mempengaruhi sektor ini
+- rationale: jelaskan dengan ANKA — sebut PER, ROE, valuasi, dampak berita, dan pengaruh makro
+- key_drivers: array 2-3 faktor kunci
+- macro_context: dampak makroekonomi pada sektor
+- news_driven: true/false — apakah berita jadi pendorong utama
+- impact_horizon: "short_term"/"medium_term"/"long_term" — horizon dampak
 
 RESPON JSON:
-{{"predictions":{{"1M":[{{"sector":"...","predicted_return":5.2,"confidence":"high","rationale":"PER 12x dengan ROE 18% dan BI rate turun mendukung...","key_drivers":["Penurunan BI Rate","Kredit tumbuh 12%"],"macro_context":"Suku bunga turun mendukung margin bunga bersih"}}],"3M":[],"6M":[],"12M":[]}}}}
+{{"predictions":{{"1M":[{{"sector":"Energi","predicted_return":8.5,"confidence":"high","rationale":"Harga batubara naik 5% didorong permintaan China dan pelemahan rupiah menguntungkan eksportir. Rata-rata PER sektor 8x menarik.","key_drivers":["Harga batubara naik","Rupiah melemah","Permintaan China pulih"],"macro_context":"Kenaikan harga komoditas dan pelemahan rupiah mendorong sektor energi","news_driven":true,"impact_horizon":"short_term"}}],"3M":[],"6M":[{{"sector":"Perbankan","predicted_return":7.2,"confidence":"high","rationale":"BI rate turun 25bp mendorong ekspansi kredit. ROE rata-rata 18% dengan PER 12x masih menarik. Pertumbuhan kredit diproyeksi 10-12% dalam 6 bulan.","key_drivers":["Penurunan BI rate","Kredit tumbuh","PER menarik"],"macro_context":"Relaksasi moneter mendukung margin bunga","news_driven":false,"impact_horizon":"medium_term"}}],"12M":[]}}}}
 JANGAN tulis apapun di luar JSON."""
 
 
@@ -267,8 +293,21 @@ def predict_sectors(refresh: bool = False) -> Dict[str, Any]:
 
     content = response.choices[0].message.content
     parsed = parse_llm_response(content)
+    predictions = parsed.get("predictions", {})
+
+    # Warn if predictions look identical across timeframes
+    pred_keys = list(predictions.keys())
+    for i in range(len(pred_keys)):
+        for j in range(i + 1, len(pred_keys)):
+            secs_i = [p.get("sector") for p in predictions.get(pred_keys[i], [])[:3]]
+            secs_j = [p.get("sector") for p in predictions.get(pred_keys[j], [])[:3]]
+            if secs_i == secs_j:
+                logger.warning(
+                    f"Top 3 sektor sama antara {pred_keys[i]} dan {pred_keys[j]}: {secs_i}"
+                )
+
     result = {
-        "predictions": parsed.get("predictions", {}),
+        "predictions": predictions,
         "generated_at": now_iso(),
         "model": LLM_MODEL,
         "method": "enhanced_fundamental_macro",
