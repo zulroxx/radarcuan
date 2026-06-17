@@ -1,16 +1,18 @@
 import { useState } from "react";
 import {
   GlobeHemisphereWest,
+  Info,
   List,
   LockKey,
   MagnifyingGlass,
+  Scroll,
   Sparkle,
   X,
 } from "@phosphor-icons/react";
 import { NavLink, useLocation } from "react-router-dom";
 import FeedbackDialog from "@/components/FeedbackDialog";
 import { Button } from "@/components/ui/button";
-import { Sheet, SheetContent, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
+import { Sheet, SheetContent, SheetDescription, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
 import { SCREENER } from "@/constants/testIds";
 
 const linkClass = ({ isActive }) =>
@@ -21,7 +23,9 @@ const linkClass = ({ isActive }) =>
 const navItems = [
   { to: "/", icon: MagnifyingGlass, label: "Screener", desc: "Screen saham IHSG" },
   { to: "/prediction", icon: Sparkle, label: "Agent Prediksi", desc: "Prediksi sektor & rekomendasi" },
+  { to: "/order-book", icon: Scroll, label: "Order Book", desc: "Simulasi historis order" },
   { to: "/macro", icon: GlobeHemisphereWest, label: "Makro Ekonomi", desc: "Indikator ekonomi makro" },
+  { to: "/about", icon: Info, label: "Tentang", desc: "Info & sumber data RadarCuan" },
   { to: "/admin", icon: LockKey, label: "Admin", desc: "Panel admin" },
 ];
 
@@ -45,7 +49,7 @@ export default function AppHeader() {
               <span className="sm:hidden">Beta</span>
             </div>
             <h1 className="truncate text-lg font-bold tracking-tight text-slate-950 sm:text-xl lg:text-2xl" data-testid={SCREENER.heroTitle}>
-              IHSG Smart Screener
+              RadarCuan
             </h1>
           </div>
 
@@ -71,8 +75,9 @@ export default function AppHeader() {
                 <span className="sr-only">Menu</span>
               </Button>
             </SheetTrigger>
-            <SheetContent className="flex w-72 flex-col gap-0 p-0 [&>button.absolute]:hidden" side="left">
+            <SheetContent className="flex w-72 flex-col gap-0 p-0 [&>button.absolute]:hidden" side="right">
               <SheetTitle className="sr-only">Navigasi</SheetTitle>
+              <SheetDescription className="sr-only">Menu navigasi RadarCuan</SheetDescription>
 
               {/* Header sidebar */}
               <div className="flex items-center justify-between border-b border-slate-200 px-5 py-4">
@@ -121,7 +126,7 @@ export default function AppHeader() {
               {/* Footer */}
               <div className="border-t border-slate-200 px-5 py-4">
                 <p className="text-[10px] text-slate-400">
-                  IHSG Smart Screener v0.1
+                  RadarCuan v0.1
                 </p>
               </div>
             </SheetContent>

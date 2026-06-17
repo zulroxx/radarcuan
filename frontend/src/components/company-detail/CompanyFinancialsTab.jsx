@@ -4,9 +4,9 @@ import { formatCompactCurrency } from "@/lib/screener";
 
 function DataTable({ columns, rows, testIdPrefix }) {
   return (
-    <div className="overflow-auto rounded-2xl border border-slate-200">
+    <div className="overflow-auto rounded-2xl border border-slate-200 dark:border-slate-700">
       <table className="w-full min-w-[520px]">
-        <thead className="bg-slate-50">
+        <thead className="bg-slate-50 dark:bg-slate-800">
           <tr>
             {columns.map((column) => (
               <th className={COMPANY_DETAIL_TABLE_CELL_CLASS} key={column.key}>{column.label}</th>
@@ -55,12 +55,12 @@ export default function CompanyFinancialsTab({ company }) {
   if (!hasFinancials) {
     return (
       <div className="space-y-4" data-testid="company-detail-tab-content-financials">
-        <Card className="border-slate-200 bg-white">
+        <Card className="border-slate-200 bg-white dark:border-slate-700 dark:bg-slate-900">
           <CardHeader>
-            <CardTitle className="text-lg text-slate-950">Laporan keuangan ringkas</CardTitle>
+            <CardTitle className="text-lg text-slate-950 dark:text-slate-50">Laporan keuangan ringkas</CardTitle>
           </CardHeader>
           <CardContent>
-            <p className="text-sm text-slate-500">Data keuangan belum tersedia untuk saham ini.</p>
+            <p className="text-sm text-slate-500 dark:text-slate-400">Data keuangan belum tersedia untuk saham ini.</p>
           </CardContent>
         </Card>
       </div>
@@ -69,23 +69,23 @@ export default function CompanyFinancialsTab({ company }) {
 
   return (
     <div className="space-y-4" data-testid="company-detail-tab-content-financials">
-      <Card className="border-slate-200 bg-white" data-testid="company-detail-income-table-card">
+      <Card className="border-slate-200 bg-white dark:border-slate-700 dark:bg-slate-900" data-testid="company-detail-income-table-card">
         <CardHeader>
-          <CardTitle className="text-lg text-slate-950">Laporan keuangan ringkas</CardTitle>
+          <CardTitle className="text-lg text-slate-950 dark:text-slate-50">Laporan keuangan ringkas</CardTitle>
         </CardHeader>
         <CardContent className="space-y-5">
           <div>
-            <p className="mb-3 text-sm font-medium text-slate-900">Income Statement</p>
+            <p className="mb-3 text-sm font-medium text-slate-900 dark:text-slate-50">Income Statement</p>
             <DataTable columns={incomeColumns} rows={company.annualFinancials.incomeStatement} testIdPrefix="company-detail-income-row" />
           </div>
 
           <div className="grid gap-4 lg:grid-cols-2 xl:grid-cols-2">
             <div>
-              <p className="mb-3 text-sm font-medium text-slate-900">Balance Sheet</p>
+              <p className="mb-3 text-sm font-medium text-slate-900 dark:text-slate-50">Balance Sheet</p>
               <DataTable columns={balanceColumns} rows={company.annualFinancials.balanceSheet} testIdPrefix="company-detail-balance-row" />
             </div>
             <div>
-              <p className="mb-3 text-sm font-medium text-slate-900">Cash Flow</p>
+              <p className="mb-3 text-sm font-medium text-slate-900 dark:text-slate-50">Cash Flow</p>
               <DataTable columns={cashFlowColumns} rows={company.annualFinancials.cashFlow} testIdPrefix="company-detail-cashflow-row" />
             </div>
           </div>

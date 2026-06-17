@@ -56,16 +56,16 @@ function MacroStatCard({ indicator, icon: Icon }) {
   const isPositive = hasChange && change >= 0;
 
   return (
-    <Card className="border-slate-200 bg-white shadow-none transition-all duration-200 hover:shadow-md">
+    <Card className="border-slate-200 bg-white shadow-none transition-all duration-200 hover:shadow-md dark:border-slate-700 dark:bg-slate-900">
       <CardContent className="p-4">
         <div className="flex items-start justify-between gap-2">
           <div className="flex items-center gap-2">
-            <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-slate-100">
-              <Icon className="h-4 w-4 text-slate-600" />
+            <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-slate-100 dark:bg-slate-700">
+              <Icon className="h-4 w-4 text-slate-600 dark:text-slate-300" />
             </div>
             <div>
-              <p className="text-xs font-medium text-slate-500">{indicator.label}</p>
-              <p className="text-lg font-bold text-slate-950">{indicator.value}</p>
+              <p className="text-xs font-medium text-slate-500 dark:text-slate-400">{indicator.label}</p>
+              <p className="text-lg font-bold text-slate-950 dark:text-slate-50">{indicator.value}</p>
             </div>
           </div>
           {hasChange && (
@@ -83,9 +83,9 @@ function MacroStatCard({ indicator, icon: Icon }) {
           )}
         </div>
         <div className="mt-2 flex items-center justify-between">
-          <p className="text-[10px] leading-4 text-slate-400">{indicator.description}</p>
+          <p className="text-[10px] leading-4 text-slate-400 dark:text-slate-500">{indicator.description}</p>
           {indicator.source && (
-            <p className="shrink-0 text-[9px] text-slate-300">{indicator.source}</p>
+            <p className="shrink-0 text-[9px] text-slate-300 dark:text-slate-500">{indicator.source}</p>
           )}
         </div>
       </CardContent>
@@ -282,18 +282,18 @@ export default function MacroDashboard() {
 
   function RpkSection() {
     return (
-      <Card className="border-slate-200 bg-white shadow-sm">
-        <CardHeader className="border-b border-slate-200 p-4 sm:p-6">
+      <Card className="border-slate-200 bg-white shadow-sm dark:border-slate-700 dark:bg-slate-900">
+        <CardHeader className="border-b border-slate-200 p-4 sm:p-6 dark:border-slate-700">
           <div className="flex flex-wrap items-center gap-3">
             <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-emerald-100">
               <Scales className="h-5 w-5 text-emerald-700" />
             </div>
             <div className="min-w-0">
-              <p className="text-xs font-semibold uppercase tracking-[0.18em] text-slate-500">
+              <p className="text-xs font-semibold uppercase tracking-[0.18em] text-slate-500 dark:text-slate-400">
                 RINGKASAN PENGAMBILAN KEPUTUSAN (RPK) FINANSIAL
               </p>
-              <p className="text-sm text-slate-600">
-                Periode Analisis: <span className="font-semibold text-slate-900">{periodLabel}</span>
+              <p className="text-sm text-slate-600 dark:text-slate-300">
+                Periode Analisis: <span className="font-semibold text-slate-900 dark:text-slate-50">{periodLabel}</span>
               </p>
             </div>
             <Badge className={`ml-auto gap-1.5 px-3 py-1 text-xs font-semibold ${rpkContent.badge}`}>
@@ -305,7 +305,7 @@ export default function MacroDashboard() {
         <CardContent className="space-y-5 p-4 sm:p-6">
           {/* 1. SITUATION */}
           <div>
-            <h4 className="flex items-center gap-2 text-sm font-bold text-slate-900">
+            <h4 className="flex items-center gap-2 text-sm font-bold text-slate-900 dark:text-slate-50">
               <GlobeHemisphereWest className="h-4 w-4 text-sky-600" />
               1. KONDISI PEMICU & DAMPAK LANGSUNG
             </h4>
@@ -327,19 +327,19 @@ export default function MacroDashboard() {
 
           {/* 2. MATRIKS KEPUTUSAN */}
           <div>
-            <h4 className="flex items-center gap-2 text-sm font-bold text-slate-900">
+            <h4 className="flex items-center gap-2 text-sm font-bold text-slate-900 dark:text-slate-50">
               <ChartLineUp className="h-4 w-4 text-emerald-600" />
               2. MATRIKS KEPUTUSAN AKSI
             </h4>
             <div className="mt-3 grid gap-3 sm:grid-cols-3">
               {/* Belanja */}
-              <Card className="border-slate-200 bg-white shadow-none">
+              <Card className="border-slate-200 bg-white shadow-none dark:border-slate-700 dark:bg-slate-900">
                 <CardContent className="p-4">
                   <div className="flex items-center gap-2">
                     <div className="flex h-7 w-7 items-center justify-center rounded-lg bg-sky-100">
                       <ShoppingCartSimple className="h-3.5 w-3.5 text-sky-700" />
                     </div>
-                    <p className="text-xs font-bold text-slate-800">Kebijakan Belanja & Konsumsi</p>
+                    <p className="text-xs font-bold text-slate-800 dark:text-slate-100">Kebijakan Belanja & Konsumsi</p>
                   </div>
                   <div className="mt-3 space-y-2">
                     <div className="rounded-md border border-emerald-100 bg-emerald-50 p-2.5">
@@ -365,13 +365,13 @@ export default function MacroDashboard() {
               </Card>
 
               {/* Utang */}
-              <Card className="border-slate-200 bg-white shadow-none">
+              <Card className="border-slate-200 bg-white shadow-none dark:border-slate-700 dark:bg-slate-900">
                 <CardContent className="p-4">
                   <div className="flex items-center gap-2">
                     <div className="flex h-7 w-7 items-center justify-center rounded-lg bg-red-100">
                       <Wallet className="h-3.5 w-3.5 text-red-700" />
                     </div>
-                    <p className="text-xs font-bold text-slate-800">Manajemen Utang & Kredit</p>
+                    <p className="text-xs font-bold text-slate-800 dark:text-slate-100">Manajemen Utang & Kredit</p>
                   </div>
                   <div className="mt-3 space-y-2">
                     <div className="rounded-md border border-red-100 bg-red-50 p-2.5">
@@ -383,12 +383,12 @@ export default function MacroDashboard() {
                         {rpkContent.actions.utang.kebijakanBaru}
                       </p>
                     </div>
-                    <div className="rounded-md border border-slate-100 bg-slate-50 p-2.5">
-                      <p className="flex items-center gap-1 text-[10px] font-semibold text-slate-800">
+                    <div className="rounded-md border border-slate-100 bg-slate-50 p-2.5 dark:border-slate-700 dark:bg-slate-800">
+                      <p className="flex items-center gap-1 text-[10px] font-semibold text-slate-800 dark:text-slate-100">
                         <ArrowClockwise className="h-3 w-3" weight="bold" />
                         Strategi Utang Berjalan
                       </p>
-                      <p className="mt-0.5 text-[11px] leading-5 text-slate-700">
+                      <p className="mt-0.5 text-[11px] leading-5 text-slate-700 dark:text-slate-200">
                         {rpkContent.actions.utang.strategiBerjalan}
                       </p>
                     </div>
@@ -397,13 +397,13 @@ export default function MacroDashboard() {
               </Card>
 
               {/* Investasi */}
-              <Card className="border-slate-200 bg-white shadow-none">
+              <Card className="border-slate-200 bg-white shadow-none dark:border-slate-700 dark:bg-slate-900">
                 <CardContent className="p-4">
                   <div className="flex items-center gap-2">
                     <div className="flex h-7 w-7 items-center justify-center rounded-lg bg-emerald-100">
                       <HandCoins className="h-3.5 w-3.5 text-emerald-700" />
                     </div>
-                    <p className="text-xs font-bold text-slate-800">Alokasi Investasi & Aset</p>
+                    <p className="text-xs font-bold text-slate-800 dark:text-slate-100">Alokasi Investasi & Aset</p>
                   </div>
                   <div className="mt-3 space-y-2">
                     <div className="rounded-md border border-amber-100 bg-amber-50 p-2.5">
@@ -432,7 +432,7 @@ export default function MacroDashboard() {
 
           {/* 3. SAFETY NET */}
           <div>
-            <h4 className="flex items-center gap-2 text-sm font-bold text-slate-900">
+            <h4 className="flex items-center gap-2 text-sm font-bold text-slate-900 dark:text-slate-50">
               <ShieldCheck className="h-4 w-4 text-emerald-600" />
               3. JARING PENGAMAN & CADANGAN RISIKO
             </h4>
@@ -458,7 +458,7 @@ export default function MacroDashboard() {
             </div>
           </div>
 
-          <p className="text-center text-[10px] text-slate-400">
+<p className="text-center text-[10px] text-slate-400 dark:text-slate-500">
             RPK Finansial bersifat informatif dan edukatif, bukan konsultasi investasi terpersonalisasi.
             Keputusan tetap sepenuhnya di tangan Anda.
           </p>
@@ -496,10 +496,10 @@ export default function MacroDashboard() {
           <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-emerald-600">
             Makro Ekonomi
           </p>
-          <h2 className="mt-2 text-lg font-semibold text-slate-950 sm:text-xl">
+          <h2 className="mt-2 text-lg font-semibold text-slate-950 sm:text-xl dark:text-slate-50">
             Indikator Ekonomi Makro Indonesia
           </h2>
-          <p className="mt-1 text-xs leading-6 text-slate-600 sm:text-sm">
+          <p className="mt-1 text-xs leading-6 text-slate-600 sm:text-sm dark:text-slate-300">
             Data real-time dari Yahoo Finance dan sumber terbuka. Indikator
             fundamental diperbarui berdasarkan rilis resmi BI & BPS.
           </p>
@@ -517,37 +517,37 @@ export default function MacroDashboard() {
       </div>
 
       <div className="grid grid-cols-2 gap-3 sm:grid-cols-4 sm:gap-4">
-        <Card className="border-slate-200 bg-white shadow-none">
+        <Card className="border-slate-200 bg-white shadow-none dark:border-slate-700 dark:bg-slate-900">
           <CardContent className="p-3 sm:p-4">
-            <p className="text-xs uppercase tracking-[0.18em] text-slate-500">Total Indikator</p>
-            <p className="mt-2 text-xl font-semibold text-slate-950 sm:text-2xl">{statCards.total}</p>
-            <p className="mt-1 text-xs text-slate-500">Semua kategori</p>
+            <p className="text-xs uppercase tracking-[0.18em] text-slate-500 dark:text-slate-400">Total Indikator</p>
+            <p className="mt-2 text-xl font-semibold text-slate-950 sm:text-2xl dark:text-slate-50">{statCards.total}</p>
+            <p className="mt-1 text-xs text-slate-500 dark:text-slate-400">Semua kategori</p>
           </CardContent>
         </Card>
-        <Card className="border-slate-200 bg-white shadow-none">
+        <Card className="border-slate-200 bg-white shadow-none dark:border-slate-700 dark:bg-slate-900">
           <CardContent className="p-3 sm:p-4">
-            <p className="text-xs uppercase tracking-[0.18em] text-slate-500">Positif</p>
+            <p className="text-xs uppercase tracking-[0.18em] text-slate-500 dark:text-slate-400">Positif</p>
             <p className="mt-2 text-xl font-semibold text-emerald-700 sm:text-2xl">{statCards.positive}</p>
-            <p className="mt-1 text-xs text-slate-500">Indikator menguat</p>
+            <p className="mt-1 text-xs text-slate-500 dark:text-slate-400">Indikator menguat</p>
           </CardContent>
         </Card>
-        <Card className="border-slate-200 bg-white shadow-none">
+        <Card className="border-slate-200 bg-white shadow-none dark:border-slate-700 dark:bg-slate-900">
           <CardContent className="p-3 sm:p-4">
-            <p className="text-xs uppercase tracking-[0.18em] text-slate-500">Negatif</p>
+            <p className="text-xs uppercase tracking-[0.18em] text-slate-500 dark:text-slate-400">Negatif</p>
             <p className="mt-2 text-xl font-semibold text-red-600 sm:text-2xl">{statCards.negative}</p>
-            <p className="mt-1 text-xs text-slate-500">Indikator melemah</p>
+            <p className="mt-1 text-xs text-slate-500 dark:text-slate-400">Indikator melemah</p>
           </CardContent>
         </Card>
-        <Card className="border-slate-200 bg-white shadow-none">
+        <Card className="border-slate-200 bg-white shadow-none dark:border-slate-700 dark:bg-slate-900">
           <CardContent className="p-3 sm:p-4">
-            <p className="text-xs uppercase tracking-[0.18em] text-slate-500">Rata-rata Perubahan</p>
+            <p className="text-xs uppercase tracking-[0.18em] text-slate-500 dark:text-slate-400">Rata-rata Perubahan</p>
             <p className={`mt-2 text-xl font-semibold sm:text-2xl ${
               statCards.avgChange >= 0 ? "text-emerald-700" : "text-red-600"
             }`}>
               {statCards.avgChange >= 0 ? "+" : ""}
               {statCards.avgChange.toFixed(2)}%
             </p>
-            <p className="mt-1 text-xs text-slate-500">Periode terakhir</p>
+            <p className="mt-1 text-xs text-slate-500 dark:text-slate-400">Periode terakhir</p>
           </CardContent>
         </Card>
       </div>
@@ -555,13 +555,13 @@ export default function MacroDashboard() {
       {loading && indicators.length === 0 ? (
         <div className="flex flex-col items-center justify-center py-16">
           <ArrowClockwise className="h-8 w-8 animate-spin text-emerald-500" />
-          <p className="mt-4 text-sm text-slate-500">Memuat data makro ekonomi...</p>
+          <p className="mt-4 text-sm text-slate-500 dark:text-slate-400">Memuat data makro ekonomi...</p>
         </div>
       ) : error ? (
         <div className="flex flex-col items-center justify-center py-16">
           <WarningCircle className="h-10 w-10 text-red-400" />
-          <p className="mt-3 text-sm font-medium text-slate-700">Gagal memuat data</p>
-          <p className="mt-1 text-xs text-slate-500">{error}</p>
+          <p className="mt-3 text-sm font-medium text-slate-700 dark:text-slate-200">Gagal memuat data</p>
+          <p className="mt-1 text-xs text-slate-500 dark:text-slate-400">{error}</p>
           <Button className="mt-4" onClick={() => fetchData({ refresh: true })} variant="outline">
             <ArrowClockwise className="mr-2 h-4 w-4" />
             Coba Lagi
@@ -575,7 +575,7 @@ export default function MacroDashboard() {
             const catIndicators = grouped[cat] || [];
             return (
               <div key={cat}>
-                <h3 className="mb-3 text-sm font-semibold text-slate-950">
+                <h3 className="mb-3 text-sm font-semibold text-slate-950 dark:text-slate-50">
                   {cat}
                 </h3>
                 <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
@@ -611,7 +611,7 @@ export default function MacroDashboard() {
         </div>
       </div>
 
-      <p className="text-center text-[10px] text-slate-400">
+      <p className="text-center text-[10px] text-slate-400 dark:text-slate-500">
         {cachedAt
           ? `Terakhir diperbarui: ${new Date(cachedAt).toLocaleString("id-ID")}`
           : "Memuat..."}

@@ -5,9 +5,7 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 
 const WAITLIST_CARD_STYLE = {
-  backgroundImage: "linear-gradient(180deg, rgba(15,23,42,0.78), rgba(15,23,42,0.96)), url(https://images.unsplash.com/photo-1644088379091-d574269d422f?crop=entropy&cs=srgb&fm=jpg&ixid=M3w4NjA0MTJ8MHwxfHNlYXJjaHwxfHxhYnN0cmFjdCUyMGRhcmslMjBibHVlJTIwZmluYW5jaWFsJTIwZGF0YXxlbnwwfHx8fDE3ODEzNjY0Mjl8MA&ixlib=rb-4.1.0&q=85)",
-  backgroundPosition: "center",
-  backgroundSize: "cover",
+  backgroundImage: "linear-gradient(180deg, rgba(15,23,42,0.82), rgba(15,23,42,0.98))",
 };
 
 function PremiumWaitlistCard({ onWaitlistChange, onWaitlistSubmit, waitlistForm, waitlistLoading }) {
@@ -22,9 +20,9 @@ function PremiumWaitlistCard({ onWaitlistChange, onWaitlistSubmit, waitlistForm,
           <h3 className="text-xl font-semibold" data-testid="premium-waitlist-title">Ingin Proyeksi Laba Berbasis AI & Analisis Sektoral Mendalam?</h3>
           <p className="text-sm leading-6 text-slate-300" data-testid="premium-waitlist-description">Gabung waitlist premium kami untuk akses lebih awal saat modul proyeksi, sector intelligence, dan ranking tematik siap dirilis.</p>
         </div>
-        <form className="space-y-3" onSubmit={onWaitlistSubmit}>
-          <Input className="border-white/15 bg-white/10 text-white placeholder:text-slate-300" data-testid="premium-waitlist-email-input" name="email" onChange={onWaitlistChange} placeholder="nama@email.com" type="email" value={waitlistForm.email} />
-          <Textarea className="min-h-[88px] border-white/15 bg-white/10 text-white placeholder:text-slate-300" data-testid="premium-waitlist-note-input" name="note" onChange={onWaitlistChange} placeholder="Sektor atau ide riset yang ingin Anda lihat" value={waitlistForm.note} />
+        <form autoComplete="on" className="space-y-3" onSubmit={onWaitlistSubmit}>
+          <Input className="border-white/15 bg-white/10 text-white placeholder:text-slate-300" data-testid="premium-waitlist-email-input" id="premium-email" name="email" autoComplete="email" onChange={onWaitlistChange} placeholder="nama@email.com" type="email" value={waitlistForm.email} />
+          <Textarea className="min-h-[88px] border-white/15 bg-white/10 text-white placeholder:text-slate-300" data-testid="premium-waitlist-note-input" id="premium-note" name="note" onChange={onWaitlistChange} placeholder="Sektor atau ide riset yang ingin Anda lihat" value={waitlistForm.note} />
           <Button className="w-full rounded-full bg-emerald-500 text-slate-950 hover:bg-emerald-400" data-testid="premium-waitlist-submit-button" disabled={waitlistLoading} type="submit">
             {waitlistLoading ? "Menyimpan..." : "Daftar Waitlist Premium"}
           </Button>
@@ -41,7 +39,7 @@ export default function FilterSidebar({
   waitlistLoading,
 }) {
   return (
-    <aside className="w-full lg:sticky lg:top-[97px] lg:max-h-[calc(100vh-116px)] lg:w-80 lg:overflow-y-auto">
+    <aside className="w-full">
       <PremiumWaitlistCard onWaitlistChange={onWaitlistChange} onWaitlistSubmit={onWaitlistSubmit} waitlistForm={waitlistForm} waitlistLoading={waitlistLoading} />
     </aside>
   );

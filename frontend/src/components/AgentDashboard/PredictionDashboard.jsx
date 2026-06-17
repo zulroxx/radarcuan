@@ -48,7 +48,7 @@ const getScoreColor = (score) => {
   if (score >= 80) return "text-emerald-600";
   if (score >= 65) return "text-sky-600";
   if (score >= 45) return "text-amber-600";
-  return "text-red-600";
+  return "text-red-600 dark:text-red-400";
 };
 
 const getScoreBg = (score) => {
@@ -70,32 +70,32 @@ function StatCards({ predictions }) {
 
   return (
     <div className="grid grid-cols-2 gap-3 sm:grid-cols-4 sm:gap-4">
-      <Card className="border-slate-200 bg-white shadow-none">
+      <Card className="border-slate-200 bg-white shadow-none dark:border-slate-700 dark:bg-slate-800 dark:shadow-none">
         <CardContent className="p-3 sm:p-4">
-          <p className="text-xs uppercase tracking-[0.18em] text-slate-500">Total Prediksi</p>
-          <p className="mt-2 text-xl font-semibold text-slate-950 sm:text-2xl">{totalPredictions}</p>
-          <p className="mt-1 text-xs text-slate-500">Semua timeframe</p>
+          <p className="text-xs uppercase tracking-[0.18em] text-slate-500 dark:text-slate-400">Total Prediksi</p>
+          <p className="mt-2 text-xl font-semibold text-slate-950 dark:text-slate-50 sm:text-2xl">{totalPredictions}</p>
+          <p className="mt-1 text-xs text-slate-500 dark:text-slate-400">Semua timeframe</p>
         </CardContent>
       </Card>
-      <Card className="border-slate-200 bg-white shadow-none">
+      <Card className="border-slate-200 bg-white shadow-none dark:border-slate-700 dark:bg-slate-800 dark:shadow-none">
         <CardContent className="p-3 sm:p-4">
-          <p className="text-xs uppercase tracking-[0.18em] text-slate-500">Confidence Tinggi</p>
-          <p className="mt-2 text-xl font-semibold text-emerald-700 sm:text-2xl">{highConf}</p>
-          <p className="mt-1 text-xs text-slate-500">High confidence</p>
+          <p className="text-xs uppercase tracking-[0.18em] text-slate-500 dark:text-slate-400">Confidence Tinggi</p>
+          <p className="mt-2 text-xl font-semibold text-emerald-700 dark:text-emerald-400 sm:text-2xl">{highConf}</p>
+          <p className="mt-1 text-xs text-slate-500 dark:text-slate-400">High confidence</p>
         </CardContent>
       </Card>
-      <Card className="border-slate-200 bg-white shadow-none">
+      <Card className="border-slate-200 bg-white shadow-none dark:border-slate-700 dark:bg-slate-800 dark:shadow-none">
         <CardContent className="p-3 sm:p-4">
-          <p className="text-xs uppercase tracking-[0.18em] text-slate-500">Model AI</p>
-          <p className="mt-2 text-sm font-semibold text-sky-700 sm:text-base">Mistral AI</p>
-          <p className="mt-1 text-xs text-slate-500">LLM Agent</p>
+          <p className="text-xs uppercase tracking-[0.18em] text-slate-500 dark:text-slate-400">Model AI</p>
+          <p className="mt-2 text-sm font-semibold text-sky-700 dark:text-sky-400 sm:text-base">Mistral AI</p>
+          <p className="mt-1 text-xs text-slate-500 dark:text-slate-400">LLM Agent</p>
         </CardContent>
       </Card>
-      <Card className="border-slate-200 bg-white shadow-none">
+      <Card className="border-slate-200 bg-white shadow-none dark:border-slate-700 dark:bg-slate-800 dark:shadow-none">
         <CardContent className="p-3 sm:p-4">
-          <p className="text-xs uppercase tracking-[0.18em] text-slate-500">Sektor Dianalisis</p>
-          <p className="mt-2 text-xl font-semibold text-slate-950 sm:text-2xl">12</p>
-          <p className="mt-1 text-xs text-slate-500">IDX sektoral</p>
+          <p className="text-xs uppercase tracking-[0.18em] text-slate-500 dark:text-slate-400">Sektor Dianalisis</p>
+          <p className="mt-2 text-xl font-semibold text-slate-950 dark:text-slate-50 sm:text-2xl">12</p>
+          <p className="mt-1 text-xs text-slate-500 dark:text-slate-400">IDX sektoral</p>
         </CardContent>
       </Card>
     </div>
@@ -106,20 +106,20 @@ function AgentInsight({ predictions, activeTimeframe }) {
   const topPick = (predictions?.[activeTimeframe] || [])[0];
 
   return (
-    <div className="rounded-lg border border-emerald-200 bg-emerald-50 p-3 sm:p-4">
+    <div className="rounded-lg border border-emerald-200 bg-emerald-50 dark:border-emerald-800 dark:bg-emerald-950 p-3 sm:p-4">
       <div className="flex items-start gap-3">
-        <Sparkle className="mt-0.5 hidden h-5 w-5 shrink-0 text-emerald-700 sm:block" weight="fill" />
+        <Sparkle className="mt-0.5 hidden h-5 w-5 shrink-0 text-emerald-700 dark:text-emerald-400 sm:block" weight="fill" />
         <div className="min-w-0 space-y-2">
-          <p className="text-xs font-semibold text-emerald-950 sm:text-sm">
+          <p className="text-xs font-semibold text-emerald-950 dark:text-emerald-100 sm:text-sm">
             Insight AI Agent — {TIMEFRAME_LABELS[activeTimeframe]}
           </p>
           {topPick ? (
-            <p className="text-xs leading-6 text-emerald-800 sm:text-sm">
+            <p className="text-xs leading-6 text-emerald-800 dark:text-emerald-300 sm:text-sm">
               Sektor <strong>{topPick.sector}</strong> diprediksi menjadi yang terkuat dengan return{" "}
               {formatReturn(topPick.predicted_return)}. {topPick.rationale}
             </p>
           ) : (
-            <p className="text-xs leading-6 text-emerald-800 sm:text-sm">
+            <p className="text-xs leading-6 text-emerald-800 dark:text-emerald-300 sm:text-sm">
               Agent sedang menunggu data untuk menghasilkan prediksi.
             </p>
           )}
@@ -139,7 +139,7 @@ function SectorPredictionCard({ prediction, rank, onSelect, isSelected }) {
     <Card
       className={`cursor-pointer border transition-all duration-200 hover:shadow-md ${
         isSelected
-          ? "border-emerald-400 bg-emerald-50/50 ring-1 ring-emerald-400"
+          ? "border-emerald-400 bg-emerald-50/50 ring-1 ring-emerald-400 dark:border-emerald-600 dark:bg-emerald-950/50 dark:ring-emerald-600"
           : "border-slate-200 bg-white"
       }`}
       onClick={() => onSelect(prediction)}
@@ -147,11 +147,11 @@ function SectorPredictionCard({ prediction, rank, onSelect, isSelected }) {
       <CardContent className="p-4">
         <div className="flex items-start justify-between gap-2">
           <div className="flex items-center gap-2">
-            <span className="flex h-6 w-6 items-center justify-center rounded-full bg-slate-100 text-xs font-bold text-slate-600">
+            <span className="flex h-6 w-6 items-center justify-center rounded-full bg-slate-100 text-xs font-bold text-slate-600 dark:bg-slate-700 dark:text-slate-400">
               {rank}
             </span>
             <div>
-              <p className="text-sm font-semibold text-slate-950">{prediction.sector}</p>
+              <p className="text-sm font-semibold text-slate-950 dark:text-slate-50">{prediction.sector}</p>
               <Badge
                 className="mt-0.5 text-[10px] hover:!bg-inherit focus:!ring-0"
                 variant={getConfidenceVariant(prediction.confidence)}
@@ -167,38 +167,38 @@ function SectorPredictionCard({ prediction, rank, onSelect, isSelected }) {
           <div className="text-right">
             <p
               className={`text-lg font-bold tabular-nums ${
-                (prediction.predicted_return || 0) >= 0 ? "text-emerald-600" : "text-red-600"
+                (prediction.predicted_return || 0) >= 0 ? "text-emerald-600" : "text-red-600 dark:text-red-400"
               }`}
             >
               {formatReturn(prediction.predicted_return)}
             </p>
-            <p className="text-[10px] text-slate-500">predicted return</p>
+            <p className="text-[10px] text-slate-500 dark:text-slate-400">predicted return</p>
           </div>
         </div>
 
         <div className="mt-3">
           <Progress
-            className="h-1.5 bg-slate-100"
+            className="h-1.5 bg-slate-100 dark:bg-slate-700"
             value={barWidth}
           />
         </div>
 
         <div className="mt-2 flex flex-wrap gap-1">
           {(prediction.key_drivers || []).slice(0, 2).map((driver) => (
-            <Badge key={driver} className="bg-slate-100 text-[10px] text-slate-700 hover:!bg-inherit focus:ring-0" variant="secondary">
+            <Badge key={driver} className="bg-slate-100 text-[10px] text-slate-700 dark:bg-slate-700 dark:text-slate-300 hover:!bg-inherit focus:ring-0" variant="secondary">
               {driver}
             </Badge>
           ))}
         </div>
 
         {isSelected && prediction.rationale && (
-          <div className="mt-3 rounded-md bg-white p-2 text-xs leading-5 text-slate-600">
+          <div className="mt-3 rounded-md bg-white p-2 text-xs leading-5 dark:bg-slate-800 text-slate-600 dark:text-slate-400">
             {prediction.rationale}
           </div>
         )}
 
         {isSelected && prediction.macro_context && (
-          <div className="mt-2 rounded-md bg-sky-50 p-2 text-[10px] leading-5 text-sky-700">
+          <div className="mt-2 rounded-md bg-sky-50 p-2 text-[10px] leading-5 text-sky-700 dark:bg-sky-950 dark:text-sky-400">
             <span className="font-semibold">Kontext Makro:</span> {prediction.macro_context}
           </div>
         )}
@@ -211,11 +211,11 @@ function ScoreBar({ label, value, color }) {
   if (value === null || value === undefined) return null;
   return (
     <div className="flex items-center gap-2">
-      <span className="w-24 text-[10px] text-slate-500">{label}</span>
-      <div className="h-1.5 flex-1 rounded-full bg-slate-100">
+      <span className="w-24 text-[10px] text-slate-500 dark:text-slate-400">{label}</span>
+      <div className="h-1.5 flex-1 rounded-full bg-slate-100 dark:bg-slate-700">
         <div className={`h-full rounded-full ${color || "bg-slate-400"}`} style={{ width: `${Math.max(2, Math.min(100, value))}%` }} />
       </div>
-      <span className="w-8 text-right text-[10px] font-medium text-slate-700">{Math.round(value)}</span>
+      <span className="w-8 text-right text-[10px] font-medium text-slate-700 dark:text-slate-300">{Math.round(value)}</span>
     </div>
   );
 }
@@ -223,27 +223,27 @@ function ScoreBar({ label, value, color }) {
 function StockRecommendationCard({ stock }) {
   const scoring = stock.scoring || {};
   return (
-    <Card className="border-slate-200 bg-white">
+    <Card className="border-slate-200 bg-white dark:border-slate-700 dark:bg-slate-800">
       <CardContent className="p-4">
         <div className="flex items-start justify-between gap-2">
           <div>
             <div className="flex items-center gap-2">
-              <span className="font-mono text-sm font-bold text-slate-950">{stock.ticker}</span>
+              <span className="font-mono text-sm font-bold text-slate-950 dark:text-slate-50">{stock.ticker}</span>
               <Badge
                 className={`text-[10px] hover:!bg-inherit focus:!ring-0 ${
                   stock.recommendation === "Strong Buy"
-                    ? "bg-emerald-100 text-emerald-800"
+                    ? "bg-emerald-100 text-emerald-800 dark:bg-emerald-900 dark:text-emerald-300"
                     : stock.recommendation === "Buy"
-                    ? "bg-sky-100 text-sky-800"
+                    ? "bg-sky-100 text-sky-800 dark:bg-sky-900"
                     : stock.recommendation === "Hold"
-                    ? "bg-amber-100 text-amber-800"
-                    : "bg-red-100 text-red-800"
+                    ? "bg-amber-100 text-amber-800 dark:bg-amber-900"
+                    : "bg-red-100 text-red-800 dark:bg-red-900"
                 }`}
               >
                 {stock.recommendation}
               </Badge>
             </div>
-            <p className="mt-1 text-xs leading-5 text-slate-600">{stock.rationale}</p>
+            <p className="mt-1 text-xs leading-5 text-slate-600 dark:text-slate-400">{stock.rationale}</p>
           </div>
           <div className="text-right">
             <span
@@ -256,15 +256,15 @@ function StockRecommendationCard({ stock }) {
 
         {/* Scoring Breakdown */}
         {(stock.fundamental_score || stock.valuation_score || scoring.combined_score) && (
-          <div className="mt-3 rounded-md bg-slate-50 p-2">
-            <p className="mb-1.5 text-[10px] font-semibold uppercase tracking-wide text-slate-500">Skor Detail</p>
+          <div className="mt-3 rounded-md bg-slate-50 p-2 dark:bg-slate-800/50">
+            <p className="mb-1.5 text-[10px] font-semibold uppercase tracking-wide text-slate-500 dark:text-slate-400">Skor Detail</p>
             <ScoreBar label="Fundamental" value={stock.fundamental_score || scoring.fundamental_score} color="bg-emerald-500" />
             <ScoreBar label="Teknikal" value={scoring.technical_score} color="bg-sky-500" />
             <ScoreBar label="Valuasi" value={stock.valuation_score || scoring.valuation_score} color="bg-violet-500" />
             <ScoreBar label="Makro Fit" value={scoring.macro_sector_fit} color="bg-amber-500" />
             {scoring.combined_score && (
-              <div className="mt-1 flex items-center gap-2 border-t border-slate-200 pt-1">
-                <span className="w-24 text-[10px] font-semibold text-slate-700">Skor Gabungan</span>
+              <div className="mt-1 flex items-center gap-2 border-t border-slate-200 pt-1 dark:border-slate-700">
+                <span className="w-24 text-[10px] font-semibold text-slate-700 dark:text-slate-300">Skor Gabungan</span>
                 <span className={`text-xs font-bold ${getScoreColor(scoring.combined_score)}`}>{Math.round(scoring.combined_score)}/100</span>
               </div>
             )}
@@ -283,23 +283,23 @@ function StockRecommendationCard({ stock }) {
           <Badge
             className={`text-[10px] hover:!bg-inherit focus:!ring-0 ${
               stock.news_sentiment === "positif"
-                ? "bg-emerald-100 text-emerald-700"
+                ? "bg-emerald-100 text-emerald-700 dark:bg-emerald-900 dark:text-emerald-400"
                 : stock.news_sentiment === "netral"
-                ? "bg-slate-100 text-slate-600"
-                : "bg-red-100 text-red-700"
+                ? "bg-slate-100 text-slate-600 dark:bg-slate-700 dark:text-slate-400"
+                : "bg-red-100 text-red-700 dark:bg-red-900 dark:text-red-400"
             }`}
           >
             {stock.news_sentiment === "positif" ? "Berita Positif" : stock.news_sentiment === "netral" ? "Berita Netral" : "Berita Negatif"}
           </Badge>
           {(stock.risks || []).slice(0, 1).map((risk) => (
-            <span key={risk} className="text-[10px] text-slate-500">
+            <span key={risk} className="text-[10px] text-slate-500 dark:text-slate-400">
               ⚠ {risk}
             </span>
           ))}
         </div>
 
         {stock.key_headline && stock.key_headline !== "Tidak ada berita terbaru" && (
-          <div className="mt-2 rounded bg-slate-50 p-2 text-[10px] italic leading-5 text-slate-500">
+          <div className="mt-2 rounded bg-slate-50 p-2 text-[10px] italic leading-5 dark:bg-slate-800/50 text-slate-500 dark:text-slate-400">
             "{stock.key_headline}"
           </div>
         )}
@@ -311,9 +311,9 @@ function StockRecommendationCard({ stock }) {
 function MetricBadge({ label, value, suffix }) {
   if (value === null || value === undefined) return null;
   return (
-    <div className="rounded bg-slate-50 p-1.5 text-center">
-      <p className="text-[10px] text-slate-500">{label}</p>
-      <p className="text-xs font-semibold text-slate-800">
+    <div className="rounded bg-slate-50 p-1.5 text-center dark:bg-slate-800/50">
+      <p className="text-[10px] text-slate-500 dark:text-slate-400">{label}</p>
+      <p className="text-xs font-semibold text-slate-800 dark:text-slate-200">
         {Number(value).toFixed(1)}{suffix}
       </p>
     </div>
@@ -324,7 +324,7 @@ function LoadingState({ message }) {
   return (
     <div className="flex flex-col items-center justify-center py-16">
       <ArrowClockwise className="h-8 w-8 animate-spin text-emerald-500" />
-      <p className="mt-4 text-sm text-slate-600">{message}</p>
+      <p className="mt-4 text-sm text-slate-600 dark:text-slate-400">{message}</p>
     </div>
   );
 }
@@ -333,8 +333,8 @@ function ErrorState({ message, onRetry }) {
   return (
     <div className="flex flex-col items-center justify-center py-16">
       <WarningCircle className="h-10 w-10 text-red-400" />
-      <p className="mt-3 text-sm font-medium text-slate-700">Gagal memuat prediksi</p>
-      <p className="mt-1 text-xs text-slate-500">{message}</p>
+      <p className="mt-3 text-sm font-medium text-slate-700 dark:text-slate-300">Gagal memuat prediksi</p>
+      <p className="mt-1 text-xs text-slate-500 dark:text-slate-400">{message}</p>
       <Button className="mt-4" onClick={onRetry} variant="outline">
         <ArrowClockwise className="mr-2 h-4 w-4" />
         Coba Lagi
@@ -479,10 +479,10 @@ export default function PredictionDashboard() {
         <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-emerald-600">
           AI Prediction Agent
         </p>
-        <h2 className="mt-2 text-lg font-semibold text-slate-950 sm:text-xl">
+        <h2 className="mt-2 text-lg font-semibold text-slate-950 dark:text-slate-50 sm:text-xl">
           Prediksi Sektor & Rekomendasi Saham
         </h2>
-        <p className="mt-1 text-xs leading-6 text-slate-600 sm:text-sm">
+        <p className="mt-1 text-xs leading-6 text-slate-600 dark:text-slate-400 sm:text-sm">
           Agent menganalisis data fundamental sektor + kondisi makroekonomi global
           menggunakan Mistral AI untuk memprediksi sektor dengan potensi cuan tertinggi.
         </p>
@@ -523,15 +523,15 @@ export default function PredictionDashboard() {
       ) : currentPredictions.length === 0 ? (
         <div className="flex flex-col items-center justify-center py-16">
           <Warning className="h-10 w-10 text-amber-400" />
-          <p className="mt-3 text-sm font-medium text-slate-700">
+          <p className="mt-3 text-sm font-medium text-slate-700 dark:text-slate-300">
             Belum ada prediksi untuk timeframe {TIMEFRAME_LABELS[activeTimeframe]}
           </p>
-          <p className="mt-4 text-xs text-slate-400">Refresh otomatis setiap pukul 09:00 dan 15:00 WIB.</p>
+          <p className="mt-4 text-xs text-slate-400 dark:text-slate-500">Refresh otomatis setiap pukul 09:00 dan 15:00 WIB.</p>
         </div>
       ) : (
         <>
           <div>
-            <h3 className="mb-3 text-sm font-semibold text-slate-950">
+            <h3 className="mb-3 text-sm font-semibold text-slate-950 dark:text-slate-50">
               Top Sektor — {TIMEFRAME_LABELS[activeTimeframe]}
             </h3>
             <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
@@ -550,10 +550,10 @@ export default function PredictionDashboard() {
           {selectedSector && (
             <div>
               <div className="mb-3 flex items-center gap-2">
-                <h3 className="text-sm font-semibold text-slate-950">
+                <h3 className="text-sm font-semibold text-slate-950 dark:text-slate-50">
                   Rekomendasi Saham — {selectedSector.sector}
                 </h3>
-                <Badge className="bg-emerald-100 text-emerald-800 hover:!bg-emerald-100 focus:!ring-0">
+                <Badge className="bg-emerald-100 text-emerald-800 dark:bg-emerald-900 dark:text-emerald-300 hover:!bg-emerald-100 focus:!ring-0">
                   Prediksi {formatReturn(selectedSector.predicted_return)}
                 </Badge>
               </div>
@@ -561,9 +561,9 @@ export default function PredictionDashboard() {
               {stockLoading ? (
                 <LoadingState message="Agent sedang menganalisis fundamental saham..." />
               ) : stockRecs.length === 0 ? (
-                <Card className="border-slate-200 bg-white">
+                <Card className="border-slate-200 bg-white dark:border-slate-700 dark:bg-slate-800">
                   <CardContent className="flex flex-col items-center py-10">
-                    <p className="text-sm text-slate-600">
+                    <p className="text-sm text-slate-600 dark:text-slate-400">
                       Belum ada rekomendasi saham untuk sektor ini.
                     </p>
                   </CardContent>
@@ -580,9 +580,9 @@ export default function PredictionDashboard() {
         </>
       )}
 
-      <div className="flex items-center justify-center gap-3 text-[10px] text-slate-400">
+      <div className="flex items-center justify-center gap-3 text-[10px] text-slate-400 dark:text-slate-500">
         <span>Data diperbarui setiap 4 jam sekali</span>
-        <span className="text-slate-300">|</span>
+        <span className="text-slate-300 dark:text-slate-600">|</span>
         <span>
           Terakhir diperbarui:{" "}
           {generatedAt

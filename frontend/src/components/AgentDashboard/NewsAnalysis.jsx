@@ -1,22 +1,18 @@
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import {
-  ArrowClockwise,
   Article,
   ChartLineUp,
   GlobeHemisphereWest,
   Lightning,
   Newspaper,
   Scroll,
-  SealCheck,
   Sparkle,
   TrendDown,
   TrendUp,
   Warning,
-  WarningCircle,
 } from "@phosphor-icons/react";
 import axios from "axios";
 import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -26,7 +22,9 @@ const BACKEND_URL = (process.env.REACT_APP_BACKEND_URL || "http://localhost:8000
 const API_BASE = `${BACKEND_URL}/api`;
 
 const LS_NEWS_KEY = "ihsg_news_analysis";
-const CACHE_TTL = 14400000; // 4 jam — semua user share cache backend, hemat API
+const CACHE_TTL = 14400000;
+const POLL_INTERVAL = 8000;
+const POLL_TIMEOUT = 300000;
 
 function lsGet(key, ttl) {
   try {
@@ -68,29 +66,6 @@ function SentimentBadge({ sentiment }) {
       {isPos ? <TrendUp className="mr-1 h-3 w-3" /> : <TrendDown className="mr-1 h-3 w-3" />}
       {sentiment}
     </Badge>
-  );
-}
-
-function LoadingState({ message }) {
-  return (
-    <div className="flex flex-col items-center justify-center py-12">
-      <ArrowClockwise className="h-7 w-7 animate-spin text-emerald-500" />
-      <p className="mt-3 text-sm text-slate-600">{message}</p>
-    </div>
-  );
-}
-
-function ErrorState({ message, onRetry }) {
-  return (
-    <div className="flex flex-col items-center justify-center py-12">
-      <WarningCircle className="h-9 w-9 text-red-400" />
-      <p className="mt-2 text-sm font-medium text-slate-700">Gagal memuat berita</p>
-      <p className="mt-1 text-xs text-slate-500">{message}</p>
-      <Button className="mt-3" onClick={onRetry} variant="outline">
-        <ArrowClockwise className="mr-2 h-4 w-4" />
-        Coba Lagi
-      </Button>
-    </div>
   );
 }
 
@@ -200,55 +175,204 @@ function IndicatorCard({ indicator }) {
   );
 }
 
+function PreparingState({ message, subMessage }) {
+  const [dots, setDots] = useState("");
+  const [elapsed, setElapsed] = useState(0);
+
+  useEffect(() => {
+    const dotsInterval = setInterval(() => {
+      setDots((prev) => (prev.length >= 3 ? "" : prev + "."));
+    }, 800);
+
+    const start = Date.now();
+    const timer = setInterval(() => {
+      setElapsed(Date.now() - start);
+    }, 1000);
+
+    return () => {
+      clearInterval(dotsInterval);
+      clearInterval(timer);
+    };
+  }, []);
+
+  const progress = Math.min(100, (elapsed / POLL_TIMEOUT) * 100);
+  const remaining = Math.max(0, Math.ceil((POLL_TIMEOUT - elapsed) / 1000));
+  const minutes = Math.floor(remaining / 60);
+  const seconds = remaining % 60;
+
+  return (
+    <div className="flex flex-col items-center justify-center py-16">
+      <div className="relative mb-8">
+        <div className="h-20 w-20 animate-pulse rounded-full bg-sky-100" />
+        <div className="absolute inset-0 flex items-center justify-center">
+          <div className="h-12 w-12 animate-spin rounded-full border-4 border-sky-200 border-t-sky-500" />
+        </div>
+        <div className="absolute -right-2 -top-1">
+          <Sparkle className="h-6 w-6 animate-bounce text-sky-400" weight="fill" />
+        </div>
+      </div>
+      <p className="text-lg font-semibold text-slate-800">
+        {message || "Menyiapkan data"}
+        <span className="inline-block w-6 text-left">{dots}</span>
+      </p>
+      <p className="mt-2 max-w-sm text-center text-sm leading-6 text-slate-500">
+        {subMessage || "Sistem sedang mengumpulkan dan menganalisis berita terbaru dari berbagai sumber."}
+      </p>
+      <div className="mt-6 w-72">
+        <Progress className="h-2 bg-sky-100" value={progress} />
+        <p className="mt-1.5 text-center text-xs text-slate-500">
+          Sisa waktu: {minutes}:{seconds.toString().padStart(2, "0")}
+        </p>
+      </div>
+    </div>
+  );
+}
+
+function SkeletonSummary() {
+  return (
+    <div className="grid gap-3 sm:grid-cols-2">
+      {[1, 2].map((i) => (
+        <Card key={i} className="border-slate-200 bg-white shadow-none">
+          <CardContent className="p-4">
+            <div className="flex items-start gap-3">
+              <div className="h-5 w-5 animate-pulse rounded bg-slate-200" />
+              <div className="min-w-0 flex-1">
+                <div className="h-3 w-32 animate-pulse rounded bg-slate-200" />
+                <div className="mt-2 space-y-1.5">
+                  <div className="h-2 w-full animate-pulse rounded bg-slate-100" />
+                  <div className="h-2 w-3/4 animate-pulse rounded bg-slate-100" />
+                  <div className="h-2 w-5/6 animate-pulse rounded bg-slate-100" />
+                </div>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+      ))}
+    </div>
+  );
+}
+
 export default function NewsAnalysis() {
   const [data, setData] = useState(null);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
+  const [preparing, setPreparing] = useState(false);
   const [activeTab, setActiveTab] = useState("ringkasan");
+  const pollingRef = useRef(null);
 
-  const fetchNews = useCallback(async ({ refresh = false } = {}) => {
-    if (!refresh) {
-      const cached = lsGet(LS_NEWS_KEY, CACHE_TTL);
-      if (cached) {
-        setData(cached);
-        setLoading(false);
-        return;
-      }
-    }
-    setLoading(true);
-    setError(null);
+  const triggerCacheRefresh = useCallback(async () => {
     try {
-      const response = await axios.get(`${API_BASE}/news/flow`, {
-        params: { refresh },
-      });
+      await axios.post(`${API_BASE}/admin/refresh-cache?token=ihsg-admin-token`);
+    } catch {
+      // scheduler may already be running
+    }
+  }, []);
+
+  const startPolling = useCallback(() => {
+    if (pollingRef.current) return;
+    setPreparing(true);
+
+    let timedOut = false;
+    const timeoutId = setTimeout(() => {
+      timedOut = true;
+      setPreparing(false);
+      setLoading(false);
+      pollingRef.current = null;
+    }, POLL_TIMEOUT);
+
+    const poll = async () => {
+      if (timedOut) return;
+      try {
+        const resp = await axios.get(`${API_BASE}/news/flow`);
+        if (resp.data.success) {
+          clearTimeout(timeoutId);
+          setPreparing(false);
+          setLoading(false);
+          setData(resp.data);
+          lsSet(LS_NEWS_KEY, resp.data);
+          pollingRef.current = null;
+          return;
+        }
+      } catch {
+        // keep polling
+      }
+      pollingRef.current = setTimeout(poll, POLL_INTERVAL);
+    };
+
+    pollingRef.current = setTimeout(poll, POLL_INTERVAL);
+    return () => {
+      clearTimeout(timeoutId);
+      if (pollingRef.current) {
+        clearTimeout(pollingRef.current);
+        pollingRef.current = null;
+      }
+    };
+  }, []);
+
+  const fetchNews = useCallback(async () => {
+    const cached = lsGet(LS_NEWS_KEY, CACHE_TTL);
+    if (cached) {
+      setData(cached);
+      setLoading(false);
+      return;
+    }
+
+    setLoading(true);
+    try {
+      const response = await axios.get(`${API_BASE}/news/flow`);
       if (response.data.success) {
         setData(response.data);
         lsSet(LS_NEWS_KEY, response.data);
-        toast.success("Berita & analisis AI berhasil dimuat.");
-      } else {
-        setError("Gagal memuat berita");
+        setLoading(false);
+        return;
       }
-    } catch (err) {
-      const msg = err.response?.data?.detail || err.message || "Terjadi kesalahan jaringan";
-      setError(msg);
-      toast.error(msg);
-    } finally {
+      // Data not ready — trigger cache and poll
       setLoading(false);
+      await triggerCacheRefresh();
+      startPolling();
+    } catch (err) {
+      setLoading(false);
+      await triggerCacheRefresh();
+      startPolling();
     }
-  }, []);
+  }, [triggerCacheRefresh, startPolling]);
 
   useEffect(() => {
     fetchNews();
   }, [fetchNews]);
 
-  // Auto-refresh setiap 4 jam (tidak paksa refresh backend — pakai cache bersama)
   useEffect(() => {
-    const interval = setInterval(() => fetchNews({ refresh: false }), CACHE_TTL);
-    return () => clearInterval(interval);
-  }, [fetchNews]);
+    return () => {
+      if (pollingRef.current) {
+        clearTimeout(pollingRef.current);
+        pollingRef.current = null;
+      }
+    };
+  }, []);
 
   const analysis = data?.analysis || {};
   const newsList = data?.news || [];
+
+  if (preparing) {
+    return (
+      <div className="space-y-6">
+        <div>
+          <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-sky-600">
+            AI News Intelligence
+          </p>
+          <h2 className="mt-2 text-lg font-semibold text-slate-950 sm:text-xl">
+            Ringkasan Berita & Analisis Sektor
+          </h2>
+          <p className="mt-1 text-xs leading-6 text-slate-600 sm:text-sm">
+            Agent mengumpulkan berita ekonomi global dan menganalisis dampaknya ke sektor IDX.
+          </p>
+        </div>
+        <PreparingState
+          message="Menyiapkan analisis berita"
+          subMessage="AI Agent sedang mengumpulkan berita terbaru dari TradingView dan menganalisis dampaknya ke sektor-sektor IDX."
+        />
+      </div>
+    );
+  }
 
   if (loading) {
     return (
@@ -264,12 +388,12 @@ export default function NewsAnalysis() {
             Agent mengumpulkan berita ekonomi global dan menganalisis dampaknya ke sektor IDX.
           </p>
         </div>
-        <LoadingState message="AI agent sedang mengumpulkan & menganalisis berita terkini..." />
+        <SkeletonSummary />
       </div>
     );
   }
 
-  if (error) {
+  if (!data && !loading && !preparing) {
     return (
       <div className="space-y-6">
         <div>
@@ -280,7 +404,15 @@ export default function NewsAnalysis() {
             Ringkasan Berita & Analisis Sektor
           </h2>
         </div>
-        <ErrorState message={error} onRetry={() => fetchNews({ refresh: true })} />
+        <div className="flex flex-col items-center justify-center py-16">
+          <Warning className="h-10 w-10 text-amber-400" />
+          <p className="mt-3 text-sm font-medium text-slate-700">
+            Data berita belum tersedia
+          </p>
+          <p className="mt-2 text-xs text-slate-400">
+            Sistem akan menyiapkan data secara otomatis.
+          </p>
+        </div>
       </div>
     );
   }

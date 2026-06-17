@@ -1,12 +1,14 @@
 import { useCallback, useMemo, useState } from "react";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
-import { Buildings, ChartLineUp, Coins, GlobeHemisphereWest } from "@phosphor-icons/react";
+import { Buildings, ChartLineUp, Coins, GlobeHemisphereWest, Scroll } from "@phosphor-icons/react";
 import "@/App.css";
 import { Toaster } from "@/components/ui/sonner";
 import AdminDashboard from "@/components/AdminDashboard";
 import AppHeader from "@/components/AppHeader";
 import CompanyDetailSheet from "@/components/CompanyDetailSheet";
 import MacroDashboard from "@/components/MacroDashboard";
+import About from "@/components/About";
+import OrderBook from "@/components/OrderBook";
 import NewsAnalysis from "@/components/AgentDashboard/NewsAnalysis";
 import PredictionDashboard from "@/components/AgentDashboard/PredictionDashboard";
 import ScreenerLayout from "@/components/ScreenerLayout";
@@ -98,6 +100,28 @@ function PredictionPage() {
   );
 }
 
+function OrderBookPage() {
+  return (
+    <div className="min-h-screen bg-[radial-gradient(circle_at_top_left,_rgba(16,185,129,0.12),_transparent_28%),linear-gradient(180deg,_#f8fafc_0%,_#eff6ff_100%)]">
+      <AppHeader />
+      <main className="mx-auto max-w-[1600px] space-y-10 px-4 py-6 sm:px-6 lg:px-8">
+        <OrderBook />
+      </main>
+    </div>
+  );
+}
+
+function AboutPage() {
+  return (
+    <div className="min-h-screen bg-[radial-gradient(circle_at_top_left,_rgba(16,185,129,0.12),_transparent_28%),linear-gradient(180deg,_#f8fafc_0%,_#eff6ff_100%)]">
+      <AppHeader />
+      <main className="mx-auto max-w-[900px] px-4 py-8 sm:px-6 lg:px-8 lg:py-10">
+        <About />
+      </main>
+    </div>
+  );
+}
+
 function MacroPage() {
   return (
     <div className="min-h-screen bg-[radial-gradient(circle_at_top_left,_rgba(16,185,129,0.12),_transparent_28%),linear-gradient(180deg,_#f8fafc_0%,_#eff6ff_100%)]">
@@ -126,6 +150,8 @@ export default function App() {
       <Routes>
         <Route element={<ScreenerPage />} path="/" />
         <Route element={<PredictionPage />} path="/prediction" />
+        <Route element={<OrderBookPage />} path="/order-book" />
+        <Route element={<AboutPage />} path="/about" />
         <Route element={<MacroPage />} path="/macro" />
         <Route element={<AdminPage />} path="/admin" />
       </Routes>

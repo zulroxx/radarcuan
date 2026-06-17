@@ -3,6 +3,7 @@ import CompanyOverviewTab from "@/components/company-detail/CompanyOverviewTab";
 import CompanyFinancialsTab from "@/components/company-detail/CompanyFinancialsTab";
 import CompanyDividendTab from "@/components/company-detail/CompanyDividendTab";
 import CompanyValuationTab from "@/components/company-detail/CompanyValuationTab";
+import PriceChart from "@/components/company-detail/PriceChart";
 
 export default function CompanyDetailTabs({ activeTab, company, onTabChange, open, sectorBenchmark }) {
   return (
@@ -12,6 +13,7 @@ export default function CompanyDetailTabs({ activeTab, company, onTabChange, ope
         <TabsTrigger className="rounded-lg px-3 py-1.5 text-xs font-medium data-[state=active]:bg-white data-[state=active]:shadow-sm sm:px-4 sm:py-2 sm:text-sm" data-testid="company-detail-tab-financials" value="financials">Financials</TabsTrigger>
         <TabsTrigger className="rounded-lg px-3 py-1.5 text-xs font-medium data-[state=active]:bg-white data-[state=active]:shadow-sm sm:px-4 sm:py-2 sm:text-sm" data-testid="company-detail-tab-dividend" value="dividend">Dividend</TabsTrigger>
         <TabsTrigger className="rounded-lg px-3 py-1.5 text-xs font-medium data-[state=active]:bg-white data-[state=active]:shadow-sm sm:px-4 sm:py-2 sm:text-sm" data-testid="company-detail-tab-valuation" value="valuation">Valuation</TabsTrigger>
+        <TabsTrigger className="rounded-lg px-3 py-1.5 text-xs font-medium data-[state=active]:bg-white data-[state=active]:shadow-sm sm:px-4 sm:py-2 sm:text-sm" value="chart">Chart</TabsTrigger>
       </TabsList>
 
       <TabsContent value="overview">
@@ -25,6 +27,9 @@ export default function CompanyDetailTabs({ activeTab, company, onTabChange, ope
       </TabsContent>
       <TabsContent value="valuation">
         <CompanyValuationTab active={open && activeTab === "valuation"} company={company} />
+      </TabsContent>
+      <TabsContent value="chart">
+        <PriceChart ticker={company.stockCode} />
       </TabsContent>
     </Tabs>
   );

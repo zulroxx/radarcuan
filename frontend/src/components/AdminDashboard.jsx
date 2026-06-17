@@ -50,32 +50,34 @@ function LoginForm({ onLogin }) {
 
   return (
     <div className="mx-auto flex min-h-[60vh] max-w-sm flex-col justify-center">
-      <Card className="border-slate-200 bg-white shadow-sm">
+      <Card className="border-slate-200 bg-white shadow-sm dark:border-slate-700 dark:bg-slate-900">
         <CardHeader className="items-center space-y-3 text-center">
           <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-slate-950">
             <LockKey className="h-6 w-6 text-white" weight="fill" />
           </div>
-          <CardTitle className="text-lg text-slate-950">Admin Panel</CardTitle>
-          <p className="text-sm text-slate-500">Masuk untuk melihat log feedback & waitlist.</p>
+          <CardTitle className="text-lg text-slate-950 dark:text-slate-50">Admin Panel</CardTitle>
+          <p className="text-sm text-slate-500 dark:text-slate-400">Masuk untuk melihat log feedback & waitlist.</p>
         </CardHeader>
         <CardContent>
           <form className="space-y-4" onSubmit={handleSubmit}>
             <div className="space-y-2">
-              <label className="text-xs font-medium text-slate-700" htmlFor="username">Username</label>
+              <label className="text-xs font-medium text-slate-700 dark:text-slate-200" htmlFor="username">Username</label>
               <Input
                 autoComplete="username"
                 id="username"
+                name="username"
                 onChange={(e) => setUsername(e.target.value)}
                 placeholder="admin"
                 value={username}
               />
             </div>
             <div className="space-y-2">
-              <label className="text-xs font-medium text-slate-700" htmlFor="password">Password</label>
+              <label className="text-xs font-medium text-slate-700 dark:text-slate-200" htmlFor="password">Password</label>
               <div className="relative">
                 <Input
                   autoComplete="current-password"
                   id="password"
+                  name="password"
                   onChange={(e) => setPassword(e.target.value)}
                   onKeyDown={(e) => e.key === "Enter" && handleSubmit(e)}
                   placeholder="••••••"
@@ -83,7 +85,7 @@ function LoginForm({ onLogin }) {
                   value={password}
                 />
                 <button
-                  className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600"
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 dark:hover:text-slate-300"
                   onClick={() => setShowPassword(!showPassword)}
                   tabIndex={-1}
                   type="button"
@@ -105,32 +107,32 @@ function LoginForm({ onLogin }) {
 function FeedbackTable({ data }) {
   if (!data?.length) {
     return (
-      <div className="flex flex-col items-center py-12 text-sm text-slate-500">
+      <div className="flex flex-col items-center py-12 text-sm text-slate-500 dark:text-slate-400">
         Belum ada data feedback.
       </div>
     );
   }
 
   return (
-    <div className="overflow-x-auto rounded-lg border border-slate-200">
+    <div className="overflow-x-auto rounded-lg border border-slate-200 dark:border-slate-700">
       <table className="w-full min-w-[600px]">
         <thead>
-          <tr className="bg-slate-50">
-            <th className="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wider text-slate-500">Waktu</th>
-            <th className="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wider text-slate-500">Nama</th>
-            <th className="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wider text-slate-500">Email</th>
-            <th className="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wider text-slate-500">Pesan</th>
+          <tr className="bg-slate-50 dark:bg-slate-800">
+            <th className="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400">Waktu</th>
+            <th className="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400">Nama</th>
+            <th className="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400">Email</th>
+            <th className="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400">Pesan</th>
           </tr>
         </thead>
-        <tbody className="divide-y divide-slate-100">
+        <tbody className="divide-y divide-slate-100 dark:divide-slate-700">
           {data.map((item) => (
-            <tr key={item.id} className="hover:bg-slate-50">
-              <td className="whitespace-nowrap px-4 py-3 text-xs text-slate-500">
+            <tr key={item.id} className="hover:bg-slate-50 dark:hover:bg-slate-800">
+              <td className="whitespace-nowrap px-4 py-3 text-xs text-slate-500 dark:text-slate-400">
                 {new Date(item.created_at).toLocaleString("id-ID")}
               </td>
-              <td className="px-4 py-3 text-sm text-slate-800">{item.name || "-"}</td>
-              <td className="px-4 py-3 text-sm text-slate-800">{item.email || "-"}</td>
-              <td className="max-w-xs truncate px-4 py-3 text-sm text-slate-600">{item.message}</td>
+              <td className="px-4 py-3 text-sm text-slate-800 dark:text-slate-100">{item.name || "-"}</td>
+              <td className="px-4 py-3 text-sm text-slate-800 dark:text-slate-100">{item.email || "-"}</td>
+              <td className="max-w-xs truncate px-4 py-3 text-sm text-slate-600 dark:text-slate-300">{item.message}</td>
             </tr>
           ))}
         </tbody>
@@ -142,31 +144,31 @@ function FeedbackTable({ data }) {
 function WaitlistTable({ data }) {
   if (!data?.length) {
     return (
-      <div className="flex flex-col items-center py-12 text-sm text-slate-500">
+      <div className="flex flex-col items-center py-12 text-sm text-slate-500 dark:text-slate-400">
         Belum ada data waitlist.
       </div>
     );
   }
 
   return (
-    <div className="overflow-x-auto rounded-lg border border-slate-200">
+    <div className="overflow-x-auto rounded-lg border border-slate-200 dark:border-slate-700">
       <table className="w-full min-w-[600px]">
         <thead>
-          <tr className="bg-slate-50">
-            <th className="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wider text-slate-500">Waktu</th>
-            <th className="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wider text-slate-500">Email</th>
-            <th className="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wider text-slate-500">Catatan</th>
-            <th className="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wider text-slate-500">Status</th>
+          <tr className="bg-slate-50 dark:bg-slate-800">
+            <th className="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400">Waktu</th>
+            <th className="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400">Email</th>
+            <th className="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400">Catatan</th>
+            <th className="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400">Status</th>
           </tr>
         </thead>
-        <tbody className="divide-y divide-slate-100">
+        <tbody className="divide-y divide-slate-100 dark:divide-slate-700">
           {data.map((item) => (
-            <tr key={item.id} className="hover:bg-slate-50">
-              <td className="whitespace-nowrap px-4 py-3 text-xs text-slate-500">
+            <tr key={item.id} className="hover:bg-slate-50 dark:hover:bg-slate-800">
+              <td className="whitespace-nowrap px-4 py-3 text-xs text-slate-500 dark:text-slate-400">
                 {new Date(item.created_at).toLocaleString("id-ID")}
               </td>
-              <td className="px-4 py-3 text-sm text-slate-800">{item.email}</td>
-              <td className="max-w-xs truncate px-4 py-3 text-sm text-slate-600">{item.note || "-"}</td>
+              <td className="px-4 py-3 text-sm text-slate-800 dark:text-slate-100">{item.email}</td>
+              <td className="max-w-xs truncate px-4 py-3 text-sm text-slate-600 dark:text-slate-300">{item.note || "-"}</td>
               <td className="px-4 py-3">
                 <Badge className="bg-emerald-100 text-emerald-700 hover:!bg-emerald-100 focus:!ring-0">
                   {item.status || "active"}
@@ -235,10 +237,10 @@ function AdminDashboard() {
     <div className="space-y-6">
       <div className="flex items-center justify-between">
         <div>
-          <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-slate-500">
+          <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-slate-500 dark:text-slate-400">
             Admin Panel
           </p>
-          <h2 className="mt-1 text-lg font-semibold text-slate-950 sm:text-xl">
+          <h2 className="mt-1 text-lg font-semibold text-slate-950 sm:text-xl dark:text-slate-50">
             Log Feedback & Waitlist
           </h2>
         </div>
@@ -249,22 +251,22 @@ function AdminDashboard() {
       </div>
 
       <div className="grid grid-cols-2 gap-3 sm:grid-cols-2">
-        <Card className="border-slate-200 bg-white shadow-none">
+        <Card className="border-slate-200 bg-white shadow-none dark:border-slate-700 dark:bg-slate-900">
           <CardContent className="p-3 sm:p-4">
             <div className="flex items-center gap-2">
               <Article className="h-4 w-4 text-sky-600" weight="fill" />
-              <p className="text-xs uppercase tracking-[0.18em] text-slate-500">Feedback</p>
+              <p className="text-xs uppercase tracking-[0.18em] text-slate-500 dark:text-slate-400">Feedback</p>
             </div>
-            <p className="mt-2 text-2xl font-semibold text-slate-950">{feedbackData.length}</p>
+            <p className="mt-2 text-2xl font-semibold text-slate-950 dark:text-slate-50">{feedbackData.length}</p>
           </CardContent>
         </Card>
-        <Card className="border-slate-200 bg-white shadow-none">
+        <Card className="border-slate-200 bg-white shadow-none dark:border-slate-700 dark:bg-slate-900">
           <CardContent className="p-3 sm:p-4">
             <div className="flex items-center gap-2">
               <Users className="h-4 w-4 text-emerald-600" weight="fill" />
-              <p className="text-xs uppercase tracking-[0.18em] text-slate-500">Waitlist</p>
+              <p className="text-xs uppercase tracking-[0.18em] text-slate-500 dark:text-slate-400">Waitlist</p>
             </div>
-            <p className="mt-2 text-2xl font-semibold text-slate-950">{waitlistData.length}</p>
+            <p className="mt-2 text-2xl font-semibold text-slate-950 dark:text-slate-50">{waitlistData.length}</p>
           </CardContent>
         </Card>
       </div>

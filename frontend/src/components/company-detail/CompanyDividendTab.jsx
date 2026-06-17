@@ -14,12 +14,12 @@ export default function CompanyDividendTab({ active, company }) {
   if (!hasDividendHistory) {
     return (
       <div className="space-y-4" data-testid="company-detail-tab-content-dividend">
-        <Card className="border-slate-200 bg-white">
+        <Card className="border-slate-200 bg-white dark:border-slate-700 dark:bg-slate-900">
           <CardHeader>
-            <CardTitle className="text-lg text-slate-950">Riwayat dividen</CardTitle>
+            <CardTitle className="text-lg text-slate-950 dark:text-slate-50">Riwayat dividen</CardTitle>
           </CardHeader>
           <CardContent>
-            <p className="text-sm text-slate-500">Data riwayat dividen belum tersedia untuk saham ini.</p>
+            <p className="text-sm text-slate-500 dark:text-slate-400">Data riwayat dividen belum tersedia untuk saham ini.</p>
           </CardContent>
         </Card>
       </div>
@@ -29,14 +29,14 @@ export default function CompanyDividendTab({ active, company }) {
   return (
     <div className="space-y-4" data-testid="company-detail-tab-content-dividend">
       <div className="grid gap-4 lg:grid-cols-2 xl:grid-cols-[1fr_1fr]">
-        <Card className="border-slate-200 bg-white" data-testid="company-detail-dividend-history-card">
+        <Card className="border-slate-200 bg-white dark:border-slate-700 dark:bg-slate-900" data-testid="company-detail-dividend-history-card">
           <CardHeader>
-            <CardTitle className="text-lg text-slate-950">Riwayat dividen</CardTitle>
+            <CardTitle className="text-lg text-slate-950 dark:text-slate-50">Riwayat dividen</CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="overflow-auto rounded-2xl border border-slate-200">
+            <div className="overflow-auto rounded-2xl border border-slate-200 dark:border-slate-700">
               <table className="w-full min-w-[520px]">
-                <thead className="bg-slate-50">
+                <thead className="bg-slate-50 dark:bg-slate-800">
                   <tr>
                     <th className={COMPANY_DETAIL_TABLE_CELL_CLASS}>Tahun</th>
                     <th className={COMPANY_DETAIL_TABLE_CELL_CLASS}>DPS</th>
@@ -59,9 +59,9 @@ export default function CompanyDividendTab({ active, company }) {
           </CardContent>
         </Card>
 
-        <Card className="border-slate-200 bg-white" data-testid="company-detail-dividend-chart-card">
+        <Card className="border-slate-200 bg-white dark:border-slate-700 dark:bg-slate-900" data-testid="company-detail-dividend-chart-card">
           <CardHeader>
-            <CardTitle className="text-lg text-slate-950">Payout & yield trend</CardTitle>
+            <CardTitle className="text-lg text-slate-950 dark:text-slate-50">Payout & yield trend</CardTitle>
           </CardHeader>
           <CardContent>
             <DeferredChart active={active} className="h-[300px] w-full" testId="company-detail-dividend-chart">

@@ -36,11 +36,11 @@ function MetricCard({ item }) {
   }
 
   return (
-    <Card className="border-slate-200 bg-white shadow-sm" data-testid={`company-detail-metric-${item.label.toLowerCase().replace(/\s+/g, "-")}`}>
+    <Card className="border-slate-200 bg-white shadow-sm dark:border-slate-700 dark:bg-slate-900" data-testid={`company-detail-metric-${item.label.toLowerCase().replace(/\s+/g, "-")}`}>
       <CardContent className="flex items-center justify-between gap-4 p-4 sm:p-5">
         <div className="min-w-0">
-          <p className="text-[10px] uppercase tracking-[0.15em] text-slate-500">{item.label}</p>
-          <p className="mt-1.5 text-xl font-semibold text-slate-950 sm:text-2xl">{item.value}</p>
+          <p className="text-[10px] uppercase tracking-[0.15em] text-slate-500 dark:text-slate-400">{item.label}</p>
+          <p className="mt-1.5 text-xl font-semibold text-slate-950 sm:text-2xl dark:text-slate-50">{item.value}</p>
           <Badge className={`mt-2 rounded-md border px-2 py-0.5 text-[10px] font-medium ${toneClasses[item.tone]}`} data-testid={`company-detail-metric-tone-${item.label.toLowerCase().replace(/\s+/g, "-")}`} variant="outline">
             {badgeLabel}
           </Badge>
@@ -53,13 +53,13 @@ function MetricCard({ item }) {
 
 function HighlightCard({ item }) {
   return (
-    <Card className="border-slate-200 bg-white shadow-sm" data-testid={`company-detail-highlight-${item.label.toLowerCase().replace(/\s+/g, "-")}`}>
+    <Card className="border-slate-200 bg-white shadow-sm dark:border-slate-700 dark:bg-slate-900" data-testid={`company-detail-highlight-${item.label.toLowerCase().replace(/\s+/g, "-")}`}>
       <CardContent className="flex items-center justify-between gap-4 p-4 sm:p-5">
         <div className="min-w-0">
-          <p className="text-[10px] uppercase tracking-[0.15em] text-slate-500">{item.label}</p>
-          <p className="mt-1.5 text-base font-semibold text-slate-950 sm:text-xl">{item.value}</p>
+          <p className="text-[10px] uppercase tracking-[0.15em] text-slate-500 dark:text-slate-400">{item.label}</p>
+          <p className="mt-1.5 text-base font-semibold text-slate-950 sm:text-xl dark:text-slate-50">{item.value}</p>
         </div>
-        <item.icon className="h-7 w-7 shrink-0 text-slate-400 sm:h-8 sm:w-8" />
+        <item.icon className="h-7 w-7 shrink-0 text-slate-400 sm:h-8 sm:w-8 dark:text-slate-500" />
       </CardContent>
     </Card>
   );

@@ -6,9 +6,9 @@ import { formatCurrency, formatPercent, formatRatio } from "@/lib/screener";
 
 function SummaryTile({ label, testId, value }) {
   return (
-    <div className="rounded-2xl border border-slate-200 bg-slate-50 p-4" data-testid={testId}>
-      <p className="text-xs uppercase tracking-[0.2em] text-slate-500">{label}</p>
-      <p className="mt-2 text-lg font-semibold text-slate-950">{value}</p>
+    <div className="rounded-2xl border border-slate-200 bg-slate-50 p-4 dark:border-slate-700 dark:bg-slate-800" data-testid={testId}>
+      <p className="text-xs uppercase tracking-[0.2em] text-slate-500 dark:text-slate-400">{label}</p>
+      <p className="mt-2 text-lg font-semibold text-slate-950 dark:text-slate-50">{value}</p>
     </div>
   );
 }
@@ -20,12 +20,12 @@ export default function CompanyValuationTab({ active, company }) {
   if (!hasValuation) {
     return (
       <div className="space-y-4" data-testid="company-detail-tab-content-valuation">
-        <Card className="border-slate-200 bg-white">
+        <Card className="border-slate-200 bg-white dark:border-slate-700 dark:bg-slate-900">
           <CardHeader>
-            <CardTitle className="text-lg text-slate-950">Valuation summary</CardTitle>
+            <CardTitle className="text-lg text-slate-950 dark:text-slate-50">Valuation summary</CardTitle>
           </CardHeader>
           <CardContent>
-            <p className="text-sm text-slate-500">Data valuasi belum tersedia untuk saham ini.</p>
+            <p className="text-sm text-slate-500 dark:text-slate-400">Data valuasi belum tersedia untuk saham ini.</p>
           </CardContent>
         </Card>
       </div>
@@ -35,9 +35,9 @@ export default function CompanyValuationTab({ active, company }) {
   return (
     <div className="space-y-4" data-testid="company-detail-tab-content-valuation">
       <div className="grid gap-4 lg:grid-cols-2 xl:grid-cols-[0.95fr_1.05fr]">
-        <Card className="border-slate-200 bg-white" data-testid="company-detail-valuation-summary-card">
+        <Card className="border-slate-200 bg-white dark:border-slate-700 dark:bg-slate-900" data-testid="company-detail-valuation-summary-card">
           <CardHeader>
-            <CardTitle className="text-lg text-slate-950">Valuation summary</CardTitle>
+            <CardTitle className="text-lg text-slate-950 dark:text-slate-50">Valuation summary</CardTitle>
           </CardHeader>
           <CardContent className="grid gap-3 sm:grid-cols-2">
             <SummaryTile label="Fair value range" testId="company-detail-fair-value-range" value={`${formatCurrency(company.valuationSummary.fairValueRange[0])} - ${formatCurrency(company.valuationSummary.fairValueRange[1])}`} />
@@ -49,10 +49,10 @@ export default function CompanyValuationTab({ active, company }) {
           </CardContent>
         </Card>
 
-        <Card className="border-slate-200 bg-white" data-testid="company-detail-trend-card">
+        <Card className="border-slate-200 bg-white dark:border-slate-700 dark:bg-slate-900" data-testid="company-detail-trend-card">
           <CardHeader>
-            <CardTitle className="text-lg text-slate-950">Key Ratio Trend</CardTitle>
-            <p className="text-sm text-slate-500" data-testid="company-detail-trend-description">Pergerakan ROE dan PER dalam 3 tahun terakhir untuk memvalidasi konsistensi fundamental.</p>
+            <CardTitle className="text-lg text-slate-950 dark:text-slate-50">Key Ratio Trend</CardTitle>
+            <p className="text-sm text-slate-500 dark:text-slate-400" data-testid="company-detail-trend-description">Pergerakan ROE dan PER dalam 3 tahun terakhir untuk memvalidasi konsistensi fundamental.</p>
           </CardHeader>
           <CardContent>
             {hasRatioTrend ? (
@@ -70,7 +70,7 @@ export default function CompanyValuationTab({ active, company }) {
                 )}
               </DeferredChart>
             ) : (
-              <p className="text-sm text-slate-500">Data trend ratio belum tersedia.</p>
+              <p className="text-sm text-slate-500 dark:text-slate-400">Data trend ratio belum tersedia.</p>
             )}
           </CardContent>
         </Card>
