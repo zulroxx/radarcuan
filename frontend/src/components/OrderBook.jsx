@@ -540,7 +540,7 @@ export default function OrderBook() {
  }
  };
  }
- }, [simulations.length > 0, refreshPrices]);
+  }, [simulations, refreshPrices]);
 
  if (preparing) {
  return (
