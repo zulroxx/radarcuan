@@ -1,0 +1,16 @@
+services:
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    ports:
+      - "8000:8000"
+    env_file:
+      - ./backend/.env
+    volumes:
+      # Persistent volume untuk file cache — tidak hilang saat container restart/recreate
+      - backend_cache:/app/agent_cache
+    restart: unless-stopped
+
+volumes:
+  backend_cache:

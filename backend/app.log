@@ -1,0 +1,892 @@
+2026-06-20 20:36:19,321 - __main__ - INFO - Starting server on port 8000...
+2026-06-20 20:36:20,849 - server - INFO - MongoDB connection established
+2026-06-20 20:36:20,850 - server - INFO - OrderBookStore upgraded to MongoDB
+2026-06-20 20:36:20,851 - server - INFO - Application started
+2026-06-20 20:36:26,640 - scheduler - INFO - All caches already populated
+2026-06-20 20:36:36,242 - server - INFO - Jadwal AI Agent berikutnya: 09:00 Monday 22-06-2026 WIB (2183 menit lagi)
+2026-06-20 20:36:45,782 - server - INFO - Cache kosong, mencoba mengambil data langsung...
+2026-06-20 20:39:10,673 - scheduler - INFO - [run=a2a157e8] ============================================================
+2026-06-20 20:39:10,674 - scheduler - INFO - [run=a2a157e8] SCHEDULED FETCH STARTING
+2026-06-20 20:39:10,675 - scheduler - INFO - [run=a2a157e8] ============================================================
+2026-06-20 20:39:11,141 - scheduler - INFO - TradingView: data sudah ada di MongoDB, skip fetch external API
+2026-06-20 20:39:12,204 - scheduler - INFO - Macro: data sudah ada di MongoDB, skip fetch external API
+2026-06-20 20:39:15,862 - scheduler - INFO - News: 50 items fetched from TV
+2026-06-20 20:39:22,692 - httpx - INFO - HTTP Request: POST https://models.inference.ai.azure.com/chat/completions "HTTP/1.1 400 Bad Request"
+2026-06-20 20:39:22,696 - gemini_client - ERROR - github-models API error: Error code: 400 - {'error': {'code': 'unknown_model', 'message': 'Unknown model: llama-3-3-70b-instruct', 'details': 'Unknown model: llama-3-3-70b-instruct'}}
+2026-06-20 20:39:24,910 - mistral_agent_manager - INFO - Loaded agent news_flow: ag_019ede7753cf7090ac811059f61fc3c9
+2026-06-20 20:39:24,910 - mistral_agent_manager - INFO - Loaded agent sector_predictor: ag_019ede78c3bb729089efed3a037b8065
+2026-06-20 20:39:24,910 - mistral_agent_manager - INFO - Loaded agent stock_recommender: ag_019ede7915d470b99fd1c1f3355433c0
+2026-06-20 20:39:24,910 - mistral_agent_manager - INFO - Loaded agent batch_stock: ag_019ee024ba3b740892cfa5fe2e48bc51
+2026-06-20 20:39:58,240 - httpx - INFO - HTTP Request: POST https://api.mistral.ai/v1/agents/completions "HTTP/1.1 200 OK"
+2026-06-20 20:39:58,315 - scheduler - INFO - News: stored with AI analysis, version=1
+2026-06-20 20:39:58,315 - alert_manager - WARNING - [ALERT] news_flow: Average execution time 45.11s exceeds threshold 30.0s
+2026-06-20 20:39:59,336 - sector_predictor_agent - INFO - Generating sector predictions...
+2026-06-20 20:39:59,369 - sector_predictor_agent - INFO - TV data loaded from cache
+2026-06-20 20:40:00,398 - mistral_agent_manager - INFO - Loaded agent news_flow: ag_019ede7753cf7090ac811059f61fc3c9
+2026-06-20 20:40:00,398 - mistral_agent_manager - INFO - Loaded agent sector_predictor: ag_019ede78c3bb729089efed3a037b8065
+2026-06-20 20:40:00,399 - mistral_agent_manager - INFO - Loaded agent stock_recommender: ag_019ede7915d470b99fd1c1f3355433c0
+2026-06-20 20:40:00,399 - mistral_agent_manager - INFO - Loaded agent batch_stock: ag_019ee024ba3b740892cfa5fe2e48bc51
+2026-06-20 20:40:01,779 - httpx - INFO - HTTP Request: POST https://api.mistral.ai/v1/agents/completions "HTTP/1.1 200 OK"
+2026-06-20 20:40:01,783 - mistral_agent_manager - INFO - Executing function: get_macro_summary({})
+2026-06-20 20:40:01,804 - macro_agent - WARNING - Macro cache miss — returning default values
+2026-06-20 20:40:01,805 - sector_predictor_agent - WARNING - Mistral agent gagal ('value'), fallback ke LLM client...
+2026-06-20 20:40:01,805 - sector_predictor_agent - WARNING - Mistral agent gagal untuk sector prediction, fallback ke cache
+2026-06-20 20:40:01,890 - scheduler - INFO - Sector predictions stored, version=1
+2026-06-20 20:40:02,925 - stock_recommender_agent - INFO - Batch recommending stocks for 14 sectors...
+2026-06-20 20:40:53,286 - httpx - INFO - HTTP Request: POST https://api.cerebras.ai/v1/chat/completions "HTTP/1.1 200 OK"
+2026-06-20 20:40:53,306 - stock_recommender_agent - INFO - Cerebras batch success: content_len=34506, preview={
+  "recommendations": {
+    "Bahan Baku": {
+      "recommendations": [
+        {
+          "ticker": "CLPI",
+          "companyName": "PT Colorpak Indonesia Tbk",
+          "price": 1710.0,
+         
+2026-06-20 20:40:53,536 - stock_recommender_agent - INFO - Batch batch_cerebras: 12/14 sectors stored
+2026-06-20 20:40:53,537 - scheduler - INFO - [run=a2a157e8] Batch stock recs: batch_cerebras — 12/14 sectors stored
+2026-06-20 20:40:54,208 - scheduler - INFO - [run=a2a157e8] Stock recommendations version=1
+2026-06-20 20:40:54,209 - alert_manager - WARNING - [ALERT] stock_recommendations: Average execution time 51.30s exceeds threshold 30.0s
+2026-06-20 20:40:55,220 - scheduler - WARNING - Order book: dependency check failed - Sector predictions stale (72254s > 3600s)
+2026-06-20 20:40:56,237 - scheduler - INFO - [run=a2a157e8] ============================================================
+2026-06-20 20:40:56,237 - scheduler - INFO - [run=a2a157e8] SCHEDULED FETCH COMPLETE: {'tradingview': 500, 'macro': 16, 'news_flow': 50, 'sector_predictions': True, 'stock_recommendations': 12, 'order_book': False}
+2026-06-20 20:40:56,238 - scheduler - INFO - [run=a2a157e8] ============================================================
+2026-06-20 20:50:57,630 - server - INFO - Macro: refresh manual berhasil
+2026-06-20 21:34:00,807 - server - INFO - MongoDB connection closed
+2026-06-20 21:44:48,882 - __main__ - INFO - Starting server on port 8000...
+2026-06-20 21:44:51,150 - server - INFO - MongoDB connection established
+2026-06-20 21:44:51,152 - server - INFO - OrderBookStore upgraded to MongoDB
+2026-06-20 21:44:51,152 - server - INFO - Application started
+2026-06-20 21:44:56,828 - scheduler - INFO - All caches already populated
+2026-06-20 21:44:57,236 - server - INFO - Jadwal AI Agent berikutnya: 09:00 Monday 22-06-2026 WIB (2115 menit lagi)
+2026-06-20 21:46:56,881 - scheduler - INFO - [run=9b1e0cea] ============================================================
+2026-06-20 21:46:56,885 - scheduler - INFO - [run=9b1e0cea] SCHEDULED FETCH STARTING
+2026-06-20 21:46:56,886 - scheduler - INFO - [run=9b1e0cea] ============================================================
+2026-06-20 21:46:57,469 - scheduler - INFO - TradingView: data sudah ada di MongoDB, skip fetch external API
+2026-06-20 21:46:58,658 - scheduler - INFO - Macro: data sudah ada di MongoDB, skip fetch external API
+2026-06-20 21:47:03,624 - scheduler - INFO - News: 50 items fetched from TV
+2026-06-20 21:47:11,769 - httpx - INFO - HTTP Request: POST https://models.inference.ai.azure.com/chat/completions "HTTP/1.1 400 Bad Request"
+2026-06-20 21:47:11,771 - gemini_client - ERROR - github-models API error: Error code: 400 - {'error': {'code': 'unknown_model', 'message': 'Unknown model: llama-3-3-70b-instruct', 'details': 'Unknown model: llama-3-3-70b-instruct'}}
+2026-06-20 21:47:14,239 - mistral_agent_manager - INFO - Loaded agent news_flow: ag_019ede7753cf7090ac811059f61fc3c9
+2026-06-20 21:47:14,242 - mistral_agent_manager - INFO - Loaded agent sector_predictor: ag_019ede78c3bb729089efed3a037b8065
+2026-06-20 21:47:14,254 - mistral_agent_manager - INFO - Loaded agent stock_recommender: ag_019ede7915d470b99fd1c1f3355433c0
+2026-06-20 21:47:14,254 - mistral_agent_manager - INFO - Loaded agent batch_stock: ag_019ee024ba3b740892cfa5fe2e48bc51
+2026-06-20 21:47:43,988 - httpx - INFO - HTTP Request: POST https://api.mistral.ai/v1/agents/completions "HTTP/1.1 200 OK"
+2026-06-20 21:47:44,074 - scheduler - INFO - News: stored with AI analysis, version=1
+2026-06-20 21:47:44,074 - alert_manager - WARNING - [ALERT] news_flow: Average execution time 44.41s exceeds threshold 30.0s
+2026-06-20 21:47:45,090 - sector_predictor_agent - INFO - Generating sector predictions...
+2026-06-20 21:47:45,118 - sector_predictor_agent - INFO - TV data loaded from cache
+2026-06-20 21:47:46,783 - mistral_agent_manager - INFO - Loaded agent news_flow: ag_019ede7753cf7090ac811059f61fc3c9
+2026-06-20 21:47:46,785 - mistral_agent_manager - INFO - Loaded agent sector_predictor: ag_019ede78c3bb729089efed3a037b8065
+2026-06-20 21:47:46,786 - mistral_agent_manager - INFO - Loaded agent stock_recommender: ag_019ede7915d470b99fd1c1f3355433c0
+2026-06-20 21:47:46,787 - mistral_agent_manager - INFO - Loaded agent batch_stock: ag_019ee024ba3b740892cfa5fe2e48bc51
+2026-06-20 21:47:47,792 - httpx - INFO - HTTP Request: POST https://api.mistral.ai/v1/agents/completions "HTTP/1.1 200 OK"
+2026-06-20 21:47:47,796 - mistral_agent_manager - INFO - Executing function: get_macro_summary({})
+2026-06-20 21:48:58,927 - httpx - INFO - HTTP Request: POST https://api.mistral.ai/v1/agents/completions "HTTP/1.1 200 OK"
+2026-06-20 21:48:59,354 - sector_predictor_agent - INFO - Mistral sector response type=str, predictions keys=['1M', '3M', '6M', '12M'], parsed keys=['predictions']
+2026-06-20 21:48:59,354 - sector_predictor_agent - WARNING - Top 3 sama antara 6M dan 12M: ['Kesehatan', 'Infrastruktur', 'Keuangan']. Menggeser sektor di 12M...
+2026-06-20 21:48:59,412 - scheduler - INFO - Sector predictions stored, version=1
+2026-06-20 21:48:59,413 - alert_manager - WARNING - [ALERT] sector_predictions: Average execution time 74.34s exceeds threshold 30.0s
+2026-06-20 21:49:00,446 - stock_recommender_agent - INFO - Batch recommending stocks for 14 sectors...
+2026-06-20 21:49:41,092 - httpx - INFO - HTTP Request: POST https://api.cerebras.ai/v1/chat/completions "HTTP/1.1 404 Not Found"
+2026-06-20 21:49:41,094 - cerebras_client - ERROR - Cerebras API error (non-rate-limit): Error code: 404 - {'message': 'Model Llama-4-Scout-17B-16E-Instruct does not exist or you do not have access to it.', 'type': 'not_found_error', 'param': 'model', 'code': 'model_not_found'}
+2026-06-20 21:49:41,094 - stock_recommender_agent - WARNING - Cerebras batch failed: Error code: 404 - {'message': 'Model Llama-4-Scout-17B-16E-Instruct does not exist or you do not have access to it.', 'type': 'not_found_error', 'param': 'model', 'code': 'model_not_found'}, falling back to Mistral...
+Traceback (most recent call last):
+  File "C:\Users\ussr\Documents\IHSG_SMART_SCREENING\backend\stock_recommender_agent.py", line 447, in recommend_stocks_batch
+    result = generate_batch(system_prompt, user_text)
+  File "C:\Users\ussr\Documents\IHSG_SMART_SCREENING\backend\cerebras_client.py", line 63, in generate_batch
+    resp = client.chat.completions.create(
+        model=CEREBRAS_MODEL,
+    ...<5 lines>...
+        max_tokens=CEREBRAS_MAX_TOKENS,
+    )
+  File "C:\Users\ussr\scoop\apps\python313\current\Lib\site-packages\openai\_utils\_utils.py", line 298, in wrapper
+    return func(*args, **kwargs)
+  File "C:\Users\ussr\scoop\apps\python313\current\Lib\site-packages\openai\resources\chat\completions\completions.py", line 1251, in create
+    return self._post(
+           ~~~~~~~~~~^
+        "/chat/completions",
+        ^^^^^^^^^^^^^^^^^^^^
+    ...<52 lines>...
+        stream_cls=Stream[ChatCompletionChunk],
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Users\ussr\scoop\apps\python313\current\Lib\site-packages\openai\_base_client.py", line 1332, in post
+    return cast(ResponseT, self.request(cast_to, opts, stream=stream, stream_cls=stream_cls))
+                           ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\ussr\scoop\apps\python313\current\Lib\site-packages\openai\_base_client.py", line 1105, in request
+    raise self._make_status_error_from_response(err.response) from None
+openai.NotFoundError: Error code: 404 - {'message': 'Model Llama-4-Scout-17B-16E-Instruct does not exist or you do not have access to it.', 'type': 'not_found_error', 'param': 'model', 'code': 'model_not_found'}
+2026-06-20 21:49:42,718 - mistral_agent_manager - INFO - Loaded agent news_flow: ag_019ede7753cf7090ac811059f61fc3c9
+2026-06-20 21:49:42,720 - mistral_agent_manager - INFO - Loaded agent sector_predictor: ag_019ede78c3bb729089efed3a037b8065
+2026-06-20 21:49:42,722 - mistral_agent_manager - INFO - Loaded agent stock_recommender: ag_019ede7915d470b99fd1c1f3355433c0
+2026-06-20 21:49:42,722 - mistral_agent_manager - INFO - Loaded agent batch_stock: ag_019ee024ba3b740892cfa5fe2e48bc51
+2026-06-20 21:53:35,472 - httpx - INFO - HTTP Request: POST https://api.mistral.ai/v1/agents/completions "HTTP/1.1 200 OK"
+2026-06-20 21:53:36,084 - stock_recommender_agent - INFO - Batch Mistral response: content_len=56354, preview=```json
+{
+  "recommendations": {
+    "Bahan Baku": {
+      "recommendations": [
+        {
+          "ticker": "CLPI",
+          "score": 88,
+          "recommendation": "Strong Buy",
+          "ration
+2026-06-20 21:53:36,427 - stock_recommender_agent - INFO - Batch batch_mistral: 13/14 sectors stored
+2026-06-20 21:53:36,428 - scheduler - INFO - [run=9b1e0cea] Batch stock recs: batch_mistral — 13/14 sectors stored
+2026-06-20 21:53:37,180 - scheduler - INFO - [run=9b1e0cea] Stock recommendations version=1
+2026-06-20 21:53:37,180 - alert_manager - WARNING - [ALERT] stock_recommendations: Average execution time 276.76s exceeds threshold 30.0s
+2026-06-20 21:53:39,975 - macro_agent - WARNING - Macro cache miss — returning default values
+2026-06-20 21:53:40,063 - order_book_store - INFO - Snapshot 798eee8c-1a2d-4f97-94c3-bd455375143d tersimpan ke MongoDB
+2026-06-20 21:53:40,180 - order_book_store - INFO - Snapshot 798eee8c-1a2d-4f97-94c3-bd455375143d tersimpan ke file. Total: 42 snapshots
+2026-06-20 21:53:40,181 - scheduler - INFO - Order book snapshot stored: 798eee8c-1a2d-4f97-94c3-bd455375143d, version=1
+2026-06-20 21:53:41,192 - scheduler - INFO - [run=9b1e0cea] ============================================================
+2026-06-20 21:53:41,194 - scheduler - INFO - [run=9b1e0cea] SCHEDULED FETCH COMPLETE: {'tradingview': 500, 'macro': 16, 'news_flow': 50, 'sector_predictions': True, 'stock_recommendations': 13, 'order_book': True}
+2026-06-20 21:53:41,194 - scheduler - INFO - [run=9b1e0cea] ============================================================
+2026-06-20 22:05:51,751 - server - INFO - MongoDB connection closed
+2026-06-20 22:06:04,392 - __main__ - INFO - Starting server on port 8000...
+2026-06-20 22:06:05,995 - server - INFO - MongoDB connection established
+2026-06-20 22:06:05,997 - server - INFO - OrderBookStore upgraded to MongoDB
+2026-06-20 22:06:05,997 - server - INFO - Application started
+2026-06-20 22:06:11,769 - scheduler - INFO - All caches already populated
+2026-06-20 22:06:12,123 - server - INFO - Jadwal AI Agent berikutnya: 09:00 Monday 22-06-2026 WIB (2093 menit lagi)
+2026-06-20 22:06:42,608 - scheduler - INFO - [run=da5d0526] ============================================================
+2026-06-20 22:06:42,625 - scheduler - INFO - [run=da5d0526] SCHEDULED FETCH STARTING
+2026-06-20 22:06:42,626 - scheduler - INFO - [run=da5d0526] ============================================================
+2026-06-20 22:06:43,122 - scheduler - INFO - TradingView: data sudah ada di MongoDB, skip fetch external API
+2026-06-20 22:06:44,243 - scheduler - INFO - Macro: data sudah ada di MongoDB, skip fetch external API
+2026-06-20 22:06:51,083 - scheduler - INFO - News: 50 items fetched from TV
+2026-06-20 22:07:04,693 - httpx - INFO - HTTP Request: POST https://models.inference.ai.azure.com/chat/completions "HTTP/1.1 400 Bad Request"
+2026-06-20 22:07:04,796 - gemini_client - ERROR - github-models API error: Error code: 400 - {'error': {'code': 'unknown_model', 'message': 'Unknown model: meta/llama-3.3-70b-instruct', 'details': 'Unknown model: meta/llama-3.3-70b-instruct'}}
+2026-06-20 22:07:24,062 - mistral_agent_manager - INFO - Loaded agent news_flow: ag_019ede7753cf7090ac811059f61fc3c9
+2026-06-20 22:07:24,098 - mistral_agent_manager - INFO - Loaded agent sector_predictor: ag_019ede78c3bb729089efed3a037b8065
+2026-06-20 22:07:24,145 - mistral_agent_manager - INFO - Loaded agent stock_recommender: ag_019ede7915d470b99fd1c1f3355433c0
+2026-06-20 22:07:24,196 - mistral_agent_manager - INFO - Loaded agent batch_stock: ag_019ee024ba3b740892cfa5fe2e48bc51
+2026-06-20 22:07:53,826 - httpx - INFO - HTTP Request: POST https://api.mistral.ai/v1/agents/completions "HTTP/1.1 200 OK"
+2026-06-20 22:07:53,903 - scheduler - INFO - News: stored with AI analysis, version=1
+2026-06-20 22:07:53,904 - alert_manager - WARNING - [ALERT] news_flow: Average execution time 68.62s exceeds threshold 30.0s
+2026-06-20 22:07:54,944 - sector_predictor_agent - INFO - Generating sector predictions...
+2026-06-20 22:07:54,976 - sector_predictor_agent - INFO - TV data loaded from cache
+2026-06-20 22:07:58,369 - mistral_agent_manager - INFO - Loaded agent news_flow: ag_019ede7753cf7090ac811059f61fc3c9
+2026-06-20 22:07:58,372 - mistral_agent_manager - INFO - Loaded agent sector_predictor: ag_019ede78c3bb729089efed3a037b8065
+2026-06-20 22:07:58,375 - mistral_agent_manager - INFO - Loaded agent stock_recommender: ag_019ede7915d470b99fd1c1f3355433c0
+2026-06-20 22:07:58,377 - mistral_agent_manager - INFO - Loaded agent batch_stock: ag_019ee024ba3b740892cfa5fe2e48bc51
+2026-06-20 22:07:59,499 - httpx - INFO - HTTP Request: POST https://api.mistral.ai/v1/agents/completions "HTTP/1.1 200 OK"
+2026-06-20 22:07:59,505 - mistral_agent_manager - INFO - Executing function: get_macro_summary({})
+2026-06-20 22:07:59,535 - macro_agent - WARNING - Macro cache miss — returning default values
+2026-06-20 22:07:59,538 - sector_predictor_agent - WARNING - Mistral agent gagal ('value'), fallback ke LLM client...
+2026-06-20 22:07:59,539 - sector_predictor_agent - WARNING - Mistral agent gagal untuk sector prediction, fallback ke cache
+2026-06-20 22:07:59,598 - scheduler - INFO - Sector predictions stored, version=1
+2026-06-20 22:08:00,643 - stock_recommender_agent - INFO - Batch recommending stocks for 14 sectors...
+2026-06-20 22:08:39,689 - httpx - INFO - HTTP Request: POST https://api.cerebras.ai/v1/chat/completions "HTTP/1.1 404 Not Found"
+2026-06-20 22:08:39,690 - cerebras_client - ERROR - Cerebras API error (non-rate-limit): Error code: 404 - {'message': 'Model Llama-4-Scout-17B-16E-Instruct does not exist or you do not have access to it.', 'type': 'not_found_error', 'param': 'model', 'code': 'model_not_found'}
+2026-06-20 22:08:39,692 - stock_recommender_agent - WARNING - Cerebras batch failed: Error code: 404 - {'message': 'Model Llama-4-Scout-17B-16E-Instruct does not exist or you do not have access to it.', 'type': 'not_found_error', 'param': 'model', 'code': 'model_not_found'}, falling back to Mistral...
+Traceback (most recent call last):
+  File "C:\Users\ussr\Documents\IHSG_SMART_SCREENING\backend\stock_recommender_agent.py", line 447, in recommend_stocks_batch
+    result = generate_batch(system_prompt, user_text)
+  File "C:\Users\ussr\Documents\IHSG_SMART_SCREENING\backend\cerebras_client.py", line 63, in generate_batch
+    resp = client.chat.completions.create(
+        model=CEREBRAS_MODEL,
+    ...<5 lines>...
+        max_tokens=CEREBRAS_MAX_TOKENS,
+    )
+  File "C:\Users\ussr\scoop\apps\python313\current\Lib\site-packages\openai\_utils\_utils.py", line 298, in wrapper
+    return func(*args, **kwargs)
+  File "C:\Users\ussr\scoop\apps\python313\current\Lib\site-packages\openai\resources\chat\completions\completions.py", line 1251, in create
+    return self._post(
+           ~~~~~~~~~~^
+        "/chat/completions",
+        ^^^^^^^^^^^^^^^^^^^^
+    ...<52 lines>...
+        stream_cls=Stream[ChatCompletionChunk],
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Users\ussr\scoop\apps\python313\current\Lib\site-packages\openai\_base_client.py", line 1332, in post
+    return cast(ResponseT, self.request(cast_to, opts, stream=stream, stream_cls=stream_cls))
+                           ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\ussr\scoop\apps\python313\current\Lib\site-packages\openai\_base_client.py", line 1105, in request
+    raise self._make_status_error_from_response(err.response) from None
+openai.NotFoundError: Error code: 404 - {'message': 'Model Llama-4-Scout-17B-16E-Instruct does not exist or you do not have access to it.', 'type': 'not_found_error', 'param': 'model', 'code': 'model_not_found'}
+2026-06-20 22:08:41,443 - mistral_agent_manager - INFO - Loaded agent news_flow: ag_019ede7753cf7090ac811059f61fc3c9
+2026-06-20 22:08:41,443 - mistral_agent_manager - INFO - Loaded agent sector_predictor: ag_019ede78c3bb729089efed3a037b8065
+2026-06-20 22:08:41,444 - mistral_agent_manager - INFO - Loaded agent stock_recommender: ag_019ede7915d470b99fd1c1f3355433c0
+2026-06-20 22:08:41,444 - mistral_agent_manager - INFO - Loaded agent batch_stock: ag_019ee024ba3b740892cfa5fe2e48bc51
+2026-06-20 22:12:41,549 - stock_recommender_agent - WARNING - Batch Mistral agent gagal: The read operation timed out
+Traceback (most recent call last):
+  File "C:\Users\ussr\scoop\apps\python313\current\Lib\site-packages\httpx\_transports\default.py", line 101, in map_httpcore_exceptions
+    yield
+  File "C:\Users\ussr\scoop\apps\python313\current\Lib\site-packages\httpx\_transports\default.py", line 250, in handle_request
+    resp = self._pool.handle_request(req)
+  File "C:\Users\ussr\scoop\apps\python313\current\Lib\site-packages\httpcore\_sync\connection_pool.py", line 256, in handle_request
+    raise exc from None
+  File "C:\Users\ussr\scoop\apps\python313\current\Lib\site-packages\httpcore\_sync\connection_pool.py", line 236, in handle_request
+    response = connection.handle_request(
+        pool_request.request
+    )
+  File "C:\Users\ussr\scoop\apps\python313\current\Lib\site-packages\httpcore\_sync\connection.py", line 103, in handle_request
+    return self._connection.handle_request(request)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\ussr\scoop\apps\python313\current\Lib\site-packages\httpcore\_sync\http11.py", line 136, in handle_request
+    raise exc
+  File "C:\Users\ussr\scoop\apps\python313\current\Lib\site-packages\httpcore\_sync\http11.py", line 106, in handle_request
+    ) = self._receive_response_headers(**kwargs)
+        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^
+  File "C:\Users\ussr\scoop\apps\python313\current\Lib\site-packages\httpcore\_sync\http11.py", line 177, in _receive_response_headers
+    event = self._receive_event(timeout=timeout)
+  File "C:\Users\ussr\scoop\apps\python313\current\Lib\site-packages\httpcore\_sync\http11.py", line 217, in _receive_event
+    data = self._network_stream.read(
+        self.READ_NUM_BYTES, timeout=timeout
+    )
+  File "C:\Users\ussr\scoop\apps\python313\current\Lib\site-packages\httpcore\_backends\sync.py", line 126, in read
+    with map_exceptions(exc_map):
+         ~~~~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\ussr\scoop\apps\python313\current\Lib\contextlib.py", line 162, in __exit__
+    self.gen.throw(value)
+    ~~~~~~~~~~~~~~^^^^^^^
+  File "C:\Users\ussr\scoop\apps\python313\current\Lib\site-packages\httpcore\_exceptions.py", line 14, in map_exceptions
+    raise to_exc(exc) from exc
+httpcore.ReadTimeout: The read operation timed out
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "C:\Users\ussr\Documents\IHSG_SMART_SCREENING\backend\stock_recommender_agent.py", line 477, in recommend_stocks_batch
+    response = manager.run(
+        "batch_stock", inputs=inputs,
+        max_function_calls=5, timeout_ms=240000,
+    )
+  File "C:\Users\ussr\Documents\IHSG_SMART_SCREENING\backend\mistral_agent_manager.py", line 106, in run
+    response = self.client.agents.complete(
+        agent_id=agent_id,
+    ...<2 lines>...
+        timeout_ms=timeout_ms,
+    )
+  File "C:\Users\ussr\scoop\apps\python313\current\Lib\site-packages\mistralai\client\agents.py", line 168, in complete
+    http_res = self.do_request(
+        hook_ctx=HookContext(
+    ...<10 lines>...
+        retry_config=retry_config,
+    )
+  File "C:\Users\ussr\scoop\apps\python313\current\Lib\site-packages\mistralai\client\basesdk.py", line 294, in do_request
+    http_res = do()
+  File "C:\Users\ussr\scoop\apps\python313\current\Lib\site-packages\mistralai\client\basesdk.py", line 275, in do
+    raise e
+  File "C:\Users\ussr\scoop\apps\python313\current\Lib\site-packages\mistralai\client\basesdk.py", line 270, in do
+    http_res = client.send(req, stream=stream)
+  File "C:\Users\ussr\scoop\apps\python313\current\Lib\site-packages\httpx\_client.py", line 914, in send
+    response = self._send_handling_auth(
+        request,
+    ...<2 lines>...
+        history=[],
+    )
+  File "C:\Users\ussr\scoop\apps\python313\current\Lib\site-packages\httpx\_client.py", line 942, in _send_handling_auth
+    response = self._send_handling_redirects(
+        request,
+        follow_redirects=follow_redirects,
+        history=history,
+    )
+  File "C:\Users\ussr\scoop\apps\python313\current\Lib\site-packages\httpx\_client.py", line 979, in _send_handling_redirects
+    response = self._send_single_request(request)
+  File "C:\Users\ussr\scoop\apps\python313\current\Lib\site-packages\httpx\_client.py", line 1014, in _send_single_request
+    response = transport.handle_request(request)
+  File "C:\Users\ussr\scoop\apps\python313\current\Lib\site-packages\httpx\_transports\default.py", line 249, in handle_request
+    with map_httpcore_exceptions():
+         ~~~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\ussr\scoop\apps\python313\current\Lib\contextlib.py", line 162, in __exit__
+    self.gen.throw(value)
+    ~~~~~~~~~~~~~~^^^^^^^
+  File "C:\Users\ussr\scoop\apps\python313\current\Lib\site-packages\httpx\_transports\default.py", line 118, in map_httpcore_exceptions
+    raise mapped_exc(message) from exc
+httpx.ReadTimeout: The read operation timed out
+2026-06-20 22:12:41,790 - stock_recommender_agent - INFO - All batch LLMs failed/empty, fallback per-sector via Mistral...
+2026-06-20 22:12:41,791 - stock_recommender_agent - INFO - Recommending stocks for Bahan Baku...
+2026-06-20 22:12:46,078 - mistral_agent_manager - INFO - Loaded agent news_flow: ag_019ede7753cf7090ac811059f61fc3c9
+2026-06-20 22:12:46,078 - mistral_agent_manager - INFO - Loaded agent sector_predictor: ag_019ede78c3bb729089efed3a037b8065
+2026-06-20 22:12:46,078 - mistral_agent_manager - INFO - Loaded agent stock_recommender: ag_019ede7915d470b99fd1c1f3355433c0
+2026-06-20 22:12:46,078 - mistral_agent_manager - INFO - Loaded agent batch_stock: ag_019ee024ba3b740892cfa5fe2e48bc51
+2026-06-20 22:12:47,394 - httpx - INFO - HTTP Request: POST https://api.mistral.ai/v1/agents/completions "HTTP/1.1 200 OK"
+2026-06-20 22:12:47,398 - mistral_agent_manager - INFO - Executing function: get_macro_context({'sector': 'Bahan Baku'})
+2026-06-20 22:12:47,399 - macro_agent - WARNING - Macro cache miss — returning default values
+2026-06-20 22:13:30,132 - httpx - INFO - HTTP Request: POST https://api.mistral.ai/v1/agents/completions "HTTP/1.1 200 OK"
+2026-06-20 22:13:32,144 - stock_recommender_agent - INFO - Recommending stocks for Distribusi...
+2026-06-20 22:13:35,795 - mistral_agent_manager - INFO - Loaded agent news_flow: ag_019ede7753cf7090ac811059f61fc3c9
+2026-06-20 22:13:35,795 - mistral_agent_manager - INFO - Loaded agent sector_predictor: ag_019ede78c3bb729089efed3a037b8065
+2026-06-20 22:13:35,796 - mistral_agent_manager - INFO - Loaded agent stock_recommender: ag_019ede7915d470b99fd1c1f3355433c0
+2026-06-20 22:13:35,796 - mistral_agent_manager - INFO - Loaded agent batch_stock: ag_019ee024ba3b740892cfa5fe2e48bc51
+2026-06-20 22:13:37,929 - httpx - INFO - HTTP Request: POST https://api.mistral.ai/v1/agents/completions "HTTP/1.1 200 OK"
+2026-06-20 22:13:37,932 - mistral_agent_manager - INFO - Executing function: get_macro_context({'sector': 'Distribusi'})
+2026-06-20 22:13:37,933 - macro_agent - WARNING - Macro cache miss — returning default values
+2026-06-20 22:14:36,674 - httpx - INFO - HTTP Request: POST https://api.mistral.ai/v1/agents/completions "HTTP/1.1 200 OK"
+2026-06-20 22:14:38,703 - stock_recommender_agent - INFO - Recommending stocks for Energi...
+2026-06-20 22:14:42,340 - mistral_agent_manager - INFO - Loaded agent news_flow: ag_019ede7753cf7090ac811059f61fc3c9
+2026-06-20 22:14:42,341 - mistral_agent_manager - INFO - Loaded agent sector_predictor: ag_019ede78c3bb729089efed3a037b8065
+2026-06-20 22:14:42,341 - mistral_agent_manager - INFO - Loaded agent stock_recommender: ag_019ede7915d470b99fd1c1f3355433c0
+2026-06-20 22:14:42,341 - mistral_agent_manager - INFO - Loaded agent batch_stock: ag_019ee024ba3b740892cfa5fe2e48bc51
+2026-06-20 22:14:49,520 - httpx - INFO - HTTP Request: POST https://api.mistral.ai/v1/agents/completions "HTTP/1.1 200 OK"
+2026-06-20 22:14:49,524 - mistral_agent_manager - INFO - Executing function: get_macro_context({'sector': 'Energi'})
+2026-06-20 22:14:49,525 - macro_agent - WARNING - Macro cache miss — returning default values
+2026-06-20 22:14:49,526 - mistral_agent_manager - INFO - Executing function: get_ticker_news({'ticker': 'BSSR'})
+2026-06-20 22:14:49,658 - mistral_agent_manager - INFO - Executing function: get_ticker_news({'ticker': 'MCOL'})
+2026-06-20 22:14:49,760 - mistral_agent_manager - INFO - Executing function: get_ticker_news({'ticker': 'DEWA'})
+2026-06-20 22:14:49,865 - mistral_agent_manager - INFO - Executing function: get_ticker_news({'ticker': 'ENRG'})
+2026-06-20 22:14:50,020 - mistral_agent_manager - INFO - Executing function: get_ticker_news({'ticker': 'SURE'})
+2026-06-20 22:14:50,125 - mistral_agent_manager - INFO - Executing function: get_ticker_news({'ticker': 'ABMM'})
+2026-06-20 22:14:50,244 - mistral_agent_manager - INFO - Executing function: get_ticker_news({'ticker': 'CNKO'})
+2026-06-20 22:14:50,365 - mistral_agent_manager - INFO - Executing function: get_ticker_news({'ticker': 'SMMT'})
+2026-06-20 22:14:50,457 - mistral_agent_manager - INFO - Executing function: get_ticker_news({'ticker': 'HRUM'})
+2026-06-20 22:15:38,323 - httpx - INFO - HTTP Request: POST https://api.mistral.ai/v1/agents/completions "HTTP/1.1 200 OK"
+2026-06-20 22:15:40,353 - stock_recommender_agent - INFO - Recommending stocks for Industri...
+2026-06-20 22:15:44,075 - mistral_agent_manager - INFO - Loaded agent news_flow: ag_019ede7753cf7090ac811059f61fc3c9
+2026-06-20 22:15:44,076 - mistral_agent_manager - INFO - Loaded agent sector_predictor: ag_019ede78c3bb729089efed3a037b8065
+2026-06-20 22:15:44,076 - mistral_agent_manager - INFO - Loaded agent stock_recommender: ag_019ede7915d470b99fd1c1f3355433c0
+2026-06-20 22:15:44,076 - mistral_agent_manager - INFO - Loaded agent batch_stock: ag_019ee024ba3b740892cfa5fe2e48bc51
+2026-06-20 22:15:45,138 - httpx - INFO - HTTP Request: POST https://api.mistral.ai/v1/agents/completions "HTTP/1.1 200 OK"
+2026-06-20 22:15:45,141 - mistral_agent_manager - INFO - Executing function: get_macro_context({'sector': 'Industri'})
+2026-06-20 22:15:45,143 - macro_agent - WARNING - Macro cache miss — returning default values
+2026-06-20 22:16:32,935 - httpx - INFO - HTTP Request: POST https://api.mistral.ai/v1/agents/completions "HTTP/1.1 200 OK"
+2026-06-20 22:16:34,969 - stock_recommender_agent - INFO - Recommending stocks for Infrastruktur...
+2026-06-20 22:16:38,563 - mistral_agent_manager - INFO - Loaded agent news_flow: ag_019ede7753cf7090ac811059f61fc3c9
+2026-06-20 22:16:38,564 - mistral_agent_manager - INFO - Loaded agent sector_predictor: ag_019ede78c3bb729089efed3a037b8065
+2026-06-20 22:16:38,564 - mistral_agent_manager - INFO - Loaded agent stock_recommender: ag_019ede7915d470b99fd1c1f3355433c0
+2026-06-20 22:16:38,564 - mistral_agent_manager - INFO - Loaded agent batch_stock: ag_019ee024ba3b740892cfa5fe2e48bc51
+2026-06-20 22:16:39,798 - httpx - INFO - HTTP Request: POST https://api.mistral.ai/v1/agents/completions "HTTP/1.1 200 OK"
+2026-06-20 22:16:39,801 - mistral_agent_manager - INFO - Executing function: get_macro_context({'sector': 'Infrastruktur'})
+2026-06-20 22:16:39,803 - macro_agent - WARNING - Macro cache miss — returning default values
+2026-06-20 22:17:16,814 - httpx - INFO - HTTP Request: POST https://api.mistral.ai/v1/agents/completions "HTTP/1.1 200 OK"
+2026-06-20 22:17:18,849 - stock_recommender_agent - INFO - Recommending stocks for Jasa & Perdagangan...
+2026-06-20 22:17:22,425 - mistral_agent_manager - INFO - Loaded agent news_flow: ag_019ede7753cf7090ac811059f61fc3c9
+2026-06-20 22:17:22,426 - mistral_agent_manager - INFO - Loaded agent sector_predictor: ag_019ede78c3bb729089efed3a037b8065
+2026-06-20 22:17:22,426 - mistral_agent_manager - INFO - Loaded agent stock_recommender: ag_019ede7915d470b99fd1c1f3355433c0
+2026-06-20 22:17:22,426 - mistral_agent_manager - INFO - Loaded agent batch_stock: ag_019ee024ba3b740892cfa5fe2e48bc51
+2026-06-20 22:17:23,809 - httpx - INFO - HTTP Request: POST https://api.mistral.ai/v1/agents/completions "HTTP/1.1 200 OK"
+2026-06-20 22:17:23,812 - mistral_agent_manager - INFO - Executing function: get_macro_context({'sector': 'Jasa & Perdagangan'})
+2026-06-20 22:17:23,813 - macro_agent - WARNING - Macro cache miss — returning default values
+2026-06-20 22:18:29,217 - httpx - INFO - HTTP Request: POST https://api.mistral.ai/v1/agents/completions "HTTP/1.1 200 OK"
+2026-06-20 22:18:31,249 - stock_recommender_agent - INFO - Recommending stocks for Kesehatan...
+2026-06-20 22:18:35,038 - mistral_agent_manager - INFO - Loaded agent news_flow: ag_019ede7753cf7090ac811059f61fc3c9
+2026-06-20 22:18:35,039 - mistral_agent_manager - INFO - Loaded agent sector_predictor: ag_019ede78c3bb729089efed3a037b8065
+2026-06-20 22:18:35,039 - mistral_agent_manager - INFO - Loaded agent stock_recommender: ag_019ede7915d470b99fd1c1f3355433c0
+2026-06-20 22:18:35,039 - mistral_agent_manager - INFO - Loaded agent batch_stock: ag_019ee024ba3b740892cfa5fe2e48bc51
+2026-06-20 22:18:36,253 - httpx - INFO - HTTP Request: POST https://api.mistral.ai/v1/agents/completions "HTTP/1.1 200 OK"
+2026-06-20 22:18:36,255 - mistral_agent_manager - INFO - Executing function: get_macro_context({'sector': 'Kesehatan'})
+2026-06-20 22:18:36,256 - macro_agent - WARNING - Macro cache miss — returning default values
+2026-06-20 22:19:08,616 - httpx - INFO - HTTP Request: POST https://api.mistral.ai/v1/agents/completions "HTTP/1.1 200 OK"
+2026-06-20 22:19:10,683 - stock_recommender_agent - INFO - Recommending stocks for Keuangan...
+2026-06-20 22:19:14,847 - mistral_agent_manager - INFO - Loaded agent news_flow: ag_019ede7753cf7090ac811059f61fc3c9
+2026-06-20 22:19:14,848 - mistral_agent_manager - INFO - Loaded agent sector_predictor: ag_019ede78c3bb729089efed3a037b8065
+2026-06-20 22:19:14,848 - mistral_agent_manager - INFO - Loaded agent stock_recommender: ag_019ede7915d470b99fd1c1f3355433c0
+2026-06-20 22:19:14,848 - mistral_agent_manager - INFO - Loaded agent batch_stock: ag_019ee024ba3b740892cfa5fe2e48bc51
+2026-06-20 22:19:17,708 - httpx - INFO - HTTP Request: POST https://api.mistral.ai/v1/agents/completions "HTTP/1.1 200 OK"
+2026-06-20 22:19:17,711 - mistral_agent_manager - INFO - Executing function: get_macro_context({'sector': 'Keuangan'})
+2026-06-20 22:19:17,713 - macro_agent - WARNING - Macro cache miss — returning default values
+2026-06-20 22:19:17,713 - mistral_agent_manager - INFO - Executing function: get_ticker_news({'ticker': 'PANS'})
+2026-06-20 22:19:17,862 - mistral_agent_manager - INFO - Executing function: get_ticker_news({'ticker': 'BDMN'})
+2026-06-20 22:19:17,977 - mistral_agent_manager - INFO - Executing function: get_ticker_news({'ticker': 'MEGA'})
+2026-06-20 22:19:18,100 - mistral_agent_manager - INFO - Executing function: get_ticker_news({'ticker': 'AMAR'})
+2026-06-20 22:19:18,226 - mistral_agent_manager - INFO - Executing function: get_ticker_news({'ticker': 'CFIN'})
+2026-06-20 22:19:18,323 - mistral_agent_manager - INFO - Executing function: get_ticker_news({'ticker': 'JRPT'})
+2026-06-20 22:19:18,443 - mistral_agent_manager - INFO - Executing function: get_ticker_news({'ticker': 'BBRI'})
+2026-06-20 22:19:18,566 - mistral_agent_manager - INFO - Executing function: get_ticker_news({'ticker': 'BMRI'})
+2026-06-20 22:19:18,703 - mistral_agent_manager - INFO - Executing function: get_ticker_news({'ticker': 'ASDM'})
+2026-06-20 22:19:18,824 - mistral_agent_manager - INFO - Executing function: get_ticker_news({'ticker': 'BBCA'})
+2026-06-20 22:19:59,142 - httpx - INFO - HTTP Request: POST https://api.mistral.ai/v1/agents/completions "HTTP/1.1 200 OK"
+2026-06-20 22:20:01,175 - stock_recommender_agent - INFO - Recommending stocks for Konsumer...
+2026-06-20 22:20:05,596 - mistral_agent_manager - INFO - Loaded agent news_flow: ag_019ede7753cf7090ac811059f61fc3c9
+2026-06-20 22:20:05,607 - mistral_agent_manager - INFO - Loaded agent sector_predictor: ag_019ede78c3bb729089efed3a037b8065
+2026-06-20 22:20:05,609 - mistral_agent_manager - INFO - Loaded agent stock_recommender: ag_019ede7915d470b99fd1c1f3355433c0
+2026-06-20 22:20:05,610 - mistral_agent_manager - INFO - Loaded agent batch_stock: ag_019ee024ba3b740892cfa5fe2e48bc51
+2026-06-20 22:20:06,907 - httpx - INFO - HTTP Request: POST https://api.mistral.ai/v1/agents/completions "HTTP/1.1 200 OK"
+2026-06-20 22:20:06,912 - mistral_agent_manager - INFO - Executing function: get_macro_context({'sector': 'Konsumer'})
+2026-06-20 22:20:06,915 - macro_agent - WARNING - Macro cache miss — returning default values
+2026-06-20 22:20:45,705 - httpx - INFO - HTTP Request: POST https://api.mistral.ai/v1/agents/completions "HTTP/1.1 200 OK"
+2026-06-20 22:20:47,738 - stock_recommender_agent - INFO - Recommending stocks for Konsumer Non-Primer...
+2026-06-20 22:20:51,790 - mistral_agent_manager - INFO - Loaded agent news_flow: ag_019ede7753cf7090ac811059f61fc3c9
+2026-06-20 22:20:51,790 - mistral_agent_manager - INFO - Loaded agent sector_predictor: ag_019ede78c3bb729089efed3a037b8065
+2026-06-20 22:20:51,791 - mistral_agent_manager - INFO - Loaded agent stock_recommender: ag_019ede7915d470b99fd1c1f3355433c0
+2026-06-20 22:20:51,791 - mistral_agent_manager - INFO - Loaded agent batch_stock: ag_019ee024ba3b740892cfa5fe2e48bc51
+2026-06-20 22:20:53,804 - httpx - INFO - HTTP Request: POST https://api.mistral.ai/v1/agents/completions "HTTP/1.1 200 OK"
+2026-06-20 22:20:53,808 - mistral_agent_manager - INFO - Executing function: get_macro_context({'sector': 'Konsumer Non-Primer'})
+2026-06-20 22:20:53,809 - macro_agent - WARNING - Macro cache miss — returning default values
+2026-06-20 22:20:53,810 - mistral_agent_manager - INFO - Executing function: get_ticker_news({'ticker': 'TRIS'})
+2026-06-20 22:20:53,924 - mistral_agent_manager - INFO - Executing function: get_ticker_news({'ticker': 'ULTJ'})
+2026-06-20 22:20:54,128 - mistral_agent_manager - INFO - Executing function: get_ticker_news({'ticker': 'MLBI'})
+2026-06-20 22:20:54,250 - mistral_agent_manager - INFO - Executing function: get_ticker_news({'ticker': 'SRSN'})
+2026-06-20 22:20:54,360 - mistral_agent_manager - INFO - Executing function: get_ticker_news({'ticker': 'MYOR'})
+2026-06-20 22:21:55,833 - httpx - INFO - HTTP Request: POST https://api.mistral.ai/v1/agents/completions "HTTP/1.1 200 OK"
+2026-06-20 22:21:58,127 - stock_recommender_agent - INFO - Recommending stocks for Lainnya...
+2026-06-20 22:21:59,903 - mistral_agent_manager - INFO - Loaded agent news_flow: ag_019ede7753cf7090ac811059f61fc3c9
+2026-06-20 22:21:59,903 - mistral_agent_manager - INFO - Loaded agent sector_predictor: ag_019ede78c3bb729089efed3a037b8065
+2026-06-20 22:21:59,903 - mistral_agent_manager - INFO - Loaded agent stock_recommender: ag_019ede7915d470b99fd1c1f3355433c0
+2026-06-20 22:21:59,903 - mistral_agent_manager - INFO - Loaded agent batch_stock: ag_019ee024ba3b740892cfa5fe2e48bc51
+2026-06-20 22:22:01,040 - httpx - INFO - HTTP Request: POST https://api.mistral.ai/v1/agents/completions "HTTP/1.1 200 OK"
+2026-06-20 22:22:01,044 - mistral_agent_manager - INFO - Executing function: get_macro_context({'sector': 'Lainnya'})
+2026-06-20 22:22:01,045 - macro_agent - WARNING - Macro cache miss — returning default values
+2026-06-20 22:22:15,196 - httpx - INFO - HTTP Request: POST https://api.mistral.ai/v1/agents/completions "HTTP/1.1 200 OK"
+2026-06-20 22:22:17,229 - stock_recommender_agent - INFO - Recommending stocks for Teknologi...
+2026-06-20 22:22:21,223 - mistral_agent_manager - INFO - Loaded agent news_flow: ag_019ede7753cf7090ac811059f61fc3c9
+2026-06-20 22:22:21,223 - mistral_agent_manager - INFO - Loaded agent sector_predictor: ag_019ede78c3bb729089efed3a037b8065
+2026-06-20 22:22:21,223 - mistral_agent_manager - INFO - Loaded agent stock_recommender: ag_019ede7915d470b99fd1c1f3355433c0
+2026-06-20 22:22:21,223 - mistral_agent_manager - INFO - Loaded agent batch_stock: ag_019ee024ba3b740892cfa5fe2e48bc51
+2026-06-20 22:22:22,442 - httpx - INFO - HTTP Request: POST https://api.mistral.ai/v1/agents/completions "HTTP/1.1 200 OK"
+2026-06-20 22:22:22,445 - mistral_agent_manager - INFO - Executing function: get_macro_context({'sector': 'Teknologi'})
+2026-06-20 22:22:22,447 - macro_agent - WARNING - Macro cache miss — returning default values
+2026-06-20 22:23:17,802 - httpx - INFO - HTTP Request: POST https://api.mistral.ai/v1/agents/completions "HTTP/1.1 200 OK"
+2026-06-20 22:23:19,830 - stock_recommender_agent - INFO - Recommending stocks for Telekomunikasi...
+2026-06-20 22:23:23,699 - mistral_agent_manager - INFO - Loaded agent news_flow: ag_019ede7753cf7090ac811059f61fc3c9
+2026-06-20 22:23:23,699 - mistral_agent_manager - INFO - Loaded agent sector_predictor: ag_019ede78c3bb729089efed3a037b8065
+2026-06-20 22:23:23,699 - mistral_agent_manager - INFO - Loaded agent stock_recommender: ag_019ede7915d470b99fd1c1f3355433c0
+2026-06-20 22:23:23,699 - mistral_agent_manager - INFO - Loaded agent batch_stock: ag_019ee024ba3b740892cfa5fe2e48bc51
+2026-06-20 22:23:24,962 - httpx - INFO - HTTP Request: POST https://api.mistral.ai/v1/agents/completions "HTTP/1.1 200 OK"
+2026-06-20 22:23:24,965 - mistral_agent_manager - INFO - Executing function: get_macro_context({'sector': 'Telekomunikasi'})
+2026-06-20 22:23:24,967 - macro_agent - WARNING - Macro cache miss — returning default values
+2026-06-20 22:23:55,874 - httpx - INFO - HTTP Request: POST https://api.mistral.ai/v1/agents/completions "HTTP/1.1 200 OK"
+2026-06-20 22:23:57,907 - stock_recommender_agent - INFO - Recommending stocks for Transportasi & Logistik...
+2026-06-20 22:24:01,732 - mistral_agent_manager - INFO - Loaded agent news_flow: ag_019ede7753cf7090ac811059f61fc3c9
+2026-06-20 22:24:01,732 - mistral_agent_manager - INFO - Loaded agent sector_predictor: ag_019ede78c3bb729089efed3a037b8065
+2026-06-20 22:24:01,732 - mistral_agent_manager - INFO - Loaded agent stock_recommender: ag_019ede7915d470b99fd1c1f3355433c0
+2026-06-20 22:24:01,733 - mistral_agent_manager - INFO - Loaded agent batch_stock: ag_019ee024ba3b740892cfa5fe2e48bc51
+2026-06-20 22:24:03,246 - httpx - INFO - HTTP Request: POST https://api.mistral.ai/v1/agents/completions "HTTP/1.1 200 OK"
+2026-06-20 22:24:03,249 - mistral_agent_manager - INFO - Executing function: get_macro_context({'sector': 'Transportasi & Logistik'})
+2026-06-20 22:24:03,251 - macro_agent - WARNING - Macro cache miss — returning default values
+2026-06-20 22:24:46,389 - httpx - INFO - HTTP Request: POST https://api.mistral.ai/v1/agents/completions "HTTP/1.1 200 OK"
+2026-06-20 22:26:07,843 - __main__ - INFO - Starting server on port 8000...
+2026-06-20 22:26:09,183 - server - INFO - MongoDB connection established
+2026-06-20 22:26:09,184 - server - INFO - OrderBookStore upgraded to MongoDB
+2026-06-20 22:26:09,185 - server - INFO - Application started
+2026-06-20 22:26:14,917 - scheduler - INFO - All caches already populated
+2026-06-20 22:26:15,162 - server - INFO - Jadwal AI Agent berikutnya: 09:00 Monday 22-06-2026 WIB (2073 menit lagi)
+2026-06-20 22:30:44,607 - scheduler - INFO - [run=21203457] ============================================================
+2026-06-20 22:30:44,609 - scheduler - INFO - [run=21203457] SCHEDULED FETCH STARTING
+2026-06-20 22:30:44,609 - scheduler - INFO - [run=21203457] ============================================================
+2026-06-20 22:30:44,966 - scheduler - INFO - TradingView: data sudah ada di MongoDB, skip fetch external API
+2026-06-20 22:30:46,030 - scheduler - INFO - Macro: data sudah ada di MongoDB, skip fetch external API
+2026-06-20 22:30:49,198 - scheduler - INFO - News: 50 items fetched from TV
+2026-06-20 22:30:55,388 - httpx - INFO - HTTP Request: POST https://models.inference.ai.azure.com/chat/completions "HTTP/1.1 400 Bad Request"
+2026-06-20 22:30:55,391 - gemini_client - ERROR - github-models API error: Error code: 400 - {'error': {'code': 'unknown_model', 'message': 'Unknown model: meta/llama-3.3-70b-instruct', 'details': 'Unknown model: meta/llama-3.3-70b-instruct'}}
+2026-06-20 22:30:57,214 - mistral_agent_manager - INFO - Loaded agent news_flow: ag_019ede7753cf7090ac811059f61fc3c9
+2026-06-20 22:30:57,214 - mistral_agent_manager - INFO - Loaded agent sector_predictor: ag_019ede78c3bb729089efed3a037b8065
+2026-06-20 22:30:57,214 - mistral_agent_manager - INFO - Loaded agent stock_recommender: ag_019ede7915d470b99fd1c1f3355433c0
+2026-06-20 22:30:57,214 - mistral_agent_manager - INFO - Loaded agent batch_stock: ag_019ee024ba3b740892cfa5fe2e48bc51
+2026-06-20 22:31:25,885 - httpx - INFO - HTTP Request: POST https://api.mistral.ai/v1/agents/completions "HTTP/1.1 200 OK"
+2026-06-20 22:31:25,959 - scheduler - INFO - News: stored with AI analysis, version=1
+2026-06-20 22:31:25,964 - alert_manager - WARNING - [ALERT] news_flow: Average execution time 38.93s exceeds threshold 30.0s
+2026-06-20 22:31:26,979 - sector_predictor_agent - INFO - Generating sector predictions...
+2026-06-20 22:31:26,998 - sector_predictor_agent - INFO - TV data loaded from cache
+2026-06-20 22:31:28,344 - mistral_agent_manager - INFO - Loaded agent news_flow: ag_019ede7753cf7090ac811059f61fc3c9
+2026-06-20 22:31:28,344 - mistral_agent_manager - INFO - Loaded agent sector_predictor: ag_019ede78c3bb729089efed3a037b8065
+2026-06-20 22:31:28,344 - mistral_agent_manager - INFO - Loaded agent stock_recommender: ag_019ede7915d470b99fd1c1f3355433c0
+2026-06-20 22:31:28,344 - mistral_agent_manager - INFO - Loaded agent batch_stock: ag_019ee024ba3b740892cfa5fe2e48bc51
+2026-06-20 22:31:29,504 - httpx - INFO - HTTP Request: POST https://api.mistral.ai/v1/agents/completions "HTTP/1.1 200 OK"
+2026-06-20 22:31:29,507 - mistral_agent_manager - INFO - Executing function: get_macro_summary({})
+2026-06-20 22:31:29,509 - macro_agent - WARNING - Macro cache miss — returning default values
+2026-06-20 22:31:29,509 - sector_predictor_agent - WARNING - Mistral agent gagal ('value'), fallback ke LLM client...
+2026-06-20 22:31:29,509 - sector_predictor_agent - WARNING - Mistral agent gagal untuk sector prediction, fallback ke cache
+2026-06-20 22:31:29,578 - scheduler - INFO - Sector predictions stored, version=1
+2026-06-20 22:31:30,593 - stock_recommender_agent - INFO - Batch recommending stocks for 14 sectors...
+2026-06-20 22:32:08,806 - httpx - INFO - HTTP Request: POST https://api.cerebras.ai/v1/chat/completions "HTTP/1.1 404 Not Found"
+2026-06-20 22:32:08,807 - cerebras_client - ERROR - Cerebras API error (non-rate-limit): Error code: 404 - {'message': 'Model Llama-4-Scout-17B-16E-Instruct does not exist or you do not have access to it.', 'type': 'not_found_error', 'param': 'model', 'code': 'model_not_found'}
+2026-06-20 22:32:08,808 - stock_recommender_agent - WARNING - Cerebras batch failed: Error code: 404 - {'message': 'Model Llama-4-Scout-17B-16E-Instruct does not exist or you do not have access to it.', 'type': 'not_found_error', 'param': 'model', 'code': 'model_not_found'}, falling back to Mistral...
+Traceback (most recent call last):
+  File "C:\Users\ussr\Documents\IHSG_SMART_SCREENING\backend\stock_recommender_agent.py", line 447, in recommend_stocks_batch
+    result = generate_batch(system_prompt, user_text)
+  File "C:\Users\ussr\Documents\IHSG_SMART_SCREENING\backend\cerebras_client.py", line 63, in generate_batch
+    resp = client.chat.completions.create(
+        model=CEREBRAS_MODEL,
+    ...<5 lines>...
+        max_tokens=CEREBRAS_MAX_TOKENS,
+    )
+  File "C:\Users\ussr\scoop\apps\python313\current\Lib\site-packages\openai\_utils\_utils.py", line 298, in wrapper
+    return func(*args, **kwargs)
+  File "C:\Users\ussr\scoop\apps\python313\current\Lib\site-packages\openai\resources\chat\completions\completions.py", line 1251, in create
+    return self._post(
+           ~~~~~~~~~~^
+        "/chat/completions",
+        ^^^^^^^^^^^^^^^^^^^^
+    ...<52 lines>...
+        stream_cls=Stream[ChatCompletionChunk],
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Users\ussr\scoop\apps\python313\current\Lib\site-packages\openai\_base_client.py", line 1332, in post
+    return cast(ResponseT, self.request(cast_to, opts, stream=stream, stream_cls=stream_cls))
+                           ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\ussr\scoop\apps\python313\current\Lib\site-packages\openai\_base_client.py", line 1105, in request
+    raise self._make_status_error_from_response(err.response) from None
+openai.NotFoundError: Error code: 404 - {'message': 'Model Llama-4-Scout-17B-16E-Instruct does not exist or you do not have access to it.', 'type': 'not_found_error', 'param': 'model', 'code': 'model_not_found'}
+2026-06-20 22:32:09,972 - mistral_agent_manager - INFO - Loaded agent news_flow: ag_019ede7753cf7090ac811059f61fc3c9
+2026-06-20 22:32:09,973 - mistral_agent_manager - INFO - Loaded agent sector_predictor: ag_019ede78c3bb729089efed3a037b8065
+2026-06-20 22:32:09,973 - mistral_agent_manager - INFO - Loaded agent stock_recommender: ag_019ede7915d470b99fd1c1f3355433c0
+2026-06-20 22:32:09,973 - mistral_agent_manager - INFO - Loaded agent batch_stock: ag_019ee024ba3b740892cfa5fe2e48bc51
+2026-06-20 22:35:41,959 - httpx - INFO - HTTP Request: POST https://api.mistral.ai/v1/agents/completions "HTTP/1.1 200 OK"
+2026-06-20 22:35:42,003 - stock_recommender_agent - INFO - Batch Mistral response: content_len=41566, preview=```json
+{
+  "recommendations": {
+    "Bahan Baku": {
+      "recommendations": [
+        {
+          "ticker": "CLPI",
+          "score": 88,
+          "recommendation": "Strong Buy",
+          "ration
+2026-06-20 22:35:42,249 - stock_recommender_agent - INFO - Batch batch_mistral: 12/14 sectors stored
+2026-06-20 22:43:18,765 - __main__ - INFO - Starting server on port 8000...
+2026-06-20 22:43:20,224 - server - INFO - MongoDB connection established
+2026-06-20 22:43:20,225 - server - INFO - OrderBookStore upgraded to MongoDB
+2026-06-20 22:43:20,225 - server - INFO - Application started
+2026-06-20 22:43:25,916 - scheduler - INFO - All caches already populated
+2026-06-20 22:43:31,058 - server - INFO - Jadwal AI Agent berikutnya: 09:00 Monday 22-06-2026 WIB (2056 menit lagi)
+2026-06-20 22:43:44,391 - scheduler - INFO - [run=af585c33] ============================================================
+2026-06-20 22:43:44,392 - scheduler - INFO - [run=af585c33] SCHEDULED FETCH STARTING
+2026-06-20 22:43:44,393 - scheduler - INFO - [run=af585c33] ============================================================
+2026-06-20 22:43:44,717 - scheduler - INFO - TradingView: data sudah ada di MongoDB, skip fetch external API
+2026-06-20 22:43:45,770 - scheduler - INFO - Macro: data sudah ada di MongoDB, skip fetch external API
+2026-06-20 22:43:48,977 - scheduler - INFO - News: 50 items fetched from TV
+2026-06-20 22:43:59,997 - httpx - INFO - HTTP Request: POST https://models.github.ai/inference/chat/completions "HTTP/1.1 200 OK"
+2026-06-20 22:44:00,078 - scheduler - INFO - News: stored with AI analysis, version=1
+2026-06-20 22:44:01,091 - sector_predictor_agent - INFO - Generating sector predictions...
+2026-06-20 22:44:01,126 - sector_predictor_agent - INFO - TV data loaded from cache
+2026-06-20 22:44:02,797 - mistral_agent_manager - INFO - Loaded agent news_flow: ag_019ede7753cf7090ac811059f61fc3c9
+2026-06-20 22:44:02,797 - mistral_agent_manager - INFO - Loaded agent sector_predictor: ag_019ede78c3bb729089efed3a037b8065
+2026-06-20 22:44:02,798 - mistral_agent_manager - INFO - Loaded agent stock_recommender: ag_019ede7915d470b99fd1c1f3355433c0
+2026-06-20 22:44:02,798 - mistral_agent_manager - INFO - Loaded agent batch_stock: ag_019ee024ba3b740892cfa5fe2e48bc51
+2026-06-20 22:44:04,232 - httpx - INFO - HTTP Request: POST https://api.mistral.ai/v1/agents/completions "HTTP/1.1 200 OK"
+2026-06-20 22:44:04,236 - mistral_agent_manager - INFO - Executing function: get_macro_summary({})
+2026-06-20 22:44:04,256 - macro_agent - WARNING - Macro cache miss — returning default values
+2026-06-20 22:44:04,256 - sector_predictor_agent - WARNING - Mistral agent gagal ('value'), fallback ke LLM client...
+2026-06-20 22:44:04,256 - sector_predictor_agent - WARNING - Mistral agent gagal untuk sector prediction, fallback ke cache
+2026-06-20 22:44:04,333 - scheduler - INFO - Sector predictions stored, version=1
+2026-06-20 22:44:05,342 - stock_recommender_agent - INFO - Batch recommending stocks for 14 sectors...
+2026-06-20 22:44:51,126 - httpx - INFO - HTTP Request: POST https://api.cerebras.ai/v1/chat/completions "HTTP/1.1 200 OK"
+2026-06-20 22:44:51,183 - stock_recommender_agent - INFO - Cerebras batch success: content_len=35687, preview={
+  "recommendations": {
+    "Bahan Baku": {
+      "recommendations": [
+        {
+          "ticker": "CLPI",
+          "companyName": "PT Colorpak Indonesia Tbk",
+          "price": 1710.0,
+         
+2026-06-20 22:44:51,546 - stock_recommender_agent - INFO - Batch batch_cerebras: 12/14 sectors stored
+2026-06-20 22:44:51,547 - scheduler - INFO - [run=af585c33] Batch stock recs: batch_cerebras — 12/14 sectors stored
+2026-06-20 22:44:52,069 - scheduler - INFO - [run=af585c33] Stock recommendations version=1
+2026-06-20 22:44:52,069 - alert_manager - WARNING - [ALERT] stock_recommendations: Average execution time 46.73s exceeds threshold 30.0s
+2026-06-20 22:44:54,750 - macro_agent - WARNING - Macro cache miss — returning default values
+2026-06-20 22:44:54,804 - order_book_store - INFO - Snapshot 1de1ac27-61a0-4202-8987-a3b93ea8134b tersimpan ke MongoDB
+2026-06-20 22:44:55,036 - order_book_store - INFO - Snapshot 1de1ac27-61a0-4202-8987-a3b93ea8134b tersimpan ke file. Total: 43 snapshots
+2026-06-20 22:44:55,044 - scheduler - INFO - Order book snapshot stored: 1de1ac27-61a0-4202-8987-a3b93ea8134b, version=1
+2026-06-20 22:44:56,047 - scheduler - INFO - [run=af585c33] ============================================================
+2026-06-20 22:44:56,047 - scheduler - INFO - [run=af585c33] SCHEDULED FETCH COMPLETE: {'tradingview': 500, 'macro': 16, 'news_flow': 50, 'sector_predictions': True, 'stock_recommendations': 12, 'order_book': True}
+2026-06-20 22:44:56,048 - scheduler - INFO - [run=af585c33] ============================================================
+2026-06-20 22:54:05,632 - __main__ - INFO - Starting server on port 8000...
+2026-06-20 22:54:06,844 - server - INFO - MongoDB connection established
+2026-06-20 22:54:06,845 - server - INFO - OrderBookStore upgraded to MongoDB
+2026-06-20 22:54:06,845 - server - INFO - Application started
+2026-06-20 22:54:12,546 - scheduler - INFO - All caches already populated
+2026-06-20 22:54:12,722 - server - INFO - Jadwal AI Agent berikutnya: 09:00 Monday 22-06-2026 WIB (2045 menit lagi)
+2026-06-20 22:54:33,584 - scheduler - INFO - [run=a5dea502] ============================================================
+2026-06-20 22:54:33,584 - scheduler - INFO - [run=a5dea502] SCHEDULED FETCH STARTING
+2026-06-20 22:54:33,584 - scheduler - INFO - [run=a5dea502] ============================================================
+2026-06-20 22:54:34,172 - scheduler - INFO - TradingView: data sudah ada di MongoDB, skip fetch external API
+2026-06-20 22:54:35,295 - scheduler - INFO - Macro: data sudah ada di MongoDB, skip fetch external API
+2026-06-20 22:54:38,698 - scheduler - INFO - News: 50 items fetched from TV
+2026-06-20 22:54:51,997 - httpx - INFO - HTTP Request: POST https://models.github.ai/inference/chat/completions "HTTP/1.1 200 OK"
+2026-06-20 22:54:52,077 - scheduler - INFO - News: stored with AI analysis, version=1
+2026-06-20 22:54:53,090 - sector_predictor_agent - INFO - Generating sector predictions...
+2026-06-20 22:54:53,115 - sector_predictor_agent - INFO - TV data loaded from cache
+2026-06-20 22:54:54,764 - mistral_agent_manager - INFO - Loaded agent news_flow: ag_019ede7753cf7090ac811059f61fc3c9
+2026-06-20 22:54:54,765 - mistral_agent_manager - INFO - Loaded agent sector_predictor: ag_019ede78c3bb729089efed3a037b8065
+2026-06-20 22:54:54,765 - mistral_agent_manager - INFO - Loaded agent stock_recommender: ag_019ede7915d470b99fd1c1f3355433c0
+2026-06-20 22:54:54,766 - mistral_agent_manager - INFO - Loaded agent batch_stock: ag_019ee024ba3b740892cfa5fe2e48bc51
+2026-06-20 22:54:56,119 - httpx - INFO - HTTP Request: POST https://api.mistral.ai/v1/agents/completions "HTTP/1.1 200 OK"
+2026-06-20 22:54:56,123 - mistral_agent_manager - INFO - Executing function: get_macro_summary({})
+2026-06-20 22:54:56,136 - macro_agent - WARNING - Macro cache miss — returning default values
+2026-06-20 22:56:07,458 - httpx - INFO - HTTP Request: POST https://api.mistral.ai/v1/agents/completions "HTTP/1.1 200 OK"
+2026-06-20 22:56:07,472 - sector_predictor_agent - INFO - Mistral sector response type=str, predictions keys=['1M', '3M', '6M', '12M'], parsed keys=['predictions']
+2026-06-20 22:56:07,472 - sector_predictor_agent - WARNING - Sector 'Utilitas' tidak dikenal, mapping ke 'Lainnya'
+2026-06-20 22:56:07,542 - scheduler - INFO - Sector predictions stored, version=1
+2026-06-20 22:56:07,542 - alert_manager - WARNING - [ALERT] sector_predictions: Average execution time 74.46s exceeds threshold 30.0s
+2026-06-20 22:56:08,562 - stock_recommender_agent - INFO - Batch recommending stocks for 14 sectors...
+2026-06-20 22:56:56,586 - httpx - INFO - HTTP Request: POST https://api.cerebras.ai/v1/chat/completions "HTTP/1.1 200 OK"
+2026-06-20 22:56:56,800 - stock_recommender_agent - INFO - Cerebras batch success: content_len=41322, preview={
+  "recommendations": {
+    "Bahan Baku": {
+      "recommendations": [
+        {
+          "ticker": "CLPI",
+          "companyName": "PT Colorpak Indonesia Tbk",
+          "price": 1710.0,
+         
+2026-06-20 22:56:57,097 - stock_recommender_agent - INFO - Batch batch_cerebras: 14/14 sectors stored
+2026-06-20 22:56:57,098 - scheduler - INFO - [run=a5dea502] Batch stock recs: batch_cerebras — 14/14 sectors stored
+2026-06-20 22:56:57,908 - scheduler - INFO - [run=a5dea502] Stock recommendations version=1
+2026-06-20 22:56:57,909 - alert_manager - WARNING - [ALERT] stock_recommendations: Average execution time 49.36s exceeds threshold 30.0s
+2026-06-20 22:57:00,137 - macro_agent - WARNING - Macro cache miss — returning default values
+2026-06-20 22:57:00,189 - order_book_store - INFO - Snapshot 58b8cbc6-ac02-409d-aea0-fd984a8bceb0 tersimpan ke MongoDB
+2026-06-20 22:57:00,318 - order_book_store - INFO - Snapshot 58b8cbc6-ac02-409d-aea0-fd984a8bceb0 tersimpan ke file. Total: 44 snapshots
+2026-06-20 22:57:00,320 - scheduler - INFO - Order book snapshot stored: 58b8cbc6-ac02-409d-aea0-fd984a8bceb0, version=1
+2026-06-20 22:57:01,322 - scheduler - INFO - [run=a5dea502] ============================================================
+2026-06-20 22:57:01,322 - scheduler - INFO - [run=a5dea502] SCHEDULED FETCH COMPLETE: {'tradingview': 500, 'macro': 16, 'news_flow': 50, 'sector_predictions': True, 'stock_recommendations': 14, 'order_book': True}
+2026-06-20 22:57:01,323 - scheduler - INFO - [run=a5dea502] ============================================================
+2026-06-21 00:17:12,030 - server - INFO - MongoDB connection closed
+2026-06-21 00:20:07,799 - __main__ - INFO - Starting server on port 8000...
+2026-06-21 00:20:09,803 - server - INFO - MongoDB connection established
+2026-06-21 00:20:09,842 - server - INFO - OrderBookStore upgraded to MongoDB
+2026-06-21 00:20:09,870 - server - INFO - Application started
+2026-06-21 00:20:15,660 - scheduler - INFO - All caches already populated
+2026-06-21 00:20:16,076 - server - INFO - Jadwal AI Agent berikutnya: 09:00 Monday 22-06-2026 WIB (1959 menit lagi)
+2026-06-21 00:20:51,142 - scheduler - INFO - [run=dc30741c] ============================================================
+2026-06-21 00:20:51,143 - scheduler - INFO - [run=dc30741c] SCHEDULED FETCH STARTING
+2026-06-21 00:20:51,143 - scheduler - INFO - [run=dc30741c] ============================================================
+2026-06-21 00:20:51,544 - scheduler - INFO - TradingView: data sudah ada di MongoDB, skip fetch external API
+2026-06-21 00:20:52,608 - scheduler - INFO - Macro: data sudah ada di MongoDB, skip fetch external API
+2026-06-21 00:20:56,011 - scheduler - INFO - News: 50 items fetched from TV
+2026-06-21 00:21:14,069 - httpx - INFO - HTTP Request: POST https://models.github.ai/inference/chat/completions "HTTP/1.1 200 OK"
+2026-06-21 00:21:14,156 - scheduler - INFO - News: stored with AI analysis, version=1
+2026-06-21 00:21:15,163 - sector_predictor_agent - INFO - Generating sector predictions...
+2026-06-21 00:21:15,182 - sector_predictor_agent - INFO - TV data loaded from cache
+2026-06-21 00:21:16,750 - mistral_agent_manager - INFO - Loaded agent news_flow: ag_019ede7753cf7090ac811059f61fc3c9
+2026-06-21 00:21:16,750 - mistral_agent_manager - INFO - Loaded agent sector_predictor: ag_019ede78c3bb729089efed3a037b8065
+2026-06-21 00:21:16,751 - mistral_agent_manager - INFO - Loaded agent stock_recommender: ag_019ede7915d470b99fd1c1f3355433c0
+2026-06-21 00:21:16,751 - mistral_agent_manager - INFO - Loaded agent batch_stock: ag_019ee024ba3b740892cfa5fe2e48bc51
+2026-06-21 00:21:18,262 - httpx - INFO - HTTP Request: POST https://api.mistral.ai/v1/agents/completions "HTTP/1.1 200 OK"
+2026-06-21 00:21:18,265 - mistral_agent_manager - INFO - Executing function: get_macro_summary({})
+2026-06-21 00:21:18,280 - macro_agent - INFO - Macro cache miss — returning default values
+2026-06-21 00:23:50,035 - httpx - INFO - HTTP Request: POST https://api.mistral.ai/v1/agents/completions "HTTP/1.1 200 OK"
+2026-06-21 00:23:50,682 - sector_predictor_agent - INFO - Mistral sector response type=str, predictions keys=['1M', '3M', '6M', '12M'], parsed keys=['predictions']
+2026-06-21 00:23:50,764 - scheduler - INFO - Sector predictions stored, version=1
+2026-06-21 00:23:50,764 - alert_manager - WARNING - [ALERT] sector_predictions: Average execution time 155.61s exceeds threshold 30.0s
+2026-06-21 00:23:51,777 - stock_recommender_agent - INFO - Batch recommending stocks for 14 sectors...
+2026-06-21 00:25:52,816 - httpx - INFO - HTTP Request: POST https://api.cerebras.ai/v1/chat/completions "HTTP/1.1 200 OK"
+2026-06-21 00:25:52,830 - stock_recommender_agent - INFO - Cerebras batch success: content_len=36421, preview={
+  "recommendations": {
+    "Bahan Baku": {
+      "recommendations": [
+        {
+          "ticker": "CLPI",
+          "companyName": "PT Colorpak Indonesia Tbk",
+          "price": 1710.0,
+         
+2026-06-21 00:25:53,039 - stock_recommender_agent - INFO - Batch batch_cerebras: 12/14 sectors stored
+2026-06-21 00:25:53,040 - scheduler - INFO - [run=dc30741c] Batch stock recs: batch_cerebras — 12/14 sectors stored
+2026-06-21 00:25:53,727 - scheduler - INFO - [run=dc30741c] Stock recommendations version=1
+2026-06-21 00:25:53,727 - alert_manager - WARNING - [ALERT] stock_recommendations: Average execution time 121.95s exceeds threshold 30.0s
+2026-06-21 00:25:56,164 - macro_agent - INFO - Macro cache miss — returning default values
+2026-06-21 00:25:56,222 - order_book_store - INFO - Snapshot 2f3ecd87-99b1-4f7d-9f7a-35008f6339c6 tersimpan ke MongoDB
+2026-06-21 00:25:56,334 - order_book_store - INFO - Snapshot 2f3ecd87-99b1-4f7d-9f7a-35008f6339c6 tersimpan ke file. Total: 45 snapshots
+2026-06-21 00:25:56,336 - scheduler - INFO - Order book snapshot stored: 2f3ecd87-99b1-4f7d-9f7a-35008f6339c6, version=1
+2026-06-21 00:25:57,346 - scheduler - INFO - [run=dc30741c] ============================================================
+2026-06-21 00:25:57,347 - scheduler - INFO - [run=dc30741c] SCHEDULED FETCH COMPLETE: {'tradingview': 500, 'macro': 16, 'news_flow': 50, 'sector_predictions': True, 'stock_recommendations': 12, 'order_book': True}
+2026-06-21 00:25:57,347 - scheduler - INFO - [run=dc30741c] ============================================================
+2026-06-21 00:35:14,084 - server - INFO - MongoDB connection closed
+2026-06-21 00:35:24,033 - __main__ - INFO - Starting server on port 8000...
+2026-06-21 00:35:27,720 - server - INFO - MongoDB connection established
+2026-06-21 00:35:27,721 - server - INFO - OrderBookStore upgraded to MongoDB
+2026-06-21 00:35:27,722 - server - INFO - Application started
+2026-06-21 00:35:33,612 - scheduler - INFO - All caches already populated
+2026-06-21 00:35:33,779 - server - INFO - Jadwal AI Agent berikutnya: 09:00 Monday 22-06-2026 WIB (1944 menit lagi)
+2026-06-21 00:36:57,982 - scheduler - INFO - News: 50 items fetched from TV
+2026-06-21 00:37:14,102 - httpx - INFO - HTTP Request: POST https://models.github.ai/inference/chat/completions "HTTP/1.1 200 OK"
+2026-06-21 00:37:14,213 - scheduler - INFO - News: stored with AI analysis, version=1
+2026-06-21 00:37:48,621 - sector_predictor_agent - INFO - Generating sector predictions...
+2026-06-21 00:37:48,680 - sector_predictor_agent - INFO - TV data loaded from cache
+2026-06-21 00:37:51,430 - mistral_agent_manager - INFO - Loaded agent news_flow: ag_019ede7753cf7090ac811059f61fc3c9
+2026-06-21 00:37:51,431 - mistral_agent_manager - INFO - Loaded agent sector_predictor: ag_019ede78c3bb729089efed3a037b8065
+2026-06-21 00:37:51,431 - mistral_agent_manager - INFO - Loaded agent stock_recommender: ag_019ede7915d470b99fd1c1f3355433c0
+2026-06-21 00:37:51,431 - mistral_agent_manager - INFO - Loaded agent batch_stock: ag_019ee024ba3b740892cfa5fe2e48bc51
+2026-06-21 00:37:53,129 - httpx - INFO - HTTP Request: POST https://api.mistral.ai/v1/agents/completions "HTTP/1.1 200 OK"
+2026-06-21 00:37:53,134 - mistral_agent_manager - INFO - Executing function: get_macro_summary({})
+2026-06-21 00:37:53,146 - macro_agent - INFO - Macro cache miss — returning default values
+2026-06-21 00:38:54,241 - httpx - INFO - HTTP Request: POST https://api.mistral.ai/v1/agents/completions "HTTP/1.1 200 OK"
+2026-06-21 00:38:54,358 - sector_predictor_agent - INFO - Mistral sector response type=str, predictions keys=['1M', '3M', '6M', '12M'], parsed keys=['predictions']
+2026-06-21 00:38:54,422 - scheduler - INFO - Sector predictions stored, version=1
+2026-06-21 00:39:27,851 - server - INFO - Cache kosong, mencoba mengambil data langsung...
+2026-06-21 00:43:28,805 - server - INFO - MongoDB connection closed
+2026-06-21 01:15:09,437 - __main__ - INFO - Starting server on port 8000...
+2026-06-21 01:15:11,064 - server - INFO - MongoDB connection established
+2026-06-21 01:15:11,079 - server - INFO - OrderBookStore upgraded to MongoDB
+2026-06-21 01:15:11,079 - server - INFO - Application started
+2026-06-21 01:15:16,858 - scheduler - INFO - All caches already populated
+2026-06-21 01:15:17,038 - server - INFO - Jadwal AI Agent berikutnya: 09:00 Monday 22-06-2026 WIB (1904 menit lagi)
+2026-06-21 01:15:44,515 - scheduler - INFO - News: 50 items fetched from TV
+2026-06-21 01:15:59,987 - httpx - INFO - HTTP Request: POST https://models.github.ai/inference/chat/completions "HTTP/1.1 200 OK"
+2026-06-21 01:16:00,067 - scheduler - INFO - News: stored with AI analysis, version=1
+2026-06-21 01:29:09,275 - __main__ - INFO - Starting server on port 8000...
+2026-06-21 01:29:10,889 - server - INFO - MongoDB connection established
+2026-06-21 01:29:10,890 - server - INFO - OrderBookStore upgraded to MongoDB
+2026-06-21 01:29:10,890 - server - INFO - Application started
+2026-06-21 01:29:16,492 - scheduler - INFO - All caches already populated
+2026-06-21 01:29:16,685 - server - INFO - Jadwal AI Agent berikutnya: 09:00 Monday 22-06-2026 WIB (1890 menit lagi)
+2026-06-21 01:32:12,945 - __main__ - INFO - Starting server on port 8000...
+2026-06-21 01:32:15,072 - server - INFO - MongoDB connection established
+2026-06-21 01:32:15,073 - server - INFO - OrderBookStore upgraded to MongoDB
+2026-06-21 01:32:15,073 - server - INFO - Application started
+2026-06-21 01:32:15,123 - server - INFO - MongoDB connection closed
+2026-06-21 01:32:29,610 - __main__ - INFO - Starting server on port 8000...
+2026-06-21 01:32:30,512 - server - INFO - MongoDB connection established
+2026-06-21 01:32:30,513 - server - INFO - OrderBookStore upgraded to MongoDB
+2026-06-21 01:32:30,513 - server - INFO - Application started
+2026-06-21 01:32:30,564 - server - INFO - MongoDB connection closed
+2026-06-21 01:33:21,878 - __main__ - INFO - Starting server on port 8000...
+2026-06-21 01:33:22,964 - server - INFO - MongoDB connection established
+2026-06-21 01:33:22,965 - server - INFO - OrderBookStore upgraded to MongoDB
+2026-06-21 01:33:22,965 - server - INFO - Application started
+2026-06-21 01:33:28,544 - scheduler - INFO - All caches already populated
+2026-06-21 01:33:28,719 - server - INFO - Jadwal AI Agent berikutnya: 09:00 Monday 22-06-2026 WIB (1886 menit lagi)
+2026-06-21 01:38:14,287 - __main__ - INFO - Starting server on port 8000...
+2026-06-21 01:38:15,158 - server - INFO - MongoDB connection established
+2026-06-21 01:38:15,159 - server - INFO - OrderBookStore upgraded to MongoDB
+2026-06-21 01:38:15,159 - server - INFO - Application started
+2026-06-21 01:38:15,197 - server - INFO - MongoDB connection closed
+2026-06-21 01:38:30,698 - __main__ - INFO - Starting server on port 8000...
+2026-06-21 01:38:31,438 - server - INFO - MongoDB connection established
+2026-06-21 01:38:31,438 - server - INFO - OrderBookStore upgraded to MongoDB
+2026-06-21 01:38:31,439 - server - INFO - Application started
+2026-06-21 01:38:36,909 - scheduler - INFO - Cache 'news' (collection=cache_news) masih kosong — menunggu jadwal atau trigger manual admin
+2026-06-21 01:38:36,939 - scheduler - INFO - Cache 'news_flow' (collection=cache_news) masih kosong — menunggu jadwal atau trigger manual admin
+2026-06-21 01:38:37,265 - server - INFO - Jadwal AI Agent berikutnya: 09:00 Monday 22-06-2026 WIB (1881 menit lagi)
+2026-06-21 01:41:41,608 - __main__ - INFO - Starting server on port 8000...
+2026-06-21 01:41:42,480 - server - INFO - MongoDB connection established
+2026-06-21 01:41:42,481 - server - INFO - OrderBookStore upgraded to MongoDB
+2026-06-21 01:41:42,481 - server - INFO - Application started
+2026-06-21 01:41:47,948 - scheduler - INFO - Cache 'news' (collection=cache_news) masih kosong — menunggu jadwal atau trigger manual admin
+2026-06-21 01:41:47,984 - scheduler - INFO - Cache 'news_flow' (collection=cache_news) masih kosong — menunggu jadwal atau trigger manual admin
+2026-06-21 01:41:48,204 - server - INFO - Jadwal AI Agent berikutnya: 09:00 Monday 22-06-2026 WIB (1878 menit lagi)
+2026-06-21 01:43:18,771 - server - INFO - Macro: refresh manual berhasil
+2026-06-21 01:45:08,885 - scheduler - INFO - [run=e5fa4175] ============================================================
+2026-06-21 01:45:08,885 - scheduler - INFO - [run=e5fa4175] SCHEDULED FETCH STARTING
+2026-06-21 01:45:08,885 - scheduler - INFO - [run=e5fa4175] ============================================================
+2026-06-21 01:45:09,366 - scheduler - INFO - TradingView: data sudah ada di MongoDB, skip fetch external API
+2026-06-21 01:45:10,458 - scheduler - INFO - Macro: data sudah ada di MongoDB, skip fetch external API
+2026-06-21 01:45:13,354 - scheduler - INFO - News: 50 items fetched from TV
+2026-06-21 01:45:32,534 - httpx - INFO - HTTP Request: POST https://models.github.ai/inference/chat/completions "HTTP/1.1 200 OK"
+2026-06-21 01:45:32,600 - scheduler - INFO - News: stored with AI analysis, version=1
+2026-06-21 01:45:33,612 - sector_predictor_agent - INFO - Generating sector predictions...
+2026-06-21 01:45:33,627 - sector_predictor_agent - INFO - TV data loaded from cache
+2026-06-21 01:45:35,296 - mistral_agent_manager - INFO - Loaded agent news_flow: ag_019ede7753cf7090ac811059f61fc3c9
+2026-06-21 01:45:35,296 - mistral_agent_manager - INFO - Loaded agent sector_predictor: ag_019ede78c3bb729089efed3a037b8065
+2026-06-21 01:45:35,296 - mistral_agent_manager - INFO - Loaded agent stock_recommender: ag_019ede7915d470b99fd1c1f3355433c0
+2026-06-21 01:45:35,297 - mistral_agent_manager - INFO - Loaded agent batch_stock: ag_019ee024ba3b740892cfa5fe2e48bc51
+2026-06-21 01:45:38,324 - httpx - INFO - HTTP Request: POST https://api.mistral.ai/v1/agents/completions "HTTP/1.1 200 OK"
+2026-06-21 01:45:38,327 - mistral_agent_manager - INFO - Executing function: get_macro_summary({})
+2026-06-21 01:46:33,154 - httpx - INFO - HTTP Request: POST https://api.mistral.ai/v1/agents/completions "HTTP/1.1 200 OK"
+2026-06-21 01:46:33,425 - sector_predictor_agent - INFO - Mistral sector response type=str, predictions keys=['1M', '3M', '6M', '12M'], parsed keys=['predictions']
+2026-06-21 01:46:33,425 - sector_predictor_agent - WARNING - Top 3 sama antara 6M dan 12M: ['Kesehatan', 'Infrastruktur', 'Keuangan']. Menggeser sektor di 12M...
+2026-06-21 01:46:33,543 - scheduler - INFO - Sector predictions stored, version=1
+2026-06-21 01:46:33,544 - alert_manager - WARNING - [ALERT] sector_predictions: Average execution time 59.94s exceeds threshold 30.0s
+2026-06-21 01:46:34,558 - stock_recommender_agent - INFO - Batch recommending stocks for 14 sectors...
+2026-06-21 01:48:25,972 - httpx - INFO - HTTP Request: POST https://api.cerebras.ai/v1/chat/completions "HTTP/1.1 200 OK"
+2026-06-21 01:48:25,975 - stock_recommender_agent - INFO - Cerebras batch success: content_len=36407, preview={
+  "recommendations": {
+    "Bahan Baku": {
+      "recommendations": [
+        {
+          "ticker": "CLPI",
+          "companyName": "PT Colorpak Indonesia Tbk",
+          "price": 1710.0,
+         
+2026-06-21 01:48:26,182 - stock_recommender_agent - INFO - Batch batch_cerebras: 12/14 sectors stored
+2026-06-21 01:48:26,183 - scheduler - INFO - [run=e5fa4175] Batch stock recs: batch_cerebras — 12/14 sectors stored
+2026-06-21 01:48:26,808 - scheduler - INFO - [run=e5fa4175] Stock recommendations version=1
+2026-06-21 01:48:26,809 - alert_manager - WARNING - [ALERT] stock_recommendations: Average execution time 112.25s exceeds threshold 30.0s
+2026-06-21 01:48:28,930 - order_book_store - INFO - Snapshot d4ed6196-0dc8-4579-b8cb-9d43f9963479 tersimpan ke MongoDB
+2026-06-21 01:48:29,053 - order_book_store - INFO - Snapshot d4ed6196-0dc8-4579-b8cb-9d43f9963479 tersimpan ke file. Total: 46 snapshots
+2026-06-21 01:48:29,055 - scheduler - INFO - Order book snapshot stored: d4ed6196-0dc8-4579-b8cb-9d43f9963479, version=1
+2026-06-21 01:48:30,058 - scheduler - INFO - [run=e5fa4175] ============================================================
+2026-06-21 01:48:30,059 - scheduler - INFO - [run=e5fa4175] SCHEDULED FETCH COMPLETE: {'tradingview': 500, 'macro': 16, 'news_flow': 50, 'sector_predictions': True, 'stock_recommendations': 12, 'order_book': True}
+2026-06-21 01:48:30,059 - scheduler - INFO - [run=e5fa4175] ============================================================
+2026-06-21 09:35:49,771 - server - INFO - Cache kosong, mencoba mengambil data langsung...
+2026-06-21 10:07:03,782 - scheduler - INFO - [run=9bb5da56] ============================================================
+2026-06-21 10:07:03,785 - scheduler - INFO - [run=9bb5da56] SCHEDULED FETCH STARTING
+2026-06-21 10:07:03,785 - scheduler - INFO - [run=9bb5da56] ============================================================
+2026-06-21 10:07:04,276 - scheduler - INFO - TradingView: data sudah ada di MongoDB, skip fetch external API
+2026-06-21 10:07:19,095 - scheduler - INFO - Macro: fetch external API berhasil
+2026-06-21 10:07:19,170 - scheduler - INFO - Macro: 16 indicators stored, version=2
+2026-06-21 10:07:23,041 - scheduler - INFO - News: 50 items fetched from TV
+2026-06-21 10:07:34,022 - httpx - INFO - HTTP Request: POST https://models.github.ai/inference/chat/completions "HTTP/1.1 200 OK"
+2026-06-21 10:07:34,099 - scheduler - INFO - News: stored with AI analysis, version=2
+2026-06-21 10:17:35,126 - scheduler - ERROR - [run=9bb5da56] Agent 'sector_predictions' TIMEOUT setelah 600s — melanjutkan ke agent berikutnya
+2026-06-21 10:17:36,141 - stock_recommender_agent - INFO - Batch recommending stocks for 14 sectors...
+2026-06-21 10:19:35,077 - httpx - INFO - HTTP Request: POST https://api.cerebras.ai/v1/chat/completions "HTTP/1.1 200 OK"
+2026-06-21 10:19:35,088 - stock_recommender_agent - INFO - Cerebras batch success: content_len=38159, preview={
+  "recommendations": {
+    "Bahan Baku": {
+      "recommendations": [
+        {
+          "ticker": "CLPI",
+          "companyName": "PT Colorpak Indonesia Tbk",
+          "price": 1710.0,
+         
+2026-06-21 10:19:35,432 - stock_recommender_agent - INFO - Batch batch_cerebras: 13/14 sectors stored
+2026-06-21 10:19:35,435 - scheduler - INFO - [run=9bb5da56] Batch stock recs: batch_cerebras — 13/14 sectors stored
+2026-06-21 10:19:36,100 - scheduler - INFO - [run=9bb5da56] Stock recommendations version=2
+2026-06-21 10:19:36,100 - alert_manager - WARNING - [ALERT] stock_recommendations: Average execution time 116.11s exceeds threshold 30.0s
+2026-06-21 10:19:37,110 - scheduler - WARNING - Order book: dependency check failed - Sector predictions stale (30784s > 3600s)
+2026-06-21 10:19:38,112 - scheduler - INFO - [run=9bb5da56] ============================================================
+2026-06-21 10:19:38,114 - scheduler - INFO - [run=9bb5da56] SCHEDULED FETCH COMPLETE: {'tradingview': 500, 'macro': 16, 'news_flow': 50, 'sector_predictions': None, 'stock_recommendations': 13, 'order_book': False}
+2026-06-21 10:19:38,114 - scheduler - INFO - [run=9bb5da56] ============================================================
+2026-06-21 21:32:50,000 - __main__ - INFO - Starting server on port 8000...
+2026-06-21 21:32:50,144 - scheduler - INFO - [run=55f537bb] ============================================================
+2026-06-21 21:32:50,163 - scheduler - INFO - [run=55f537bb] SCHEDULED FETCH STARTING
+2026-06-21 21:32:50,166 - scheduler - INFO - [run=55f537bb] ============================================================
+2026-06-21 21:32:50,744 - scheduler - INFO - TradingView: data sudah ada di MongoDB, skip fetch external API
+2026-06-21 21:32:51,815 - scheduler - INFO - Macro: data sudah ada di MongoDB, skip fetch external API
+2026-06-21 21:32:52,250 - server - INFO - MongoDB connection established
+2026-06-21 21:32:52,252 - server - INFO - OrderBookStore upgraded to MongoDB
+2026-06-21 21:32:52,252 - server - INFO - Application started
+2026-06-21 21:32:52,291 - server - INFO - MongoDB connection closed
+2026-06-21 21:33:29,118 - __main__ - INFO - Starting server on port 8000...
+2026-06-21 21:33:30,835 - server - INFO - MongoDB connection established
+2026-06-21 21:33:30,837 - server - INFO - OrderBookStore upgraded to MongoDB
+2026-06-21 21:33:30,842 - server - INFO - Application started
+2026-06-21 21:33:36,788 - scheduler - INFO - All caches already populated
+2026-06-21 21:33:43,134 - server - INFO - Jadwal AI Agent berikutnya: 09:00 Monday 22-06-2026 WIB (686 menit lagi)
+2026-06-21 21:34:27,763 - scheduler - INFO - [run=9a33d026] ============================================================
+2026-06-21 21:34:27,767 - scheduler - INFO - [run=9a33d026] SCHEDULED FETCH STARTING
+2026-06-21 21:34:27,771 - scheduler - INFO - [run=9a33d026] ============================================================
+2026-06-21 21:34:28,151 - scheduler - INFO - TradingView: data sudah ada di MongoDB, skip fetch external API
+2026-06-21 21:34:29,210 - scheduler - INFO - Macro: data sudah ada di MongoDB, skip fetch external API
+2026-06-21 21:34:32,757 - scheduler - INFO - News: 50 items fetched from TV
+2026-06-21 21:34:40,367 - httpx - INFO - HTTP Request: POST https://openrouter.ai/api/v1/chat/completions "HTTP/1.1 200 OK"
+2026-06-21 21:34:53,695 - scheduler - INFO - News: stored with AI analysis, version=1
+2026-06-21 21:34:54,713 - sector_predictor_agent - INFO - Generating sector predictions...
+2026-06-21 21:34:54,762 - sector_predictor_agent - INFO - TV data loaded from cache
+2026-06-21 21:34:57,244 - mistral_agent_manager - INFO - Loaded agent news_flow: ag_019ede7753cf7090ac811059f61fc3c9
+2026-06-21 21:34:57,246 - mistral_agent_manager - INFO - Loaded agent sector_predictor: ag_019ede78c3bb729089efed3a037b8065
+2026-06-21 21:34:57,247 - mistral_agent_manager - INFO - Loaded agent stock_recommender: ag_019ede7915d470b99fd1c1f3355433c0
+2026-06-21 21:34:57,247 - mistral_agent_manager - INFO - Loaded agent batch_stock: ag_019ee024ba3b740892cfa5fe2e48bc51
+2026-06-21 21:34:58,584 - httpx - INFO - HTTP Request: POST https://api.mistral.ai/v1/agents/completions "HTTP/1.1 200 OK"
+2026-06-21 21:34:58,590 - mistral_agent_manager - INFO - Executing function: get_macro_summary({})
+2026-06-21 21:34:58,616 - macro_agent - INFO - Macro cache miss — returning default values
+2026-06-21 21:35:57,171 - httpx - INFO - HTTP Request: POST https://api.mistral.ai/v1/agents/completions "HTTP/1.1 200 OK"
+2026-06-21 21:35:57,187 - sector_predictor_agent - INFO - Mistral sector response type=str, predictions keys=['1M', '3M', '6M', '12M'], parsed keys=['predictions']
+2026-06-21 21:35:57,266 - scheduler - INFO - Sector predictions stored, version=1
+2026-06-21 21:35:57,266 - alert_manager - WARNING - [ALERT] sector_predictions: Average execution time 62.56s exceeds threshold 30.0s
+2026-06-21 21:35:58,279 - stock_recommender_agent - INFO - Batch recommending stocks for 14 sectors...
+2026-06-21 21:38:02,669 - httpx - INFO - HTTP Request: POST https://api.cerebras.ai/v1/chat/completions "HTTP/1.1 200 OK"
+2026-06-21 21:38:02,706 - stock_recommender_agent - INFO - Cerebras batch success: content_len=39818, preview={
+  "recommendations": {
+    "Bahan Baku": {
+      "recommendations": [
+        {
+          "ticker": "CLPI",
+          "companyName": "PT Colorpak Indonesia Tbk",
+          "price": 1710.0,
+         
+2026-06-21 21:38:03,049 - stock_recommender_agent - INFO - Batch batch_cerebras: 13/14 sectors stored
+2026-06-21 21:38:03,050 - scheduler - INFO - [run=9a33d026] Batch stock recs: batch_cerebras — 13/14 sectors stored
+2026-06-21 21:38:03,685 - scheduler - INFO - [run=9a33d026] Stock recommendations version=1
+2026-06-21 21:38:03,685 - alert_manager - WARNING - [ALERT] stock_recommendations: Average execution time 125.42s exceeds threshold 30.0s
+2026-06-21 21:38:06,314 - macro_agent - INFO - Macro cache miss — returning default values
+2026-06-21 21:38:06,371 - order_book_store - INFO - Snapshot 659105c9-6b53-4659-86cc-935a9491508f tersimpan ke MongoDB
+2026-06-21 21:38:06,543 - order_book_store - INFO - Snapshot 659105c9-6b53-4659-86cc-935a9491508f tersimpan ke file. Total: 47 snapshots
+2026-06-21 21:38:06,547 - scheduler - INFO - Order book snapshot stored: 659105c9-6b53-4659-86cc-935a9491508f, version=1
+2026-06-21 21:38:07,555 - scheduler - INFO - [run=9a33d026] ============================================================
+2026-06-21 21:38:07,555 - scheduler - INFO - [run=9a33d026] SCHEDULED FETCH COMPLETE: {'tradingview': 500, 'macro': 16, 'news_flow': 50, 'sector_predictions': True, 'stock_recommendations': 13, 'order_book': True}
+2026-06-21 21:38:07,555 - scheduler - INFO - [run=9a33d026] ============================================================
+2026-06-23 18:35:49,437 - __main__ - INFO - Starting server on port 8000...
+2026-06-23 18:35:49,577 - server - INFO - OrderBookStore initialized with file-only storage
+2026-06-23 18:35:49,578 - server - INFO - Application started
+2026-06-23 18:35:54,639 - scheduler - WARNING - MongoDB not connected
+2026-06-23 18:35:56,708 - server - INFO - Jadwal AI Agent berikutnya: 09:00 Wednesday 24-06-2026 WIB (864 menit lagi)

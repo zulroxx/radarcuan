@@ -1,0 +1,11 @@
+2026-06-19 01:05:37,924 - __main__ - INFO - Starting server on port 8000...
+INFO:     Started server process [29956]
+INFO:     Waiting for application startup.
+2026-06-19 01:05:38,712 - server - INFO - MongoDB connection established
+2026-06-19 01:05:38,713 - server - INFO - OrderBookStore upgraded to MongoDB
+2026-06-19 01:05:38,715 - server - INFO - Application started
+INFO:     Application startup complete.
+ERROR:    [Errno 10048] error while attempting to bind on address ('0.0.0.0', 8000): [winerror 10048] only one usage of each socket address (protocol/network address/port) is normally permitted
+INFO:     Waiting for application shutdown.
+2026-06-19 01:05:38,761 - server - INFO - MongoDB connection closed
+INFO:     Application shutdown complete.
